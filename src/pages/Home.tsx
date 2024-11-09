@@ -116,7 +116,7 @@ export default (props: HomeProps) => {
           </div>
           <div class={groupStyles.actions}>
             <button
-              title='New group'
+              title='New post'
               class={`${appStyles.button} ${appStyles.link} ${styles['new-group']}`}
               onClick={onNewGroupClicked}>
               <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />

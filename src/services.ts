@@ -8,7 +8,8 @@ import {
   NotificationAction,
   Expense,
   Balance,
-  NotificationUpdate
+  NotificationUpdate,
+  Ingredient
 } from './types'
 
 export const API_HOST = import.meta.env.VITE_API_URL
@@ -57,6 +58,60 @@ export async function fetchCurrencies(identity: Identity): Promise<Currency[]> {
   const res = await authentifiedFetch(`${API_HOST}/currencies`, identity!)
 
   return (await res.json()) as Currency[]
+}
+
+export async function fetchIngredients(identity: Identity): Promise<Ingredient[]> {
+  // const res = await authentifiedFetch(`${API_HOST}/ingredients`, identity!)
+
+  // return (await res.json()) as Ingredient[]
+  return [
+    {
+      id: 1,
+      name: 'zapallo',
+      state: 'bad',
+      tags: ['vegetable', 'pumpkin'],
+      notes: 'me cae mal',
+      related: [2],
+      recipes: []
+    },
+    {
+      id: 2,
+      name: 'calabacín',
+      state: 'good',
+      tags: ['vegetable', 'pumpkin'],
+      notes: 'joya, pero no me gusta mucho',
+      related: [1],
+      recipes: []
+    },
+    {
+      id: 3,
+      name: 'tofu',
+      state: 'warning',
+      tags: ['protein'],
+      notes: 'tiene sus días',
+      related: [],
+      recipes: []
+    },
+    {
+      id: 4,
+      name: 'remolacha',
+      state: 'unknown',
+      tags: ['vegetable'],
+      notes: 'ni loca lo pruebo',
+      related: [],
+      recipes: []
+    }
+
+    // id: number | undefined
+    // name: string
+    // created_at: string | undefined
+    //
+    // state: State
+    // tags: string[]
+    // notes: string
+    //
+    // related: number[]
+  ]
 }
 
 export async function fetchNotifications(identity: Identity): Promise<Notification[]> {

@@ -35,6 +35,7 @@ import { formatError, sleep } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
 const GroupPage = lazy(() => import('./pages/Group'))
+const IngredientsPage = lazy(() => import('./pages/Ingredients'))
 
 export default () => {
   const [state, { setState, setGroup, setError }] = useAppContext()
@@ -42,48 +43,48 @@ export default () => {
   const navigate = useNavigate()
 
   // FIXME - dupped method from group - moliva - 2024/04/10
-  const fetchGroupData = async (id: string, opts: { refetching: boolean; field: string }): Promise<DetailedGroup> => {
-    try {
-      const group = state().groups[id]
-
-      // check if we currently have the group loaded with detailed fields as well or force fetch
-      if (!opts.refetching && group?.members) {
-        return group
-      }
-
-      const identity = state().identity
-
-      if (!identity) {
-        throw 'not authentified!'
-      }
-
-      let result
-      if (opts.field === 'expenses') {
-        const expensesFetch = fetchExpenses(identity!, Number(id))
-        const balancesFetch = fetchBalances(identity!, Number(id))
-        const [expenses, balances] = await Promise.all([expensesFetch, balancesFetch])
-        result = {
-          ...group,
-          expenses,
-          balances
-        }
-      } else {
-        const newGroup = await fetchGroup(identity!, Number(id))
-        result = {
-          ...group,
-          ...newGroup
-        }
-      }
-
-      setGroup(result)
-
-      return result
-    } catch (e) {
-      setError(formatError('Error while fetching detailed group', e))
-      const group = state().groups[id]
-      return group as DetailedGroup
-    }
-  }
+  // const fetchGroupData = async (id: string, opts: { refetching: boolean; field: string }): Promise<DetailedGroup> => {
+  //   try {
+  //     const group = state().groups[id]
+  //
+  //     // check if we currently have the group loaded with detailed fields as well or force fetch
+  //     if (!opts.refetching && group?.members) {
+  //       return group
+  //     }
+  //
+  //     const identity = state().identity
+  //
+  //     if (!identity) {
+  //       throw 'not authentified!'
+  //     }
+  //
+  //     let result
+  //     if (opts.field === 'expenses') {
+  //       const expensesFetch = fetchExpenses(identity!, Number(id))
+  //       const balancesFetch = fetchBalances(identity!, Number(id))
+  //       const [expenses, balances] = await Promise.all([expensesFetch, balancesFetch])
+  //       result = {
+  //         ...group,
+  //         expenses,
+  //         balances
+  //       }
+  //     } else {
+  //       const newGroup = await fetchGroup(identity!, Number(id))
+  //       result = {
+  //         ...group,
+  //         ...newGroup
+  //       }
+  //     }
+  //
+  //     setGroup(result)
+  //
+  //     return result
+  //   } catch (e) {
+  //     setError(formatError('Error while fetching detailed group', e))
+  //     const group = state().groups[id]
+  //     return group as DetailedGroup
+  //   }
+  // }
 
   // handle auth
   const [searchParams] = useSearchParams()
@@ -157,31 +158,31 @@ export default () => {
     }
   }
 
-  const syncMaster = async () => {
-    while (!state().identity) {
-      await sleep(1000)
-    }
-
-    // long polling on fetch sync and processing events
-    while (true) {
-      const events = await fetchSync(state().identity!)
-      for (const event of events) {
-        switch (event.kind) {
-          case 'group': {
-            await fetchGroupData(`${event.id}`, { refetching: true, field: event.field })
-            break
-          }
-          case 'notification': {
-            await refetchNotifications()
-            break
-          }
-          default: {
-            console.warn('unknown event', event)
-          }
-        }
-      }
-    }
-  }
+  // const syncMaster = async () => {
+  //   while (!state().identity) {
+  //     await sleep(1000)
+  //   }
+  //
+  //   // long polling on fetch sync and processing events
+  //   while (true) {
+  //     const events = await fetchSync(state().identity!)
+  //     for (const event of events) {
+  //       switch (event.kind) {
+  //         case 'group': {
+  //           await fetchGroupData(`${event.id}`, { refetching: true, field: event.field })
+  //           break
+  //         }
+  //         case 'notification': {
+  //           await refetchNotifications()
+  //           break
+  //         }
+  //         default: {
+  //           console.warn('unknown event', event)
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   onMount(() => {
     // window.addEventListener('keydown', handleAppKeydown, true)
@@ -246,14 +247,15 @@ export default () => {
               onNotificationsClicked={toggleNotifications}
               notifications={notifications}
             />
+            <hr class={styles['divider']} />
           </header>
           <main class={styles.main}>
             <section class={styles.content}>
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
                   <Route path='/' component={Home} />
-                  <Route path='/ingredients' component={GroupPage} />
                   <Route path='/recipes' component={GroupPage} />
+                  <Route path='/ingredients' component={IngredientsPage} />
                 </Route>
               </Routes>
             </section>

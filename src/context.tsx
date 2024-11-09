@@ -1,31 +1,28 @@
 import { JSXElement, createContext, createSignal, useContext } from 'solid-js'
 
-import { Currency, DetailedGroup, Identity } from './types'
+import { Currency, DetailedGroup, Identity, Ingredient } from './types'
 
 export type AppState = {
   identity: Identity | undefined
-  groups: Record<string, DetailedGroup>
+  ingredients: Record<number, Ingredient> | undefined
   currencies: Record<number, Currency>
   error?: any
 }
 
 const INITIAL_STATE: AppState = {
   identity: undefined,
-  groups: {},
-  currencies: []
+  ingredients: undefined,
+  currencies: {}
 }
 
 const [state, setState] = createSignal(INITIAL_STATE)
 
-const setGroup = (group: Partial<DetailedGroup>) => {
+const setIngredients = (ingredients: Ingredient[]) => {
   setState({
     ...state(),
-    groups: {
-      ...state().groups,
-      [group.id!]: {
-        ...(state().groups[group.id!] ?? {}),
-        ...group
-      }
+    ingredients: {
+      ...state().ingredients,
+      ...Object.fromEntries(ingredients.map(ingredient => [ingredient.id, ingredient]))
     }
   })
 }
@@ -39,7 +36,7 @@ const setError = (error?: any) => {
   })
 }
 
-const appState = [state, { setState, setError, setGroup }] as const
+const appState = [state, { setState, setError, setIngredients }] as const
 
 const AppContext = createContext<typeof appState>()
 

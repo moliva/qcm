@@ -100,6 +100,21 @@ export type Group = {
   }
 }
 
+export type State = 'bad' | 'good' | 'warning' | 'unknown'
+
+export type Ingredient = {
+  id: number | undefined
+  name: string
+  created_at?: string | undefined
+
+  state: State
+  tags: string[]
+  notes: string
+
+  related: number[]
+  recipes: number[]
+}
+
 export type DetailedGroup = Group & {
   creator: User
   members: Membership[]
