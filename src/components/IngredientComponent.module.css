@@ -3,7 +3,7 @@
   flex-direction: column;
 
   border-radius: 10px;
-  padding: 15px 10px;
+  padding: 15px 15px 30px;
   margin: 4px 0;
   width: 300px;
 
@@ -84,8 +84,9 @@
   position: relative;
 }
 
-.note-tags {
-  padding-left: 21px;
+.ingredient-name {
+  font-weight: 600;
+  margin: 0 0 3px;
 }
 
 .ingredient-state-icon {
@@ -100,7 +101,7 @@
 }
 
 .note-tag:hover {
-  color: var(--note-color);
+  color: #282c34;
   background-color: white;
 }
 
@@ -110,6 +111,42 @@
   border-radius: 4px;
   padding: 2px 3px;
   border-color: white;
+}
+
+.ingredient-notes {
+  padding: 10px 3px 0;
+  resize: none;
+  background: transparent;
+}
+
+.ingredient-notes:focus {
+  outline: none;
+  box-shadow: none !important;
+  border: none;
+}
+
+.ingredient-subtitle {
+  margin: 5px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ingredient-related-set {
+  display: flex;
+  padding: 5px 0 0;
+  gap: 5px;
+}
+
+.ingredient-related:hover {
+  color: #282c34;
+  background-color: white;
+}
+
+.ingredient-related {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 5px;
+  background-color: grey;
 }
 
 /* ***************************************************************************************************** */

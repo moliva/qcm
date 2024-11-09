@@ -115,6 +115,18 @@ export type Ingredient = {
   recipes: number[]
 }
 
+export type Recipe = {
+  id: number | undefined
+  name: string
+  created_at?: string | undefined
+
+  state: State
+  tags: string[]
+  notes: string
+
+  ingredients: number[]
+}
+
 export type DetailedGroup = Group & {
   creator: User
   members: Membership[]

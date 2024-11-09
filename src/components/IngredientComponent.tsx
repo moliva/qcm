@@ -2,6 +2,8 @@ import { A } from '@solidjs/router'
 
 import { Group, Ingredient } from '../types'
 
+import { useAppContext } from '../context'
+
 import styles from './IngredientComponent.module.css'
 import appStyles from '../App.module.css'
 import navStyles from './NavComponent.module.css'
@@ -14,6 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 import { For } from 'solid-js'
+import MultiSelect from '@moliva/solid-multiselect'
 
 export type IngredientComponentProps = {
   ingredient: Ingredient
@@ -23,6 +26,7 @@ export type IngredientComponentProps = {
 
 export const IngredientComponent = (props: IngredientComponentProps) => {
   const { ingredient } = props
+  const [state, { setError, setIngredients }] = useAppContext()
 
   const [icon, color] = renderState(ingredient)
 
@@ -47,6 +51,41 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
           )}
         </For>
       </div>
+      <textarea class={styles['ingredient-notes']} readonly={true}>
+        {ingredient.notes}
+      </textarea>
+      {ingredient.related.length > 0 ? (
+        <>
+          <label class={styles['ingredient-subtitle']}>Related</label>
+          <div class={styles['ingredient-related-set']}>
+            <For each={ingredient.related.map(id => state().ingredients![id])}>
+              {related => (
+                <label
+                  class={`${styles['ingredient-related']} ${appStyles.button}`}
+                  onClick={() => console.log('ingredient', related)}>
+                  {related.name}
+                </label>
+              )}
+            </For>
+          </div>
+        </>
+      ) : null}
+      {state().recipes && ingredient.recipes.length > 0 ? (
+        <>
+          <label class={styles['ingredient-subtitle']}>Recipes</label>
+          <div class={styles['ingredient-related-set']}>
+            <For each={ingredient.recipes.map(id => state().recipes![id])}>
+              {recipe => (
+                <label
+                  class={`${styles['ingredient-related']} ${appStyles.button}`}
+                  onClick={() => console.log('recipe', recipe)}>
+                  {recipe.name}
+                </label>
+              )}
+            </For>
+          </div>
+        </>
+      ) : null}
     </div>
   )
 }
@@ -60,6 +99,6 @@ function renderState(ingredient: Ingredient): [IconDefinition, string] {
     case 'warning':
       return [faTriangleExclamation, 'yellow']
     default:
-      return [faCircleQuestion, 'grey']
+      return [faCircleQuestion, 'lightgrey']
   }
 }

@@ -9,7 +9,8 @@ import {
   Expense,
   Balance,
   NotificationUpdate,
-  Ingredient
+  Ingredient,
+  Recipe
 } from './types'
 
 export const API_HOST = import.meta.env.VITE_API_URL
@@ -60,6 +61,40 @@ export async function fetchCurrencies(identity: Identity): Promise<Currency[]> {
   return (await res.json()) as Currency[]
 }
 
+export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
+  // const res = await authentifiedFetch(`${API_HOST}/recipes`, identity!)
+
+  // return (await res.json()) as Recipe[]
+  return [
+    {
+      id: 1,
+      name: 'sopa crema zapallo',
+      state: 'bad',
+      tags: ['vegetable', 'sopa'],
+      notes: '1- hervir zapallo, 2- mixear bien',
+      ingredients: [1]
+    },
+    {
+      id: 2,
+      name: 'wok salteao',
+      state: 'good',
+      tags: ['vegetable', 'wok'],
+      notes: '1- saltear, 2- gozar',
+      ingredients: [3, 2]
+    }
+    // export type Recipe = {
+    //   id: number | undefined
+    //   name: string
+    //   created_at?: string | undefined
+    //
+    //   state: State
+    //   tags: string[]
+    //   notes: string
+    //
+    //   ingredients: number[]
+    // }
+  ]
+}
 export async function fetchIngredients(identity: Identity): Promise<Ingredient[]> {
   // const res = await authentifiedFetch(`${API_HOST}/ingredients`, identity!)
 
@@ -71,8 +106,8 @@ export async function fetchIngredients(identity: Identity): Promise<Ingredient[]
       state: 'bad',
       tags: ['vegetable', 'pumpkin'],
       notes: 'me cae mal',
-      related: [2],
-      recipes: []
+      related: [2, 4],
+      recipes: [1]
     },
     {
       id: 2,
@@ -81,7 +116,7 @@ export async function fetchIngredients(identity: Identity): Promise<Ingredient[]
       tags: ['vegetable', 'pumpkin'],
       notes: 'joya, pero no me gusta mucho',
       related: [1],
-      recipes: []
+      recipes: [2]
     },
     {
       id: 3,
@@ -90,7 +125,7 @@ export async function fetchIngredients(identity: Identity): Promise<Ingredient[]
       tags: ['protein'],
       notes: 'tiene sus días',
       related: [],
-      recipes: []
+      recipes: [2]
     },
     {
       id: 4,

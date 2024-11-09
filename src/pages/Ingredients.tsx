@@ -5,21 +5,15 @@ import { faPlusSquare, faRotateRight, faSliders, faUsers } from '@fortawesome/fr
 import Fa from 'solid-fa'
 
 import {
-  fetchBalances,
-  fetchExpenses,
-  fetchGroup,
   fetchIngredients as fetchApiIngredients,
+  fetchRecipes as fetchApiRecipes,
   postGroup,
   putGroup
 } from '../services'
-import { Balance, Group, Ingredient } from '../types'
+import { Balance, Group, Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
 import { formatError, formatExpenses } from '../utils'
 
-import { Balances } from '../components/Balances'
-import { Expenses } from '../components/Expenses'
-import { EditGroup } from '../components/EditGroupComponent'
-import { UsersModal } from '../components/UsersModal'
 import { IngredientComponent } from '../components/IngredientComponent'
 
 import appStyles from '../App.module.css'
@@ -30,7 +24,33 @@ import groupStyles from './Group.module.css'
 
 export default () => {
   const params = useParams()
-  const [state, { setError, setIngredients }] = useAppContext()
+  const [state, { setError, setIngredients, setRecipes }] = useAppContext()
+
+  const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
+    try {
+      const recipes = state().recipes
+
+      // check if we currently have the ingredients or force fetch
+      if (!opts.refetching) {
+        return recipes!
+      }
+
+      const identity = state().identity
+
+      if (!identity) {
+        throw 'not authentified!'
+      }
+
+      const result = await fetchApiRecipes(identity!)
+      setRecipes(result)
+
+      return result
+    } catch (e) {
+      setError(formatError('Error while fetching detailed group', e))
+      const recipes = state().recipes!
+      return recipes
+    }
+  }
 
   const fetchIngredients = async (opts: { refetching: boolean }): Promise<Record<number, Ingredient>> => {
     try {
@@ -38,7 +58,7 @@ export default () => {
 
       // check if we currently have the ingredients or force fetch
       if (!opts.refetching) {
-        return ingredients
+        return ingredients!
       }
 
       const identity = state().identity
@@ -54,7 +74,7 @@ export default () => {
     } catch (e) {
       setError(formatError('Error while fetching detailed group', e))
       const ingredients = state().ingredients
-      return ingredients
+      return ingredients!
     }
   }
 
@@ -66,12 +86,14 @@ export default () => {
 
   onMount(() => {
     fetchIngredients({ refetching: false })
+    fetchRecipes({ refetching: false })
   })
 
   const refreshContent = async () => {
     try {
       const currentIdentity = state().identity!
       fetchIngredients({ refetching: true })
+      fetchRecipes({ refetching: true })
     } catch (e) {
       setError(formatError('Error while refreshing content', e))
       throw e
@@ -95,6 +117,7 @@ export default () => {
 
   const refreshAll = async () => {
     fetchIngredients({ refetching: true })
+    fetchRecipes({ refetching: true })
     // refreshContent()
   }
 
