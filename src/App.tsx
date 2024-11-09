@@ -252,7 +252,8 @@ export default () => {
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
                   <Route path='/' component={Home} />
-                  <Route path='/groups/:id' component={GroupPage} />
+                  <Route path='/ingredients' component={GroupPage} />
+                  <Route path='/recipes' component={GroupPage} />
                 </Route>
               </Routes>
             </section>

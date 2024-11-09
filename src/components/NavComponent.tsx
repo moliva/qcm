@@ -50,45 +50,53 @@ export const Nav = (props: NavProps) => {
             <Fa class={styles['nav-icon']} icon={faAngleLeft} />
           </button>
         </div>
-        <div class={styles['profile-card']}>
-          <div class={styles['nav-app-controls']}></div>
-          <div class={styles['nav-auth-controls']}>
-            <div class={styles['nav-auth-actions']}>
-              <input style={{ width: '100%', 'flex-grow': '1' }} />
-              <button
-                title='Search'
-                class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
-                onClick={props.onNotificationsClicked}>
-                <Fa class={styles['nav-icon']} icon={faMagnifyingGlass} />
-              </button>
-              <a
-                title='Log out'
-                class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.logout}`}
-                href={import.meta.env.BASE_URL}>
-                <Fa class={styles['nav-icon']} icon={faUnlockKeyhole} />
-              </a>
-            </div>
-            <ProfilePicture title={identity.identity.name} picture={identity.identity.picture} />
+        <div class={styles['nav-app-controls']}>
+          <input
+            style={{
+              width: '100%',
+              'max-width': '600px',
+              'border-style': 'solid',
+              'border-width': '1px',
+              'border-radius': '5px',
+              'border-color': '#3b3b3b'
+            }}
+          />
+          <button
+            title='Search'
+            class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
+            onClick={props.onNotificationsClicked}>
+            <Fa class={styles['nav-icon']} icon={faMagnifyingGlass} />
+          </button>
+        </div>
+        <div class={styles['nav-auth-controls']}>
+          <div class={styles['nav-auth-actions']}>
+            <a
+              title='Log out'
+              class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.logout}`}
+              href={import.meta.env.BASE_URL}>
+              <Fa class={styles['nav-icon']} icon={faUnlockKeyhole} />
+            </a>
           </div>
+          <ProfilePicture title={identity.identity.name} picture={identity.identity.picture} />
         </div>
       </div>
       <div class={styles['nav-main']} style={{ 'align-items': 'center', 'justify-content': 'center' }}>
         <button
           title='Home'
           class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
-          onClick={props.onNotificationsClicked}>
+          onClick={() => navigate(import.meta.env.BASE_URL)}>
           <Fa class={styles['nav2-icon']} icon={faHouse} />
         </button>
         <button
           title='Recipes'
           class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
-          onClick={props.onNotificationsClicked}>
+          onClick={() => navigate(`${import.meta.env.BASE_URL}recipes`)}>
           <Fa class={styles['nav2-icon']} icon={faBlender} />
         </button>
         <button
           title='Ingredients'
           class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
-          onClick={props.onNotificationsClicked}>
+          onClick={() => navigate(`${import.meta.env.BASE_URL}ingredients`)}>
           <Fa class={styles['nav2-icon']} icon={faCarrot} />
         </button>
       </div>

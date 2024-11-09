@@ -44,10 +44,11 @@
 
 .nav-app-controls {
   width: 100%;
+  flex-grow: 1;
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: right;
 }
 
 .nav-left-controls {
@@ -59,7 +60,6 @@
 }
 
 .nav-auth-controls {
-  width: 100%;
   flex-grow: 0;
   flex-shrink: 0;
 
@@ -67,13 +67,6 @@
 
   display: flex;
   align-items: center;
-}
-
-@media screen and (min-width: 1110px) {
-  .nav-auth-controls {
-    position: fixed;
-    right: 15%;
-  }
 }
 
 .profile-picture {
@@ -97,7 +90,6 @@
 }
 
 .nav-auth-actions {
-  width: 100%;
   flex-grow: 0;
   flex-shrink: 0;
 
