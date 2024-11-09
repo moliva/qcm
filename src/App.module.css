@@ -1,0 +1,186 @@
+.App {
+  width: 100%;
+  margin: auto;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 100%;
+
+  padding: 10px 0;
+  background-color: #282c34;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  z-index: 1;
+
+  box-shadow: 0 0 1rem 1px rgb(40, 44, 52);
+}
+
+.main {
+  background-color: #282c34;
+  color: white;
+  width: auto;
+
+  padding: 0 14px;
+
+  min-height: 100vh;
+  margin-top: 100px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (min-width: 800px) {
+  .content {
+    width: 80%;
+  }
+}
+
+/* ***************************************************************************************************** */
+/* *************** Text decorations *************** */
+/* ***************************************************************************************************** */
+
+.link {
+  color: white;
+  text-decoration: none;
+}
+
+.group-name {
+  color: green;
+  font-style: italic;
+}
+
+/* ***************************************************************************************************** */
+/* *************** Buttons *************** */
+/* ***************************************************************************************************** */
+
+.button {
+  border: 0;
+  border-radius: 5px;
+  padding: 7px 10px;
+
+  background-color: transparent;
+  cursor: pointer;
+
+  color: white;
+  font-family: var(--font-family);
+  font-size: 16px;
+}
+
+.button:hover {
+  filter: brightness(120%);
+}
+
+.button:disabled {
+  background-color: #b9b9b9;
+  color: #727272;
+  cursor: not-allowed;
+}
+
+.button.primary:not([disabled]) {
+  background-color: #00ac00;
+}
+
+.button.secondary {
+  background-color: gray;
+}
+
+.button.delete {
+  background-color: #9b2d2d;
+}
+
+/* ***************************************************************************************************** */
+/* *************** Notifications *************** */
+/* ***************************************************************************************************** */
+
+.notification-button {
+  border: 0;
+  border-radius: 5px;
+  padding: 7px 10px;
+
+  background-color: transparent;
+  cursor: pointer;
+
+  color: white;
+  font-family: var(--font-family);
+  font-size: 10px;
+}
+
+.notification-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.notification-card {
+  color: white;
+  background-color: #191a1f;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.notification-card-controls {
+  margin-left: 10px;
+  display: inline-flex;
+  gap: 3px;
+}
+
+.notification-button.primary {
+  background-color: #00ac00;
+}
+
+.notification-button.cancel {
+  background-color: #ca0808;
+}
+
+.archive-notification {
+  width: 10px;
+  float: right;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #b0b0b0;
+  padding-bottom: 6.5px;
+}
+
+/* ***************************************************************************************************** */
+/* *************** Error *************** */
+/* ***************************************************************************************************** */
+
+.error-float {
+  display: flex;
+  position: fixed;
+  bottom: 30px;
+  width: 100%;
+  justify-content: center;
+}
+
+.error-toast {
+  padding: 10px 25px;
+  background-color: #ca0808;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 3px;
+}
+
+.error-clear {
+  margin-top: 10px;
+  color: #6f0a0a;
+  font-weight: 650;
+}

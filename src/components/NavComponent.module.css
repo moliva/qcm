@@ -1,0 +1,132 @@
+.nav {
+  position: relative;
+  width: 95%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-main {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  display: flex;
+}
+
+@media screen and (min-width: 800px) {
+  .nav {
+    width: 70%;
+  }
+}
+
+.nav2-icon {
+  font-size: 20px;
+  color: #b8b8b8;
+}
+
+.nav-icon {
+  font-size: 25px;
+}
+
+.tiny {
+  max-height: 2rem;
+}
+
+.profile-card {
+  width: 100%;
+  height: 33px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-app-controls {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-left-controls {
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+}
+
+.nav-auth-controls {
+  width: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (min-width: 1110px) {
+  .nav-auth-controls {
+    position: fixed;
+    right: 15%;
+  }
+}
+
+.profile-picture {
+  border-radius: 15%;
+}
+
+.back:hover {
+  color: #b9b9b9;
+}
+
+.login:hover {
+  color: DarkKhaki;
+}
+
+.logout:hover {
+  color: tan;
+}
+
+.notifications:hover {
+  color: #c2b96e;
+}
+
+.nav-auth-actions {
+  width: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  padding: 7px 5px;
+}
+
+.nav-auth-actions > .nav-button {
+  padding: 7px 5px;
+}
+
+.nav-overlap {
+  position: absolute;
+  right: -0.27em;
+  bottom: -0.25em;
+
+  font-size: 0.9em;
+  color: #282c34;
+}
+
+.nav-overlap-2 {
+  position: absolute;
+  right: -0.2em;
+  bottom: -0.2em;
+
+  font-size: 0.7em;
+  color: #ca0808;
+}
