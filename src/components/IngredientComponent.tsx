@@ -16,7 +16,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 import { For } from 'solid-js'
-import MultiSelect from '@moliva/solid-multiselect'
 
 export type IngredientComponentProps = {
   ingredient: Ingredient

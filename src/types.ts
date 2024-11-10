@@ -115,6 +115,9 @@ export type Ingredient = {
   recipes: number[]
 }
 
+/** Ingredient id -> measure to be used in recipe */
+export type IngredientPair = [number, string]
+
 export type Recipe = {
   id: number | undefined
   name: string
@@ -124,7 +127,7 @@ export type Recipe = {
   tags: string[]
   notes: string
 
-  ingredients: number[]
+  ingredients: IngredientPair[]
 }
 
 export type DetailedGroup = Group & {

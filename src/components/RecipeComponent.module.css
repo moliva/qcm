@@ -1,0 +1,164 @@
+.ingredient {
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 10px;
+  padding: 15px 15px 30px;
+  margin: 4px 0;
+  width: 300px;
+
+  background-color: #393b40;
+  box-shadow: 0 0 1rem 1px rgb(30, 30, 30);
+}
+
+.note {
+  border-radius: 10px;
+  margin: 1px;
+  padding: 15px 10px;
+  margin: 0;
+  width: 400px;
+
+  background-color: var(--note-color);
+}
+
+.note-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.note-label {
+  display: flex;
+}
+
+.note-name {
+  margin-left: 5px;
+}
+
+.note-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.delete-control:hover {
+  color: LightCoral;
+}
+
+.edit-control:hover {
+  color: LightCyan;
+}
+
+.note-control {
+  cursor: pointer;
+  color: lightgray;
+}
+
+.copy-control:hover {
+  color: beige;
+}
+
+.note-expand-control {
+  display: block;
+  width: 100%;
+  position: relative;
+
+  text-align: center;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.note-constrain:before {
+  content: '';
+  width: 100%;
+  height: 50px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  background: linear-gradient(transparent -20px, var(--note-color));
+}
+
+.note-constrain {
+  max-height: 480px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ingredient-name {
+  font-weight: 600;
+  margin: 0 0 3px;
+}
+
+.ingredient-state-icon {
+  padding-left: 5px;
+  font-size: 12px;
+}
+
+.note-tags {
+  display: flex;
+  gap: 2px;
+  margin-top: 5px;
+}
+
+.note-tag:hover {
+  color: #282c34;
+  background-color: white;
+}
+
+.note-tag {
+  font-size: 10px;
+  border: solid 0.1px;
+  border-radius: 4px;
+  padding: 2px 3px;
+  border-color: white;
+}
+
+.ingredient-notes {
+  padding: 10px 3px 0;
+  resize: none;
+  background: transparent;
+}
+
+.ingredient-notes:focus {
+  outline: none;
+  box-shadow: none !important;
+  border: none;
+}
+
+.ingredient-subtitle {
+  margin: 5px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ingredient-related-set {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0 0;
+  gap: 5px;
+}
+
+.ingredient-related:hover {
+  color: #282c34;
+  background-color: white;
+}
+
+.ingredient-related {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 5px;
+  background-color: grey;
+}
+
+/* ***************************************************************************************************** */
+/* *************** Arrow *************** */
+/* ***************************************************************************************************** */
+
+.arrow {
+  color: lightgray;
+  padding: 0;
+  font-size: 10px;
+
+  min-width: 16px;
+  text-align: center;
+}

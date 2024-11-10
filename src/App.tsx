@@ -12,14 +12,10 @@ import {
 } from 'solid-js'
 import { useNavigate, useSearchParams, Routes, Route } from '@solidjs/router'
 
-import { DetailedGroup, Notification, NotificationAction } from './types'
+import { Notification, NotificationAction } from './types'
 import {
   fetchCurrencies as doFetchCurrencies,
   fetchNotifications as doFetchNotifications,
-  fetchBalances,
-  fetchExpenses,
-  fetchGroup,
-  fetchSync,
   updateMembership,
   updateNotification,
   updateNotifications
@@ -28,17 +24,16 @@ import { useAppContext } from './context'
 
 import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
-import { NotificationsPanel } from './components/NotificationsPanel'
 
 import styles from './App.module.css'
 import { formatError, sleep } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
-const GroupPage = lazy(() => import('./pages/Group'))
+const RecipesPage = lazy(() => import('./pages/Recipes'))
 const IngredientsPage = lazy(() => import('./pages/Ingredients'))
 
 export default () => {
-  const [state, { setState, setGroup, setError }] = useAppContext()
+  const [state, { setState, setError }] = useAppContext()
 
   const navigate = useNavigate()
 
@@ -200,10 +195,10 @@ export default () => {
       await updateMembership(action, notification.data.group, state().identity!)
       await updateNotification(notification, { status: 'archived' }, state().identity!)
 
-      if (action === 'joined') {
-        const group = notification.data.group
-        setGroup(group)
-      }
+      // if (action === 'joined') {
+      //   const group = notification.data.group
+      //   setGroup(group)
+      // }
 
       const ns = [...notifications()!]
       const index = ns.indexOf(notification)
@@ -254,7 +249,7 @@ export default () => {
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
                   <Route path='/' component={Home} />
-                  <Route path='/recipes' component={GroupPage} />
+                  <Route path='/recipes' component={RecipesPage} />
                   <Route path='/ingredients' component={IngredientsPage} />
                 </Route>
               </Routes>

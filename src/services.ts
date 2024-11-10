@@ -72,7 +72,7 @@ export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
       state: 'bad',
       tags: ['vegetable', 'sopa'],
       notes: '1- hervir zapallo, 2- mixear bien',
-      ingredients: [1]
+      ingredients: [[1, 'un poquitou']]
     },
     {
       id: 2,
@@ -80,7 +80,10 @@ export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
       state: 'good',
       tags: ['vegetable', 'wok'],
       notes: '1- saltear, 2- gozar',
-      ingredients: [3, 2]
+      ingredients: [
+        [3, 'mandale nomás'],
+        [2, 'a gusto']
+      ]
     }
     // export type Recipe = {
     //   id: number | undefined
