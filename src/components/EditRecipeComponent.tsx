@@ -1,4 +1,4 @@
-import { Accessor, createSignal, For } from 'solid-js'
+import { Accessor, createSignal, For, onMount } from 'solid-js'
 
 import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
@@ -18,10 +18,14 @@ export type EditIngredientProps = {
   onDiscard(): void
 }
 
+type IngredientWorkingType = { key: number; id: number; measure: string }
+
 export default (props: EditIngredientProps) => {
   const { recipe: ingredient } = props
 
   const [state] = useAppContext()
+
+  const [ingredients, setIngredients] = createSignal<IngredientWorkingType[]>([])
 
   const stateOptions = ['unknown', 'good', 'warning', 'bad']
 
@@ -31,43 +35,56 @@ export default (props: EditIngredientProps) => {
   let tagsRef
   let ingredientsRef
 
+  onMount(() => {
+    let key = 0
+    const _ingredients = (ingredient()?.ingredients ?? []).map(e => ({
+      key: key++,
+      id: e[0],
+      measure: e[1]
+    }))
+    setIngredients(_ingredients)
+  })
+
   const newIngredient = () =>
     ({
       id: ingredient()?.id,
       name: newIngredientName!.value,
       state: 'good',
       tags: parseTags(tagsRef!.value),
-      notes: newIngredientNotes!.value
+      notes: newIngredientNotes!.value,
 
-      // ingredients: relatedRef()!
-      //   .values()
-      //   .map(e => e.id),
+      ingredients: readIngredients()
     }) as Recipe
 
-  function addIngredient() {
-    const child = (
-      <div style={{ display: 'flex', 'align-items': 'center' }}>
-        <select class={expenseStyles['currency-select']} value={''}>
-          <For each={Object.values(state().ingredients!)}>
-            {ingredient => (
-              <option value={ingredient.id} title={ingredient.name}>
-                {ingredient.name}
-              </option>
-            )}
-          </For>
-        </select>
-        <input style={{ width: '100%' }} />
-        <button
-          title='Remove ingredient'
-          style={{ 'margin-left': 'auto' }}
-          class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
-          onClick={() => {}}>
-          <Fa class={navStyles['nav-icon']} icon={faXmarkCircle} />
-        </button>
-      </div>
-    )
+  function readIngredients() {
+    const _ingredients = []
 
-    ingredientsRef!.appendChild(child)
+    for (const row of ingredientsRef!.children) {
+      const ingredientId = Number(row.children[0].value)
+      const measure = row.children[1].value
+
+      _ingredients.push([ingredientId, measure])
+    }
+
+    return _ingredients
+  }
+
+  function removeIngredient(key: number) {
+    const _ingredients = [...ingredients()]
+
+    const index = _ingredients.findIndex(e => e.key === key)
+    _ingredients.splice(index, 1)
+
+    setIngredients(_ingredients)
+  }
+
+  function addIngredient() {
+    const _ingredients = [...ingredients()]
+
+    const key = _ingredients.length > 0 ? _ingredients[_ingredients.length - 1].key + 1 : 0
+    _ingredients.push({ key, id: Object.values(state().ingredients!)[0].id!, measure: '' })
+
+    setIngredients(_ingredients)
   }
 
   return (
@@ -104,7 +121,33 @@ export default (props: EditIngredientProps) => {
         </div>
         <div style={{ display: 'flex', width: '100%', 'flex-direction': 'column', gap: '10px' }}>
           <label>Ingredients</label>
-          <div ref={ingredientsRef}></div>
+          <div ref={ingredientsRef}>
+            <For each={ingredients()}>
+              {ingredient => (
+                <div style={{ display: 'flex', 'align-items': 'center' }}>
+                  <select class={expenseStyles['currency-select']} value={ingredient.id}>
+                    <For each={Object.values(state().ingredients!)}>
+                      {ingredient => (
+                        <option value={ingredient.id} title={ingredient.name}>
+                          {ingredient.name}
+                        </option>
+                      )}
+                    </For>
+                  </select>
+                  <input style={{ width: '100%' }} value={ingredient.measure} />
+                  <button
+                    title='Remove ingredient'
+                    style={{ 'margin-left': 'auto' }}
+                    class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
+                    onClick={() => {
+                      removeIngredient(ingredient.key)
+                    }}>
+                    <Fa class={navStyles['nav-icon']} icon={faXmarkCircle} />
+                  </button>
+                </div>
+              )}
+            </For>
+          </div>
           <button
             title='Add ingredient'
             style={{ 'margin-left': 'auto' }}
