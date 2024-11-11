@@ -179,9 +179,7 @@ export default () => {
             {ingredient => (
               <IngredientComponent
                 ingredient={ingredient}
-                onEdit={ingredient => {
-                  onEditIngredientClicked(ingredient)
-                }}
+                onEdit={onEditIngredientClicked}
                 onDelete={onDeleteIngredient}
                 onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
               />

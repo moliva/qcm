@@ -1,18 +1,16 @@
-import { For, Match, Show, Switch, createEffect, createSignal, onMount } from 'solid-js'
+import { Show, createEffect, createSignal, onMount } from 'solid-js'
 import { useNavigate, useParams } from '@solidjs/router'
 
-import { faPlusSquare, faRotateRight, faSliders, faUsers } from '@fortawesome/free-solid-svg-icons'
-import Fa from 'solid-fa'
-
 import {
+  deleteIngredient,
   fetchIngredients as fetchApiIngredients,
   fetchRecipes as fetchApiRecipes,
-  postGroup,
-  putGroup
+  postIngredient,
+  putIngredient
 } from '../services'
-import { Balance, Group, Ingredient, Recipe } from '../types'
+import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError, formatExpenses } from '../utils'
+import { formatError } from '../utils'
 
 import { IngredientComponent } from '../components/IngredientComponent'
 
@@ -21,6 +19,7 @@ import navStyles from '../components/NavComponent.module.css'
 import homeStyles from './Home.module.css'
 import styles from './Ingredients.module.css'
 import groupStyles from './Group.module.css'
+import EditIngredientComponent from '../components/EditIngredientComponent'
 
 export default () => {
   const navigate = useNavigate()
@@ -30,6 +29,8 @@ export default () => {
 
   const [id, setId] = createSignal(Number(params.id))
   const [ingredient, setIngredient] = createSignal<Ingredient | undefined>()
+
+  const [showIngredientModal, setShowIngredientModal] = createSignal(false)
 
   createEffect(() => {
     setIngredient(state().ingredients ? state().ingredients![id()]! : undefined)
@@ -87,12 +88,6 @@ export default () => {
     }
   }
 
-  const [showGroupModal, setShowGroupModal] = createSignal(false)
-  const [showUsersModal, setShowUsersModal] = createSignal(false)
-
-  const [tab, setTab] = createSignal(0)
-  const updateTab = (index: number) => () => setTab(index)
-
   onMount(() => {
     fetchIngredients({ refetching: false })
     fetchRecipes({ refetching: false })
@@ -144,33 +139,47 @@ export default () => {
   //   }
   // })
 
-  const updateGroup = (updated: Group) => {
-    const promise = updated.id ? putGroup(updated, state()!.identity!) : postGroup(updated, state()!.identity!)
+  const onDeleteIngredient = (ingredient: Ingredient) => {
+    deleteIngredient(ingredient, state()!.identity!)
+  }
+
+  const onEditIngredientClicked = (ingredient: Ingredient) => {
+    setIngredient(ingredient)
+    setShowIngredientModal(true)
+  }
+
+  const updateIngredient = (updated: Ingredient) => {
+    const promise = updated.id
+      ? putIngredient(updated, state()!.identity!)
+      : postIngredient(updated, state()!.identity!)
 
     promise
       .then(() => {
         // setGroup({ ...group()!, ...updated })
       })
-      .catch(e => {
+      .catch((e: any) => {
         setError(formatError('Error while updating group', e))
       })
 
-    setShowGroupModal(false)
-  }
-
-  const onNewGroupClicked = () => {
-    // setCurrentGroup(note as DetailedGroup)
-    setShowGroupModal(true)
+    setShowIngredientModal(false)
   }
 
   return (
     <div class={styles.main}>
+      <Show when={showIngredientModal()}>
+        <EditIngredientComponent
+          ingredient={ingredient}
+          onDiscard={() => setShowIngredientModal(false)}
+          onConfirm={updateIngredient}
+        />
+      </Show>
       {ingredient() ? (
         <Show when={ingredient()} keyed>
           {ingredient => (
             <IngredientComponent
               ingredient={ingredient}
-              onEdit={() => {}}
+              onEdit={onEditIngredientClicked}
+              onDelete={onDeleteIngredient}
               onRelatedIngredientClicked={id => {
                 setId(id)
                 navigate(import.meta.env.BASE_URL + `ingredients/${id}`)
