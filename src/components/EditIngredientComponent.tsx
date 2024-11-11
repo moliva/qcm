@@ -94,7 +94,7 @@ export default (props: EditIngredientProps) => {
             isObject
             displayValue='id'
             renderValue={(member: Ingredient) => <label>{member.name}</label>}
-            selectedValues={[]}
+            selectedValues={ingredient()?.related.map(e => state()!.ingredients[e])}
             selectionLimit={20}
             hidePlaceholder={true}
             // placeholder={props.placeholder}
@@ -117,7 +117,7 @@ export default (props: EditIngredientProps) => {
             isObject
             displayValue='id'
             renderValue={(member: Recipe) => <label>{member.name}</label>}
-            selectedValues={[]}
+            selectedValues={ingredient()?.recipes.map(e => state()!.recipes[e])}
             selectionLimit={20}
             hidePlaceholder={true}
             // placeholder={props.placeholder}

@@ -5,6 +5,7 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
 import {
+  deleteIngredient,
   fetchIngredients as fetchApiIngredients,
   fetchRecipes as fetchApiRecipes,
   postIngredient,
@@ -134,7 +135,6 @@ export default () => {
   const navigate = useNavigate()
 
   const updateIngredient = (updated: Ingredient) => {
-    console.log('new ingre', updated)
     const promise = updated.id
       ? putIngredient(updated, state()!.identity!)
       : postIngredient(updated, state()!.identity!)
@@ -148,6 +148,15 @@ export default () => {
       })
 
     setShowIngredientModal(false)
+  }
+
+  const onDeleteIngredient = (ingredient: Ingredient) => {
+    deleteIngredient(ingredient, state()!.identity!)
+  }
+
+  const onEditIngredientClicked = (ingredient: Ingredient) => {
+    setCurrentIngredient(ingredient)
+    setShowIngredientModal(true)
   }
 
   const onNewIngredientClicked = () => {
@@ -170,7 +179,10 @@ export default () => {
             {ingredient => (
               <IngredientComponent
                 ingredient={ingredient}
-                onEdit={() => {}}
+                onEdit={ingredient => {
+                  onEditIngredientClicked(ingredient)
+                }}
+                onDelete={onDeleteIngredient}
                 onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
               />
             )}

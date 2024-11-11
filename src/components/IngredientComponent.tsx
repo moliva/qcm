@@ -11,7 +11,9 @@ import {
   faCircleCheck,
   faCircleQuestion,
   faCircleXmark,
+  faPenToSquare,
   faTriangleExclamation,
+  faXmark,
   IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
@@ -23,6 +25,7 @@ export type IngredientComponentProps = {
   onRelatedIngredientClicked(id: number): void
 
   onEdit(ingredient: Ingredient): void
+  onDelete(ingredient: Ingredient): void
 }
 
 export const IngredientComponent = (props: IngredientComponentProps) => {
@@ -40,6 +43,19 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
         <span style={{ color: color }}>
           <Fa class={styles['ingredient-state-icon']} icon={icon} />
         </span>
+
+        <div class={styles['note-controls']}>
+          <button
+            class={`${styles['edit-control']} ${styles['note-control']}`}
+            onClick={() => props.onEdit(ingredient)}>
+            <Fa icon={faPenToSquare} />
+          </button>
+          <button
+            class={`${styles['delete-control']} ${styles['note-control']}`}
+            onClick={() => props.onDelete(ingredient)}>
+            <Fa icon={faXmark} />
+          </button>
+        </div>
       </div>
       <div class={styles['note-tags']}>
         <For each={ingredient.tags}>

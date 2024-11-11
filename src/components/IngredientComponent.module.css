@@ -38,6 +38,8 @@
 .note-controls {
   display: flex;
   gap: 5px;
+
+  margin-left: auto;
 }
 
 .delete-control:hover {
@@ -85,6 +87,8 @@
 }
 
 .ingredient-name {
+  display: flex;
+
   font-weight: 600;
   margin: 0 0 3px;
 }
@@ -147,6 +151,24 @@
   border-radius: 4px;
   padding: 2px 5px;
   background-color: grey;
+}
+
+.note-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.delete-control:hover {
+  color: LightCoral;
+}
+
+.edit-control:hover {
+  color: LightCyan;
+}
+
+.note-control {
+  cursor: pointer;
+  color: lightgray;
 }
 
 /* ***************************************************************************************************** */

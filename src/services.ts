@@ -255,6 +255,13 @@ export async function putIngredient(ingredient: Ingredient, identity: Identity):
   }
 }
 
+export async function deleteIngredient(ingredient: Ingredient, identity: Identity) {
+  const response = await authentifiedFetch(`${API_HOST}/ingredients/${ingredient.id}`, identity, { method: 'DELETE' })
+  if (!response.ok) {
+    throw response
+  }
+}
+
 export async function deleteGroup(group: Group, identity: Identity) {
   const response = await authentifiedFetch(`${API_HOST}/groups/${group.id}`, identity, { method: 'DELETE' })
   if (!response.ok) {
