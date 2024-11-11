@@ -1,11 +1,12 @@
-import { Accessor, For } from 'solid-js'
+import { Accessor, createSignal, For } from 'solid-js'
 
-import { DetailedGroup, Group, Ingredient } from '../types'
+import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
 
 import appStyles from '../App.module.css'
 import styles from './EditIngredientComponent.module.css'
 import expenseStyles from './ExpenseModal.module.css'
+import MultiSelect, { Ref } from '@moliva/solid-multiselect'
 
 export type EditIngredientProps = {
   ingredient: Accessor<Ingredient | undefined>
@@ -19,73 +20,118 @@ export default (props: EditIngredientProps) => {
 
   const [state] = useAppContext()
 
-  let newGroupName
-  let simplifiedBalance
-  let defaultCurrencyId
+  const stateOptions = ['unknown', 'good', 'warning', 'bad']
 
-  const newGroup = () =>
+  let newIngredientName
+  let newIngredientNotes
+  let ingredientState
+  let tagsRef
+
+  const [relatedRef, setRelatedRef] = createSignal<Ref<Ingredient>>()
+  const [recipesRef, setRecipesdRef] = createSignal<Ref<Recipe>>()
+
+  const newIngredient = () =>
     ({
       id: ingredient()?.id,
-      name: newGroupName!.value,
+      name: newIngredientName!.value,
       state: 'good',
-      tags: [],
-      notes: '',
+      tags: parseTags(tagsRef!.value),
+      notes: newIngredientNotes!.value,
 
-      related: [],
-      recipes: []
-    }) as any as Ingredient
-
-  // export type Ingredient = {
-  //   id: number | undefined
-  //   name: string
-  //   created_at?: string | undefined
-  //
-  //   state: State
-  //   tags: string[]
-  //   notes: string
-  //
-  //   related: number[]
-  //   recipes: number[]
-  // }
+      related: relatedRef()!
+        .values()
+        .map(e => e.id),
+      recipes: recipesRef()!
+        .values()
+        .map(e => e.id)
+    }) as Ingredient
 
   return (
     <div class={styles.modal}>
       <div class={styles['modal-content']}>
         <input
-          ref={newGroupName}
+          ref={newIngredientName}
           class={styles['modal-name']}
-          placeholder='Group name'
+          placeholder='Ingrdient name'
           value={ingredient()?.name ?? ''}
         />
-        {/**
-        <div style={{ display: 'inline-flex', gap: '10px' }}>
-          <label>Default currency</label>
+        <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
+          <label>State</label>
           <select
             class={expenseStyles['currency-select']}
-            ref={defaultCurrencyId}
-            value={group()?.default_currency_id ?? state().currencies[1].id}>
-            <For each={Object.values(state().currencies)}>
-              {currency => (
-                <option value={currency.id} title={currency.description}>
-                  {currency.acronym}
+            ref={ingredientState}
+            value={ingredient()?.state ?? 'unknown'}>
+            <For each={stateOptions}>
+              {state => (
+                <option value={state} title={state}>
+                  {state}
                 </option>
               )}
             </For>
           </select>
         </div>
-        <div style={{ display: 'inline-flex', gap: '10px' }}>
-          <label>Simplified balance</label>
+        <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
           <input
-            type='checkbox'
-            ref={simplifiedBalance}
-            class={styles['modal-name']}
-            checked={group()?.balance_config?.simplified ?? false}
+            ref={tagsRef}
+            style={{ width: '100%' }}
+            class={styles['modal-tags']}
+            placeholder='Comma separated tags'
+            value={ingredient()?.tags?.join(',') ?? ''}></input>
+        </div>
+        <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
+          <textarea style={{ width: '100%' }} ref={newIngredientNotes} placeholder='Steps...' rows='10'>
+            {ingredient() ? ingredient()?.notes : ''}
+          </textarea>
+        </div>
+        <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
+          <label>Related ingredients</label>
+          <MultiSelect
+            ref={setRelatedRef}
+            // onSelect={props.onChange}
+            // onRemove={props.onChange}
+            emptyRecordMsg='No ingredients'
+            options={Object.values(state().ingredients!)}
+            isObject
+            displayValue='id'
+            renderValue={(member: Ingredient) => <label>{member.name}</label>}
+            selectedValues={[]}
+            selectionLimit={20}
+            hidePlaceholder={true}
+            // placeholder={props.placeholder}
+            // closeOnSelect={props.closeOnSelect}
+            // disable={props.disable}
+            style={{
+              optionContainer: { 'background-color': '#282c34' },
+              option: { display: 'flex', 'align-items': 'center', height: '40px', margin: '0', padding: '0 10px' }
+            }}
           />
         </div>
-        */}
+        <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
+          <label>Recipes</label>
+          <MultiSelect
+            ref={setRecipesdRef}
+            // onSelect={props.onChange}
+            // onRemove={props.onChange}
+            emptyRecordMsg='No recipes'
+            options={Object.values(state().recipes!)}
+            isObject
+            displayValue='id'
+            renderValue={(member: Recipe) => <label>{member.name}</label>}
+            selectedValues={[]}
+            selectionLimit={20}
+            hidePlaceholder={true}
+            // placeholder={props.placeholder}
+            // closeOnSelect={props.closeOnSelect}
+            // disable={props.disable}
+            style={{
+              optionContainer: { 'background-color': '#282c34' },
+              option: { display: 'flex', 'align-items': 'center', height: '40px', margin: '0', padding: '0 10px' }
+            }}
+          />
+        </div>
         <hr class={styles.divider} />
         <div class={styles['modal-controls']}>
-          <button class={`${appStyles.button} ${appStyles.primary}`} onClick={() => props.onConfirm(newGroup())}>
+          <button class={`${appStyles.button} ${appStyles.primary}`} onClick={() => props.onConfirm(newIngredient())}>
             {ingredient() ? 'Edit' : 'Create'}
           </button>
           <button class={`${appStyles.button} ${appStyles.secondary}`} onClick={props.onDiscard}>
@@ -95,4 +141,11 @@ export default (props: EditIngredientProps) => {
       </div>
     </div>
   )
+}
+
+export function parseTags(tagString: string): string[] {
+  return tagString
+    .split(',')
+    .filter(line => line.length)
+    .map(line => line.trim().toLowerCase())
 }

@@ -134,6 +134,7 @@ export default () => {
   const navigate = useNavigate()
 
   const updateIngredient = (updated: Ingredient) => {
+    console.log('new ingre', updated)
     const promise = updated.id
       ? putIngredient(updated, state()!.identity!)
       : postIngredient(updated, state()!.identity!)
