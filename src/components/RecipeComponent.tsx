@@ -1,4 +1,4 @@
-import { A } from '@solidjs/router'
+import { A, useNavigate } from '@solidjs/router'
 
 import { Group, Ingredient, Recipe } from '../types'
 
@@ -21,11 +21,14 @@ export type RecipeComponentProps = {
   recipe: Recipe
 
   onEdit(recipe: Recipe): void
+  onRelatedRecipeClicked(id: number): void
 }
 
 export const RecipeComponent = (props: RecipeComponentProps) => {
   const { recipe } = props
   const [state, { setError, setIngredients }] = useAppContext()
+
+  const navigate = useNavigate()
 
   const [icon, color] = renderState(recipe)
 

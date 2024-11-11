@@ -21,12 +21,20 @@ import navStyles from '../components/NavComponent.module.css'
 import homeStyles from './Home.module.css'
 import styles from './Ingredients.module.css'
 import groupStyles from './Group.module.css'
-import { Filter } from '../components/FilterComponent'
 import { RecipeComponent } from '../components/RecipeComponent'
 
 export default () => {
+  const navigate = useNavigate()
+
   const params = useParams()
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
+
+  const [id, setId] = createSignal(Number(params.id))
+  const [recipe, setRecipe] = createSignal<Recipe | undefined>()
+
+  createEffect(() => {
+    setRecipe(state().recipes ? state().recipes![id()]! : undefined)
+  })
 
   const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
     try {
@@ -85,8 +93,6 @@ export default () => {
 
   const [tab, setTab] = createSignal(0)
   const updateTab = (index: number) => () => setTab(index)
-
-  const navigate = useNavigate()
 
   onMount(() => {
     fetchIngredients({ refetching: false })
@@ -158,8 +164,6 @@ export default () => {
     setShowGroupModal(true)
   }
 
-  const [filter, setFilter] = createSignal('')
-
   return (
     <div class={styles.main}>
       {/**
@@ -170,51 +174,19 @@ export default () => {
         <UsersModal group={group} onClose={() => setShowUsersModal(false)} />
       </Show>
       */}
-      {state().recipes ? (
-        <>
-          <For each={Object.values(state().recipes!)}>
-            {recipe => (
-              <RecipeComponent
-                recipe={recipe}
-                onEdit={() => {}}
-                onRelatedRecipeClicked={id => navigate(import.meta.env.BASE_URL + `recipes/${id}`)}
-              />
-            )}
-          </For>
-          {/**
-          <div style={{ display: 'inline-flex', 'margin-bottom': '10px', gap: '8px' }}>
-            <label style={{ 'font-weight': '700', 'font-size': 'x-large' }} class={styles.name}>
-              group name
-            </label>
-            <button title='Group settings' onClick={() => setShowGroupModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-settings-icon']}`} icon={faSliders} />
-            </button>
-            <button title='Users' onClick={() => setShowUsersModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-users-icon']}`} icon={faUsers} />
-            </button>
-            <button title='Refresh group' onClick={() => refreshAll()}>
-              <Fa class={`${styles['group-icon']} ${styles['group-refresh-icon']}`} icon={faRotateRight} />
-            </button>
-          </div>
-          <ul class={styles['tab-group']}>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 0 }} onClick={updateTab(0)}>
-              Expenses
-            </li>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 1 }} onClick={updateTab(1)}>
-              Balances
-            </li>
-          </ul>
-          <hr class={styles['divider']} />
-      */}
-          <div class={groupStyles.actions}>
-            <button
-              title='New recipe'
-              class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
-              onClick={onNewGroupClicked}>
-              <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />
-            </button>
-          </div>
-        </>
+      {recipe() ? (
+        <Show when={recipe()} keyed>
+          {recipe => (
+            <RecipeComponent
+              recipe={recipe}
+              onEdit={() => {}}
+              onRelatedRecipeClicked={id => {
+                setId(id)
+                navigate(import.meta.env.BASE_URL + `recipes/${id}`)
+              }}
+            />
+          )}
+        </Show>
       ) : (
         'Loading'
       )}
