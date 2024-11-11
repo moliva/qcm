@@ -231,6 +231,37 @@ export async function postGroup(group: Group, identity: Identity): Promise<void>
   }
 }
 
+export async function postRecipe(recipe: Recipe, identity: Identity): Promise<void> {
+  const response = await authentifiedFetch(`${API_HOST}/recipes`, identity, {
+    method: 'POST',
+    body: JSON.stringify(recipe),
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  if (!response.ok) {
+    throw response
+  }
+}
+
+export async function putRecipe(recipe: Recipe, identity: Identity): Promise<void> {
+  const response = await authentifiedFetch(`${API_HOST}/recipes/${recipe.id}`, identity, {
+    method: 'PUT',
+    body: JSON.stringify(recipe),
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  if (!response.ok) {
+    throw response
+  }
+}
+
+export async function deleteRecipe(recipe: Recipe, identity: Identity) {
+  const response = await authentifiedFetch(`${API_HOST}/recipes/${recipe.id}`, identity, { method: 'DELETE' })
+  if (!response.ok) {
+    throw response
+  }
+}
+
 export async function postIngredient(ingredient: Ingredient, identity: Identity): Promise<void> {
   const response = await authentifiedFetch(`${API_HOST}/ingredients`, identity, {
     method: 'POST',

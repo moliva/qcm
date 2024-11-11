@@ -36,6 +36,8 @@
 }
 
 .note-controls {
+  margin-left: auto;
+
   display: flex;
   gap: 5px;
 }
@@ -85,6 +87,7 @@
 }
 
 .ingredient-name {
+  display: flex;
   font-weight: 600;
   margin: 0 0 3px;
 }

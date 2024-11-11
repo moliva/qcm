@@ -7,7 +7,9 @@ import {
   faCircleCheck,
   faCircleQuestion,
   faCircleXmark,
+  faPenToSquare,
   faTriangleExclamation,
+  faXmark,
   IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
@@ -20,8 +22,10 @@ import navStyles from './NavComponent.module.css'
 export type RecipeComponentProps = {
   recipe: Recipe
 
-  onEdit(recipe: Recipe): void
   onRelatedRecipeClicked(id: number): void
+
+  onEdit(recipe: Recipe): void
+  onDelete(recipe: Recipe): void
 }
 
 export const RecipeComponent = (props: RecipeComponentProps) => {
@@ -39,6 +43,17 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
         <span style={{ color: color }}>
           <Fa class={styles['ingredient-state-icon']} icon={icon} />
         </span>
+
+        <div class={styles['note-controls']}>
+          <button class={`${styles['edit-control']} ${styles['note-control']}`} onClick={() => props.onEdit(recipe)}>
+            <Fa icon={faPenToSquare} />
+          </button>
+          <button
+            class={`${styles['delete-control']} ${styles['note-control']}`}
+            onClick={() => props.onDelete(recipe)}>
+            <Fa icon={faXmark} />
+          </button>
+        </div>
       </div>
       <div class={styles['note-tags']}>
         <For each={recipe.tags}>
