@@ -1,6 +1,6 @@
-import { A } from '@solidjs/router'
+import { A, useNavigate } from '@solidjs/router'
 
-import { Group, Ingredient } from '../types'
+import { Ingredient } from '../types'
 
 import { useAppContext } from '../context'
 
@@ -20,12 +20,16 @@ import { For } from 'solid-js'
 export type IngredientComponentProps = {
   ingredient: Ingredient
 
+  onRelatedIngredientClicked(id: number): void
+
   onEdit(ingredient: Ingredient): void
 }
 
 export const IngredientComponent = (props: IngredientComponentProps) => {
   const { ingredient } = props
   const [state, { setError, setIngredients }] = useAppContext()
+
+  const navigate = useNavigate()
 
   const [icon, color] = renderState(ingredient)
 
@@ -61,7 +65,7 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
               {related => (
                 <label
                   class={`${styles['ingredient-related']} ${appStyles.button}`}
-                  onClick={() => console.log('ingredient', related)}>
+                  onClick={() => props.onRelatedIngredientClicked(related.id)}>
                   {related.name}
                 </label>
               )}
@@ -77,7 +81,7 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
               {recipe => (
                 <label
                   class={`${styles['ingredient-related']} ${appStyles.button}`}
-                  onClick={() => console.log('recipe', recipe)}>
+                  onClick={() => navigate(import.meta.env.BASE_URL + `recipes/${recipe.id}`)}>
                   {recipe.name}
                 </label>
               )}

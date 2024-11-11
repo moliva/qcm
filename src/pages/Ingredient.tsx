@@ -23,8 +23,17 @@ import styles from './Ingredients.module.css'
 import groupStyles from './Group.module.css'
 
 export default () => {
+  const navigate = useNavigate()
+
   const params = useParams()
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
+
+  const [id, setId] = createSignal(Number(params.id))
+  const [ingredient, setIngredient] = createSignal<Ingredient | undefined>()
+
+  createEffect(() => {
+    setIngredient(state().ingredients ? state().ingredients[id()]! : undefined)
+  })
 
   const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
     try {
@@ -134,7 +143,6 @@ export default () => {
   //     setError(formatError('Error while formatting and setting new data', e))
   //   }
   // })
-  const navigate = useNavigate()
 
   const updateGroup = (updated: Group) => {
     const promise = updated.id ? putGroup(updated, state()!.identity!) : postGroup(updated, state()!.identity!)
@@ -165,51 +173,29 @@ export default () => {
         <UsersModal group={group} onClose={() => setShowUsersModal(false)} />
       </Show>
       */}
-      {state().ingredients ? (
-        <>
-          <For each={Object.values(state().ingredients!)}>
-            {ingredient => (
+      {ingredient() ? (
+        <Show when={ingredient()} keyed>
+          {ingredient => (
+            <>
               <IngredientComponent
                 ingredient={ingredient}
                 onEdit={() => {}}
-                onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
+                onRelatedIngredientClicked={id => {
+                  setId(id)
+                  navigate(import.meta.env.BASE_URL + `ingredients/${id}`)
+                }}
               />
-            )}
-          </For>
-          {/**
-          <div style={{ display: 'inline-flex', 'margin-bottom': '10px', gap: '8px' }}>
-            <label style={{ 'font-weight': '700', 'font-size': 'x-large' }} class={styles.name}>
-              group name
-            </label>
-            <button title='Group settings' onClick={() => setShowGroupModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-settings-icon']}`} icon={faSliders} />
-            </button>
-            <button title='Users' onClick={() => setShowUsersModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-users-icon']}`} icon={faUsers} />
-            </button>
-            <button title='Refresh group' onClick={() => refreshAll()}>
-              <Fa class={`${styles['group-icon']} ${styles['group-refresh-icon']}`} icon={faRotateRight} />
-            </button>
-          </div>
-          <ul class={styles['tab-group']}>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 0 }} onClick={updateTab(0)}>
-              Expenses
-            </li>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 1 }} onClick={updateTab(1)}>
-              Balances
-            </li>
-          </ul>
-          <hr class={styles['divider']} />
-      */}
-          <div class={groupStyles.actions}>
-            <button
-              title='New ingredient'
-              class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
-              onClick={onNewGroupClicked}>
-              <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />
-            </button>
-          </div>
-        </>
+              <div class={groupStyles.actions}>
+                <button
+                  title='New ingredient'
+                  class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
+                  onClick={onNewGroupClicked}>
+                  <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />
+                </button>
+              </div>
+            </>
+          )}
+        </Show>
       ) : (
         'Loading'
       )}

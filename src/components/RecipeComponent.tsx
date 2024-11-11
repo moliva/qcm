@@ -57,7 +57,7 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
             <div style={{ display: 'flex', 'align-items': 'center', gap: '5px' }}>
               <label
                 class={`${styles['ingredient-related']} ${appStyles.button}`}
-                onClick={() => console.log('ingredient', related)}>
+                onClick={() => navigate(import.meta.env.BASE_URL + `ingredients/${related.id}`)}>
                 {related.name}
               </label>
               <span>{measure}</span>

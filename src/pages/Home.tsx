@@ -20,7 +20,7 @@ import { formatError } from '../utils'
 export type HomeProps = {}
 
 export default (props: HomeProps) => {
-  const [state, { setGroup, setError }] = useAppContext()!
+  const [state, { setError }] = useAppContext()!
 
   const [filter, setFilter] = createSignal<string>('')
   const [filteredGroups, setFilteredGroups] = createSignal<Group[]>([])

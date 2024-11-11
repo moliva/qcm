@@ -71,7 +71,7 @@ export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
       name: 'sopa crema zapallo',
       state: 'bad',
       tags: ['vegetable', 'sopa'],
-      notes: '1- hervir zapallo, 2- mixear bien',
+      notes: '1- hervir zapallo\n2- mixear bien\n3- disfrutar!',
       ingredients: [[1, 'un poquitou']]
     },
     {
@@ -85,17 +85,6 @@ export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
         [2, 'a gusto']
       ]
     }
-    // export type Recipe = {
-    //   id: number | undefined
-    //   name: string
-    //   created_at?: string | undefined
-    //
-    //   state: State
-    //   tags: string[]
-    //   notes: string
-    //
-    //   ingredients: number[]
-    // }
   ]
 }
 export async function fetchIngredients(identity: Identity): Promise<Ingredient[]> {
@@ -139,16 +128,6 @@ export async function fetchIngredients(identity: Identity): Promise<Ingredient[]
       related: [],
       recipes: []
     }
-
-    // id: number | undefined
-    // name: string
-    // created_at: string | undefined
-    //
-    // state: State
-    // tags: string[]
-    // notes: string
-    //
-    // related: number[]
   ]
 }
 

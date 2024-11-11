@@ -29,6 +29,8 @@ import styles from './App.module.css'
 import { formatError, sleep } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
+// const RecipePage = lazy(() => import('./pages/Recipe'))
+const IngredientPage = lazy(() => import('./pages/Ingredient'))
 const RecipesPage = lazy(() => import('./pages/Recipes'))
 const IngredientsPage = lazy(() => import('./pages/Ingredients'))
 
@@ -251,6 +253,8 @@ export default () => {
                   <Route path='/' component={Home} />
                   <Route path='/recipes' component={RecipesPage} />
                   <Route path='/ingredients' component={IngredientsPage} />
+                  <Route path='/recipes/:id' component={RecipesPage} />
+                  <Route path='/ingredients/:id' component={IngredientPage} />
                 </Route>
               </Routes>
             </section>
