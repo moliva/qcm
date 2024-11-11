@@ -1,20 +1,21 @@
-import { For, Match, Show, Switch, createEffect, createSignal, onMount } from 'solid-js'
-import { useNavigate, useParams } from '@solidjs/router'
+import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
+import { useNavigate } from '@solidjs/router'
 
-import { faPlusSquare, faRotateRight, faSliders, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
 import {
   fetchIngredients as fetchApiIngredients,
   fetchRecipes as fetchApiRecipes,
-  postGroup,
-  putGroup
+  postIngredient,
+  putIngredient
 } from '../services'
-import { Balance, Group, Ingredient, Recipe } from '../types'
+import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError, formatExpenses } from '../utils'
+import { formatError } from '../utils'
 
 import { IngredientComponent } from '../components/IngredientComponent'
+import EditIngredientComponent from '../components/EditIngredientComponent'
 
 import appStyles from '../App.module.css'
 import navStyles from '../components/NavComponent.module.css'
@@ -23,7 +24,6 @@ import styles from './Ingredients.module.css'
 import groupStyles from './Group.module.css'
 
 export default () => {
-  const params = useParams()
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
 
   const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
@@ -78,11 +78,8 @@ export default () => {
     }
   }
 
-  const [showGroupModal, setShowGroupModal] = createSignal(false)
-  const [showUsersModal, setShowUsersModal] = createSignal(false)
-
-  const [tab, setTab] = createSignal(0)
-  const updateTab = (index: number) => () => setTab(index)
+  const [showIngredientModal, setShowIngredientModal] = createSignal(false)
+  const [ingredient, setCurrentIngredient] = createSignal<Ingredient | undefined>()
 
   onMount(() => {
     fetchIngredients({ refetching: false })
@@ -136,35 +133,36 @@ export default () => {
   // })
   const navigate = useNavigate()
 
-  const updateGroup = (updated: Group) => {
-    const promise = updated.id ? putGroup(updated, state()!.identity!) : postGroup(updated, state()!.identity!)
+  const updateIngredient = (updated: Ingredient) => {
+    const promise = updated.id
+      ? putIngredient(updated, state()!.identity!)
+      : postIngredient(updated, state()!.identity!)
 
     promise
       .then(() => {
         // setGroup({ ...group()!, ...updated })
       })
-      .catch(e => {
+      .catch((e: any) => {
         setError(formatError('Error while updating group', e))
       })
 
-    setShowGroupModal(false)
+    setShowIngredientModal(false)
   }
 
-  const onNewGroupClicked = () => {
-    // setCurrentGroup(note as DetailedGroup)
-    setShowGroupModal(true)
+  const onNewIngredientClicked = () => {
+    setCurrentIngredient(undefined)
+    setShowIngredientModal(true)
   }
 
   return (
     <div class={styles.main}>
-      {/**
-      <Show when={showGroupModal()}>
-        <EditGroup group={group} onDiscard={() => setShowGroupModal(false)} onConfirm={updateGroup} />
+      <Show when={showIngredientModal()}>
+        <EditIngredientComponent
+          ingredient={ingredient}
+          onDiscard={() => setShowIngredientModal(false)}
+          onConfirm={updateIngredient}
+        />
       </Show>
-      <Show when={showUsersModal()}>
-        <UsersModal group={group} onClose={() => setShowUsersModal(false)} />
-      </Show>
-      */}
       {state().ingredients ? (
         <>
           <For each={Object.values(state().ingredients!)}>
@@ -176,36 +174,11 @@ export default () => {
               />
             )}
           </For>
-          {/**
-          <div style={{ display: 'inline-flex', 'margin-bottom': '10px', gap: '8px' }}>
-            <label style={{ 'font-weight': '700', 'font-size': 'x-large' }} class={styles.name}>
-              group name
-            </label>
-            <button title='Group settings' onClick={() => setShowGroupModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-settings-icon']}`} icon={faSliders} />
-            </button>
-            <button title='Users' onClick={() => setShowUsersModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-users-icon']}`} icon={faUsers} />
-            </button>
-            <button title='Refresh group' onClick={() => refreshAll()}>
-              <Fa class={`${styles['group-icon']} ${styles['group-refresh-icon']}`} icon={faRotateRight} />
-            </button>
-          </div>
-          <ul class={styles['tab-group']}>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 0 }} onClick={updateTab(0)}>
-              Expenses
-            </li>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 1 }} onClick={updateTab(1)}>
-              Balances
-            </li>
-          </ul>
-          <hr class={styles['divider']} />
-      */}
           <div class={groupStyles.actions}>
             <button
               title='New ingredient'
               class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
-              onClick={onNewGroupClicked}>
+              onClick={onNewIngredientClicked}>
               <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />
             </button>
           </div>

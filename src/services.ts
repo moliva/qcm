@@ -79,7 +79,7 @@ export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
       name: 'wok salteao',
       state: 'good',
       tags: ['vegetable', 'wok'],
-      notes: '1- saltear, 2- gozar',
+      notes: '1- saltear\n2- gozar',
       ingredients: [
         [3, 'mandale nomás'],
         [2, 'a gusto']
@@ -223,6 +223,30 @@ export async function postGroup(group: Group, identity: Identity): Promise<void>
   const response = await authentifiedFetch(`${API_HOST}/groups`, identity, {
     method: 'POST',
     body: JSON.stringify(group),
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  if (!response.ok) {
+    throw response
+  }
+}
+
+export async function postIngredient(ingredient: Ingredient, identity: Identity): Promise<void> {
+  const response = await authentifiedFetch(`${API_HOST}/ingredients`, identity, {
+    method: 'POST',
+    body: JSON.stringify(ingredient),
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  if (!response.ok) {
+    throw response
+  }
+}
+
+export async function putIngredient(ingredient: Ingredient, identity: Identity): Promise<void> {
+  const response = await authentifiedFetch(`${API_HOST}/ingredients/${ingredient.id}`, identity, {
+    method: 'PUT',
+    body: JSON.stringify(ingredient),
     headers: { 'Content-Type': 'application/json' }
   })
 

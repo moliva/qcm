@@ -32,7 +32,7 @@ export default () => {
   const [ingredient, setIngredient] = createSignal<Ingredient | undefined>()
 
   createEffect(() => {
-    setIngredient(state().ingredients ? state().ingredients[id()]! : undefined)
+    setIngredient(state().ingredients ? state().ingredients![id()]! : undefined)
   })
 
   const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
@@ -165,35 +165,17 @@ export default () => {
 
   return (
     <div class={styles.main}>
-      {/**
-      <Show when={showGroupModal()}>
-        <EditGroup group={group} onDiscard={() => setShowGroupModal(false)} onConfirm={updateGroup} />
-      </Show>
-      <Show when={showUsersModal()}>
-        <UsersModal group={group} onClose={() => setShowUsersModal(false)} />
-      </Show>
-      */}
       {ingredient() ? (
         <Show when={ingredient()} keyed>
           {ingredient => (
-            <>
-              <IngredientComponent
-                ingredient={ingredient}
-                onEdit={() => {}}
-                onRelatedIngredientClicked={id => {
-                  setId(id)
-                  navigate(import.meta.env.BASE_URL + `ingredients/${id}`)
-                }}
-              />
-              <div class={groupStyles.actions}>
-                <button
-                  title='New ingredient'
-                  class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
-                  onClick={onNewGroupClicked}>
-                  <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />
-                </button>
-              </div>
-            </>
+            <IngredientComponent
+              ingredient={ingredient}
+              onEdit={() => {}}
+              onRelatedIngredientClicked={id => {
+                setId(id)
+                navigate(import.meta.env.BASE_URL + `ingredients/${id}`)
+              }}
+            />
           )}
         </Show>
       ) : (
