@@ -1,6 +1,6 @@
 import { Accessor, createSignal, For } from 'solid-js'
 
-import { Ingredient, Recipe } from '../types'
+import { Ingredient } from '../types'
 import { useAppContext } from '../context'
 
 import appStyles from '../App.module.css'
@@ -28,20 +28,16 @@ export default (props: EditIngredientProps) => {
   let tagsRef
 
   const [relatedRef, setRelatedRef] = createSignal<Ref<Ingredient> | undefined>()
-  const [recipesRef, setRecipesdRef] = createSignal<Ref<Recipe> | undefined>()
 
   const newIngredient = () =>
     ({
       id: ingredient()?.id,
       name: newIngredientName!.value,
-      state: 'good',
+      state: ingredientState!.value,
       tags: parseTags(tagsRef!.value),
       notes: newIngredientNotes!.value,
 
       related: relatedRef()!
-        .values()
-        .map(e => e.id),
-      recipes: recipesRef()!
         .values()
         .map(e => e.id)
     }) as Ingredient
@@ -95,29 +91,6 @@ export default (props: EditIngredientProps) => {
             displayValue='id'
             renderValue={(member: Ingredient) => <label>{member.name}</label>}
             selectedValues={ingredient()?.related.map(e => state()!.ingredients![e])}
-            selectionLimit={20}
-            hidePlaceholder={true}
-            // placeholder={props.placeholder}
-            // closeOnSelect={props.closeOnSelect}
-            // disable={props.disable}
-            style={{
-              optionContainer: { 'background-color': '#282c34' },
-              option: { display: 'flex', 'align-items': 'center', height: '40px', margin: '0', padding: '0 10px' }
-            }}
-          />
-        </div>
-        <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
-          <label>Recipes</label>
-          <MultiSelect
-            ref={setRecipesdRef}
-            // onSelect={props.onChange}
-            // onRemove={props.onChange}
-            emptyRecordMsg='No recipes'
-            options={Object.values(state().recipes!)}
-            isObject
-            displayValue='id'
-            renderValue={(member: Recipe) => <label>{member.name}</label>}
-            selectedValues={ingredient()?.recipes.map(e => state()!.recipes![e])}
             selectionLimit={20}
             hidePlaceholder={true}
             // placeholder={props.placeholder}

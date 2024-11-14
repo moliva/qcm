@@ -60,7 +60,7 @@ export async function fetchCurrencies(identity: Identity): Promise<Currency[]> {
 
 export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
   // const res = await authentifiedFetch(`${API_HOST}/recipes`, identity!)
-
+  //
   // return (await res.json()) as Recipe[]
   return [
     {
@@ -85,47 +85,47 @@ export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
   ]
 }
 export async function fetchIngredients(identity: Identity): Promise<Ingredient[]> {
-  // const res = await authentifiedFetch(`${API_HOST}/ingredients`, identity!)
+  const res = await authentifiedFetch(`${API_HOST}/ingredients`, identity!)
 
-  // return (await res.json()) as Ingredient[]
-  return [
-    {
-      id: 1,
-      name: 'zapallo',
-      state: 'bad',
-      tags: ['vegetable', 'pumpkin'],
-      notes: 'me cae mal',
-      related: [2, 4],
-      recipes: [1]
-    },
-    {
-      id: 2,
-      name: 'calabacín',
-      state: 'good',
-      tags: ['vegetable', 'pumpkin'],
-      notes: 'joya, pero no me gusta mucho',
-      related: [1],
-      recipes: [2]
-    },
-    {
-      id: 3,
-      name: 'tofu',
-      state: 'warning',
-      tags: ['protein'],
-      notes: 'tiene sus días',
-      related: [],
-      recipes: [2]
-    },
-    {
-      id: 4,
-      name: 'remolacha',
-      state: 'unknown',
-      tags: ['vegetable'],
-      notes: 'ni loca lo pruebo',
-      related: [],
-      recipes: []
-    }
-  ]
+  return (await res.json()) as Ingredient[]
+  // return [
+  //   {
+  //     id: 1,
+  //     name: 'zapallo',
+  //     state: 'bad',
+  //     tags: ['vegetable', 'pumpkin'],
+  //     notes: 'me cae mal',
+  //     related: [2, 4],
+  //     recipes: [1]
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'calabacín',
+  //     state: 'good',
+  //     tags: ['vegetable', 'pumpkin'],
+  //     notes: 'joya, pero no me gusta mucho',
+  //     related: [1],
+  //     recipes: [2]
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'tofu',
+  //     state: 'warning',
+  //     tags: ['protein'],
+  //     notes: 'tiene sus días',
+  //     related: [],
+  //     recipes: [2]
+  //   },
+  //   {
+  //     id: 4,
+  //     name: 'remolacha',
+  //     state: 'unknown',
+  //     tags: ['vegetable'],
+  //     notes: 'ni loca lo pruebo',
+  //     related: [],
+  //     recipes: []
+  //   }
+  // ]
 }
 
 export async function fetchNotifications(identity: Identity): Promise<Notification[]> {
