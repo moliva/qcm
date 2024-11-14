@@ -141,7 +141,7 @@ export default () => {
 
     promise
       .then(() => {
-        // setGroup({ ...group()!, ...updated })
+        refreshAll()
       })
       .catch((e: any) => {
         setError(formatError('Error while updating group', e))
@@ -150,8 +150,9 @@ export default () => {
     setShowIngredientModal(false)
   }
 
-  const onDeleteIngredient = (ingredient: Ingredient) => {
-    deleteIngredient(ingredient, state()!.identity!)
+  const onDeleteIngredient = async (ingredient: Ingredient) => {
+    await deleteIngredient(ingredient, state()!.identity!)
+    await refreshAll()
   }
 
   const onEditIngredientClicked = (ingredient: Ingredient) => {
