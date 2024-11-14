@@ -4,12 +4,7 @@ import { useNavigate, useParams } from '@solidjs/router'
 import { faPlusSquare, faRotateRight, faSliders, faUsers } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
-import {
-  fetchIngredients as fetchApiIngredients,
-  fetchRecipes as fetchApiRecipes,
-  postGroup,
-  putGroup
-} from '../services'
+import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes } from '../services'
 import { Balance, Group, Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
 import { formatError, formatExpenses } from '../utils'
@@ -88,12 +83,6 @@ export default () => {
     }
   }
 
-  const [showGroupModal, setShowGroupModal] = createSignal(false)
-  const [showUsersModal, setShowUsersModal] = createSignal(false)
-
-  const [tab, setTab] = createSignal(0)
-  const updateTab = (index: number) => () => setTab(index)
-
   onMount(() => {
     fetchIngredients({ refetching: false })
     fetchRecipes({ refetching: false })
@@ -131,49 +120,8 @@ export default () => {
     // refreshContent()
   }
 
-  // createEffect(() => {
-  //   try {
-  //     // TODO - refactor this ensuring we have fetched detailed group, expenses and balances - moliva - 2024/04/11
-  //     if (group() && state().groups[group()!.id!].members && state().groups[group()!.id!].expenses) {
-  //       const expenses = formatExpenses(state(), group()!)
-  //
-  //       setExpenses(expenses)
-  //       setBalances(state().groups[group()!.id!].balances)
-  //     }
-  //   } catch (e: any) {
-  //     setError(formatError('Error while formatting and setting new data', e))
-  //   }
-  // })
-
-  const updateGroup = (updated: Group) => {
-    const promise = updated.id ? putGroup(updated, state()!.identity!) : postGroup(updated, state()!.identity!)
-
-    promise
-      .then(() => {
-        // setGroup({ ...group()!, ...updated })
-      })
-      .catch(e => {
-        setError(formatError('Error while updating group', e))
-      })
-
-    setShowGroupModal(false)
-  }
-
-  const onNewGroupClicked = () => {
-    // setCurrentGroup(note as DetailedGroup)
-    setShowGroupModal(true)
-  }
-
   return (
     <div class={styles.main}>
-      {/**
-      <Show when={showGroupModal()}>
-        <EditGroup group={group} onDiscard={() => setShowGroupModal(false)} onConfirm={updateGroup} />
-      </Show>
-      <Show when={showUsersModal()}>
-        <UsersModal group={group} onClose={() => setShowUsersModal(false)} />
-      </Show>
-      */}
       {recipe() ? (
         <Show when={recipe()} keyed>
           {recipe => (

@@ -4,7 +4,6 @@ import Fa from 'solid-fa'
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
 import { DetailedGroup, Group } from '../types'
-import { deleteGroup, postGroup, putGroup, fetchGroups } from '../services'
 import { useAppContext } from '../context'
 
 import { Filter } from '../components/FilterComponent'
@@ -31,11 +30,11 @@ export default (props: HomeProps) => {
   const refreshGroups = async () => {
     const currentIdentity = state().identity!
 
-    const groups = currentIdentity ? await fetchGroups(currentIdentity) : undefined
-
-    for (const g of groups ?? []) {
-      setGroup(g)
-    }
+    //   const groups = currentIdentity ? await fetchGroups(currentIdentity) : undefined
+    //
+    //   for (const g of groups ?? []) {
+    //     setGroup(g)
+    //   }
   }
 
   const refreshContent = async () => {
@@ -55,15 +54,15 @@ export default (props: HomeProps) => {
     }
   }
 
-  const createGroup = (group: Group) => {
-    const promise = group.id ? putGroup(group, state()!.identity!) : postGroup(group, state()!.identity!)
-
-    promise.then(refreshContent).catch(e => {
-      setError(formatError('Error while creating expense', e))
-    })
-
-    setShowGroupModal(false)
-  }
+  // const createGroup = (group: Group) => {
+  //   const promise = group.id ? putGroup(group, state()!.identity!) : postGroup(group, state()!.identity!)
+  //
+  //   promise.then(refreshContent).catch(e => {
+  //     setError(formatError('Error while creating expense', e))
+  //   })
+  //
+  //   setShowGroupModal(false)
+  // }
 
   onMount(() => {
     refreshContent()
@@ -75,13 +74,13 @@ export default (props: HomeProps) => {
     window.removeEventListener('keydown', handleAppKeydown)
   })
 
-  const onDeleteGroup = (group: Group): void => {
-    deleteGroup(group, state().identity!)
-      .then(refreshContent)
-      .catch(e => {
-        setError(formatError('Error while creating expense', e))
-      })
-  }
+  // const onDeleteGroup = (group: Group): void => {
+  //   deleteGroup(group, state().identity!)
+  //     .then(refreshContent)
+  //     .catch(e => {
+  //       setError(formatError('Error while creating expense', e))
+  //     })
+  // }
 
   const showModal = (note: Group | undefined) => {
     setCurrentGroup(note as DetailedGroup)
@@ -92,14 +91,16 @@ export default (props: HomeProps) => {
     showModal(undefined)
   }
 
-  createEffect(() => {
-    const lowered = filter().toLowerCase()
-    const filtered = (Object.values(state().groups) ?? []).filter(group => group.name.toLowerCase().includes(lowered))
+  // createEffect(() => {
+  //   const lowered = filter().toLowerCase()
+  //   const filtered = (Object.values(state().groups) ?? []).filter(group => group.name.toLowerCase().includes(lowered))
+  //
+  //   setFilteredGroups(filtered)
+  // })
 
-    setFilteredGroups(filtered)
-  })
-
-  return (
+  return <div></div>
+  {
+    /**
     <>
       <Show when={showGroupModal()}>
         <EditGroup group={currentGroup} onDiscard={() => setShowGroupModal(false)} onConfirm={createGroup} />
@@ -125,5 +126,6 @@ export default (props: HomeProps) => {
         </Match>
       </Switch>
     </>
-  )
+      */
+  }
 }

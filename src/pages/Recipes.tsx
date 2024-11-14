@@ -11,9 +11,9 @@ import {
   postRecipe,
   putRecipe
 } from '../services'
-import { Balance, Group, Ingredient, Recipe } from '../types'
+import {  Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError, formatExpenses } from '../utils'
+import { formatError } from '../utils'
 
 import appStyles from '../App.module.css'
 import navStyles from '../components/NavComponent.module.css'

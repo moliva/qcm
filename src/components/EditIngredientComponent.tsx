@@ -27,8 +27,8 @@ export default (props: EditIngredientProps) => {
   let ingredientState
   let tagsRef
 
-  const [relatedRef, setRelatedRef] = createSignal<Ref<Ingredient>>()
-  const [recipesRef, setRecipesdRef] = createSignal<Ref<Recipe>>()
+  const [relatedRef, setRelatedRef] = createSignal<Ref<Ingredient> | undefined>()
+  const [recipesRef, setRecipesdRef] = createSignal<Ref<Recipe> | undefined>()
 
   const newIngredient = () =>
     ({
@@ -94,7 +94,7 @@ export default (props: EditIngredientProps) => {
             isObject
             displayValue='id'
             renderValue={(member: Ingredient) => <label>{member.name}</label>}
-            selectedValues={ingredient()?.related.map(e => state()!.ingredients[e])}
+            selectedValues={ingredient()?.related.map(e => state()!.ingredients![e])}
             selectionLimit={20}
             hidePlaceholder={true}
             // placeholder={props.placeholder}
@@ -117,7 +117,7 @@ export default (props: EditIngredientProps) => {
             isObject
             displayValue='id'
             renderValue={(member: Recipe) => <label>{member.name}</label>}
-            selectedValues={ingredient()?.recipes.map(e => state()!.recipes[e])}
+            selectedValues={ingredient()?.recipes.map(e => state()!.recipes![e])}
             selectionLimit={20}
             hidePlaceholder={true}
             // placeholder={props.placeholder}
