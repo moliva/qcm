@@ -11,7 +11,7 @@ import {
   postRecipe,
   putRecipe
 } from '../services'
-import {  Ingredient, Recipe } from '../types'
+import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
 import { formatError } from '../utils'
 
@@ -25,7 +25,6 @@ import { RecipeComponent } from '../components/RecipeComponent'
 import EditRecipeComponent from '../components/EditRecipeComponent'
 
 export default () => {
-  const params = useParams()
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
 
   const [showRecipeModal, setShowRecipeModal] = createSignal(false)
@@ -92,7 +91,7 @@ export default () => {
 
   const refreshContent = async () => {
     try {
-      const currentIdentity = state().identity!
+      const _currentIdentity = state().identity!
       fetchIngredients({ refetching: true })
       fetchRecipes({ refetching: true })
     } catch (e) {
@@ -124,25 +123,11 @@ export default () => {
   const refreshAll = async () => {
     fetchIngredients({ refetching: true })
     fetchRecipes({ refetching: true })
-    // refreshContent()
   }
 
-  // createEffect(() => {
-  //   try {
-  //     // TODO - refactor this ensuring we have fetched detailed group, expenses and balances - moliva - 2024/04/11
-  //     if (group() && state().groups[group()!.id!].members && state().groups[group()!.id!].expenses) {
-  //       const expenses = formatExpenses(state(), group()!)
-  //
-  //       setExpenses(expenses)
-  //       setBalances(state().groups[group()!.id!].balances)
-  //     }
-  //   } catch (e: any) {
-  //     setError(formatError('Error while formatting and setting new data', e))
-  //   }
-  // })
-
-  const onDeleteRecipe = (recipe: Recipe) => {
-    deleteRecipe(recipe, state()!.identity!)
+  const onDeleteRecipe = async (recipe: Recipe) => {
+    await deleteRecipe(recipe, state()!.identity!)
+    await refreshAll()
   }
 
   const updateRecipe = (updated: Recipe) => {
@@ -150,7 +135,7 @@ export default () => {
 
     promise
       .then(() => {
-        // setRecipe({ ...recipe()!, ...updated })
+        refreshAll()
       })
       .catch(e => {
         setError(formatError('Error while updating recipe', e))
@@ -181,31 +166,6 @@ export default () => {
               />
             )}
           </For>
-          {/**
-          <div style={{ display: 'inline-flex', 'margin-bottom': '10px', gap: '8px' }}>
-            <label style={{ 'font-weight': '700', 'font-size': 'x-large' }} class={styles.name}>
-              group name
-            </label>
-            <button title='Group settings' onClick={() => setShowGroupModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-settings-icon']}`} icon={faSliders} />
-            </button>
-            <button title='Users' onClick={() => setShowUsersModal(true)}>
-              <Fa class={`${styles['group-icon']} ${styles['group-users-icon']}`} icon={faUsers} />
-            </button>
-            <button title='Refresh group' onClick={() => refreshAll()}>
-              <Fa class={`${styles['group-icon']} ${styles['group-refresh-icon']}`} icon={faRotateRight} />
-            </button>
-          </div>
-          <ul class={styles['tab-group']}>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 0 }} onClick={updateTab(0)}>
-              Expenses
-            </li>
-            <li class={styles['tab-item']} classList={{ [styles.selected]: tab() === 1 }} onClick={updateTab(1)}>
-              Balances
-            </li>
-          </ul>
-          <hr class={styles['divider']} />
-      */}
           <div class={groupStyles.actions}>
             <button
               title='New recipe'

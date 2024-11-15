@@ -116,7 +116,7 @@ export type Ingredient = {
 }
 
 /** Ingredient id -> measure to be used in recipe */
-export type IngredientPair = [number, string]
+export type IngredientPair = { ingredient: number; measure: string }
 
 export type Recipe = {
   id: number | undefined

@@ -59,30 +59,9 @@ export async function fetchCurrencies(identity: Identity): Promise<Currency[]> {
 }
 
 export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
-  // const res = await authentifiedFetch(`${API_HOST}/recipes`, identity!)
-  //
-  // return (await res.json()) as Recipe[]
-  return [
-    {
-      id: 1,
-      name: 'sopa crema zapallo',
-      state: 'bad',
-      tags: ['vegetable', 'sopa'],
-      notes: '1- hervir zapallo\n2- mixear bien\n3- disfrutar!',
-      ingredients: [[1, 'un poquitou']]
-    },
-    {
-      id: 2,
-      name: 'wok salteao',
-      state: 'good',
-      tags: ['vegetable', 'wok'],
-      notes: '1- saltear\n2- gozar',
-      ingredients: [
-        [3, 'mandale nomás'],
-        [2, 'a gusto']
-      ]
-    }
-  ]
+  const res = await authentifiedFetch(`${API_HOST}/recipes`, identity!)
+
+  return (await res.json()) as Recipe[]
 }
 export async function fetchIngredients(identity: Identity): Promise<Ingredient[]> {
   const res = await authentifiedFetch(`${API_HOST}/ingredients`, identity!)

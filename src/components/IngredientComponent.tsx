@@ -81,7 +81,7 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
               {related => (
                 <label
                   class={`${styles['ingredient-related']} ${appStyles.button}`}
-                  onClick={() => props.onRelatedIngredientClicked(related.id)}>
+                  onClick={() => props.onRelatedIngredientClicked(related.id!)}>
                   {related.name}
                 </label>
               )}

@@ -116,22 +116,8 @@ export default () => {
   const refreshAll = async () => {
     fetchIngredients({ refetching: true })
     fetchRecipes({ refetching: true })
-    // refreshContent()
   }
 
-  // createEffect(() => {
-  //   try {
-  //     // TODO - refactor this ensuring we have fetched detailed group, expenses and balances - moliva - 2024/04/11
-  //     if (group() && state().groups[group()!.id!].members && state().groups[group()!.id!].expenses) {
-  //       const expenses = formatExpenses(state(), group()!)
-  //
-  //       setExpenses(expenses)
-  //       setBalances(state().groups[group()!.id!].balances)
-  //     }
-  //   } catch (e: any) {
-  //     setError(formatError('Error while formatting and setting new data', e))
-  //   }
-  // })
   const navigate = useNavigate()
 
   const updateIngredient = (updated: Ingredient) => {

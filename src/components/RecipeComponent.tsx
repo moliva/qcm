@@ -70,18 +70,23 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
       </div>
       <label class={styles['ingredient-subtitle']}>Ingredients</label>
       <div class={styles['ingredient-related-set']}>
-        <For each={recipe.ingredients.map(([id, measure]) => [state().ingredients![id], measure] as const)}>
-          {([related, measure]) => (
-            <div style={{ display: 'flex', 'align-items': 'center', gap: '5px' }}>
-              <label
-                class={`${styles['ingredient-related']} ${appStyles.button}`}
-                onClick={() => navigate(import.meta.env.BASE_URL + `ingredients/${related.id}`)}>
-                {related.name}
-              </label>
-              <span>{measure}</span>
-            </div>
-          )}
-        </For>
+        {state().ingredients ? (
+          <For
+            each={recipe.ingredients.map(
+              ({ ingredient: id, measure }) => [state().ingredients![id], measure] as const
+            )}>
+            {([related, measure]) => (
+              <div style={{ display: 'flex', 'align-items': 'center', gap: '5px' }}>
+                <label
+                  class={`${styles['ingredient-related']} ${appStyles.button}`}
+                  onClick={() => navigate(import.meta.env.BASE_URL + `ingredients/${related.id}`)}>
+                  {related.name}
+                </label>
+                <span>{measure}</span>
+              </div>
+            )}
+          </For>
+        ) : null}
       </div>
       <label class={styles['ingredient-subtitle']}>Instructions</label>
       <textarea class={styles['ingredient-notes']} readonly={true}>
