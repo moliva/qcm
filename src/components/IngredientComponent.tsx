@@ -47,16 +47,20 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
         </span>
 
         <div class={styles['note-controls']}>
-          <button
-            class={`${styles['edit-control']} ${styles['note-control']}`}
-            onClick={() => props.onEdit(ingredient)}>
-            <Fa icon={faPenToSquare} />
-          </button>
-          <button
-            class={`${styles['delete-control']} ${styles['note-control']}`}
-            onClick={() => props.onDelete(ingredient)}>
-            <Fa icon={faXmark} />
-          </button>
+          {props.onEdit ? (
+            <button
+              class={`${styles['edit-control']} ${styles['note-control']}`}
+              onClick={() => props.onEdit!(ingredient)}>
+              <Fa icon={faPenToSquare} />
+            </button>
+          ) : null}
+          {props.onDelete ? (
+            <button
+              class={`${styles['delete-control']} ${styles['note-control']}`}
+              onClick={() => props.onDelete!(ingredient)}>
+              <Fa icon={faXmark} />
+            </button>
+          ) : null}
         </div>
       </div>
       <div class={styles['note-tags']}>
