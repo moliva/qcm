@@ -13,13 +13,9 @@ import { useAppContext } from '../context'
 import { formatError } from '../utils'
 
 import { IngredientComponent } from '../components/IngredientComponent'
-
-import appStyles from '../App.module.css'
-import navStyles from '../components/NavComponent.module.css'
-import homeStyles from './Home.module.css'
-import styles from './Ingredients.module.css'
-import groupStyles from './Group.module.css'
 import EditIngredientComponent from '../components/EditIngredientComponent'
+
+import styles from './Ingredients.module.css'
 
 export default () => {
   const navigate = useNavigate()
@@ -122,25 +118,11 @@ export default () => {
   const refreshAll = async () => {
     fetchIngredients({ refetching: true })
     fetchRecipes({ refetching: true })
-    // refreshContent()
   }
-
-  // createEffect(() => {
-  //   try {
-  //     // TODO - refactor this ensuring we have fetched detailed group, expenses and balances - moliva - 2024/04/11
-  //     if (group() && state().groups[group()!.id!].members && state().groups[group()!.id!].expenses) {
-  //       const expenses = formatExpenses(state(), group()!)
-  //
-  //       setExpenses(expenses)
-  //       setBalances(state().groups[group()!.id!].balances)
-  //     }
-  //   } catch (e: any) {
-  //     setError(formatError('Error while formatting and setting new data', e))
-  //   }
-  // })
 
   const onDeleteIngredient = (ingredient: Ingredient) => {
     deleteIngredient(ingredient, state()!.identity!)
+    navigate(import.meta.env.BASE_URL + `ingredients`)
   }
 
   const onEditIngredientClicked = (ingredient: Ingredient) => {
@@ -155,7 +137,7 @@ export default () => {
 
     promise
       .then(() => {
-        // setGroup({ ...group()!, ...updated })
+        refreshAll()
       })
       .catch((e: any) => {
         setError(formatError('Error while updating group', e))
@@ -178,6 +160,9 @@ export default () => {
           {ingredient => (
             <IngredientComponent
               ingredient={ingredient}
+              onNameClick={() => {
+                navigate(import.meta.env.BASE_URL + `ingredients/${ingredient.id}`)
+              }}
               onEdit={onEditIngredientClicked}
               onDelete={onDeleteIngredient}
               onRelatedIngredientClicked={id => {

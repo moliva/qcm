@@ -115,14 +115,14 @@ export default () => {
     }
   })
 
-  const onEditRecipeClicked = (recipe?: Recipe) => {
-    setCurrentRecipe(recipe)
-    setShowRecipeModal(true)
-  }
-
   const refreshAll = async () => {
     fetchIngredients({ refetching: true })
     fetchRecipes({ refetching: true })
+  }
+
+  const onEditRecipeClicked = (recipe?: Recipe) => {
+    setCurrentRecipe(recipe)
+    setShowRecipeModal(true)
   }
 
   const onDeleteRecipe = async (recipe: Recipe) => {
@@ -160,9 +160,11 @@ export default () => {
             {recipe => (
               <RecipeComponent
                 recipe={recipe}
+                onNameClick={() => {
+                  navigate(import.meta.env.BASE_URL + `recipes/${recipe.id}`)
+                }}
                 onEdit={onEditRecipeClicked}
                 onDelete={onDeleteRecipe}
-                onRelatedRecipeClicked={id => navigate(import.meta.env.BASE_URL + `recipes/${id}`)}
               />
             )}
           </For>

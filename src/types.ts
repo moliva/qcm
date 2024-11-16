@@ -1,5 +1,8 @@
 export type UserId = string
 
+export type IngredientId = number
+export type RecipeId = number
+
 export type NotificationStatus = 'new' | 'read' | 'archived'
 
 export type NotificationsUpdate = NotificationUpdate & { ids: number[] }

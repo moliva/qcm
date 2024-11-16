@@ -65,7 +65,6 @@ export default () => {
   })
 
   async function onSearchClicked(searchTerm: string) {
-    console.log('searching', searchTerm)
     navigate(import.meta.env.BASE_URL + `search?keywords=${searchTerm}`)
   }
 

@@ -41,7 +41,6 @@ export default () => {
     const keywords = decodeArgument(searchParams.keywords)
     const states = decodeArgument(searchParams.states)
     const kinds = decodeArgument(searchParams.kinds)
-    console.log(keywords, states, kinds)
 
     const searchOptions = {
       keywords,
@@ -50,15 +49,14 @@ export default () => {
     }
 
     const results = await search(state().identity!, searchOptions)
-    console.log('results', results)
+
     const merged = results.map(r => {
-      return r.kind === 'recipe' && state().recipes
+      return r.kind === 'recipe' && state().recipes && state().recipes![r.recipe as any]
         ? { kind: 'recipe', recipe: state().recipes![r.recipe as unknown as number] }
-        : r.kind === 'ingredient' && state().ingredients
+        : r.kind === 'ingredient' && state().ingredients && state().ingredients![r.ingredient as any]
           ? { kind: 'ingredient', ingredient: state().ingredients![r.ingredient as unknown as number] }
-          : 'loading'
+          : { kind: 'loading' }
     })
-    console.log('merged', merged)
 
     setResults(merged)
   })
@@ -149,8 +147,6 @@ export default () => {
   onMount(() => {
     fetchIngredients({ refetching: false })
     fetchRecipes({ refetching: false })
-
-    console.log('search query', searchParams.keywords)
   })
 
   return (
@@ -158,19 +154,20 @@ export default () => {
       {results() ? (
         <For each={results()}>
           {result =>
-            result.kind === 'ingredient' ? (
+            result.kind === 'loading' ? null : result.kind === 'ingredient' ? (
               <IngredientComponent
                 ingredient={result.ingredient}
-                onEdit={() => {}}
-                onDelete={() => {}}
-                onRelatedIngredientClicked={() => {}}
+                onNameClick={() => {
+                  navigate(import.meta.env.BASE_URL + `ingredients/${result.ingredient.id}`)
+                }}
+                onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
               />
             ) : (
               <RecipeComponent
                 recipe={result.recipe}
-                onEdit={() => {}}
-                onDelete={() => {}}
-                onRelatedRecipeClicked={() => {}}
+                onNameClick={() => {
+                  navigate(import.meta.env.BASE_URL + `ingredients/${result.recipe.id}`)
+                }}
               />
             )
           }

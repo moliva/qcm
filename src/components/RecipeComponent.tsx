@@ -1,6 +1,6 @@
-import { A, useNavigate } from '@solidjs/router'
+import { useNavigate } from '@solidjs/router'
 
-import { Group, Ingredient, Recipe } from '../types'
+import { Recipe } from '../types'
 
 import { useAppContext } from '../context'
 import {
@@ -13,7 +13,7 @@ import {
   IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
-import { For } from 'solid-js'
+import { For, Show } from 'solid-js'
 
 import styles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
@@ -22,10 +22,10 @@ import navStyles from './NavComponent.module.css'
 export type RecipeComponentProps = {
   recipe: Recipe
 
-  onRelatedRecipeClicked(id: number): void
+  onNameClick(recipe: Recipe): void
 
-  onEdit(recipe: Recipe): void
-  onDelete(recipe: Recipe): void
+  onEdit?: ((recipe: Recipe) => void) | undefined
+  onDelete?: ((recipe: Recipe) => void) | undefined
 }
 
 export const RecipeComponent = (props: RecipeComponentProps) => {
@@ -39,20 +39,26 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
   return (
     <div class={styles.ingredient}>
       <div class={styles['ingredient-name']}>
-        <label>{recipe.name}</label>
+        <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(recipe)}>
+          {recipe.name}
+        </label>
         <span style={{ color: color }}>
           <Fa class={styles['ingredient-state-icon']} icon={icon} />
         </span>
 
         <div class={styles['note-controls']}>
-          <button class={`${styles['edit-control']} ${styles['note-control']}`} onClick={() => props.onEdit(recipe)}>
-            <Fa icon={faPenToSquare} />
-          </button>
-          <button
-            class={`${styles['delete-control']} ${styles['note-control']}`}
-            onClick={() => props.onDelete(recipe)}>
-            <Fa icon={faXmark} />
-          </button>
+          {props.onEdit ? (
+            <button class={`${styles['edit-control']} ${styles['note-control']}`} onClick={() => props.onEdit!(recipe)}>
+              <Fa icon={faPenToSquare} />
+            </button>
+          ) : null}
+          {props.onDelete ? (
+            <button
+              class={`${styles['delete-control']} ${styles['note-control']}`}
+              onClick={() => props.onDelete!(recipe)}>
+              <Fa icon={faXmark} />
+            </button>
+          ) : null}
         </div>
       </div>
       <div class={styles['note-tags']}>

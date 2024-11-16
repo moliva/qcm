@@ -1,28 +1,32 @@
-import { For, Match, Show, Switch, createEffect, createSignal, onMount } from 'solid-js'
+import { Show, createEffect, createSignal, onMount } from 'solid-js'
 import { useNavigate, useParams } from '@solidjs/router'
 
 import { faPlusSquare, faRotateRight, faSliders, faUsers } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
-import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes } from '../services'
-import { Balance, Group, Ingredient, Recipe } from '../types'
+import {
+  deleteRecipe,
+  fetchIngredients as fetchApiIngredients,
+  fetchRecipes as fetchApiRecipes,
+  postRecipe,
+  putRecipe
+} from '../services'
+import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError, formatExpenses } from '../utils'
+import { formatError } from '../utils'
 
-import { IngredientComponent } from '../components/IngredientComponent'
-
-import appStyles from '../App.module.css'
-import navStyles from '../components/NavComponent.module.css'
-import homeStyles from './Home.module.css'
-import styles from './Ingredients.module.css'
-import groupStyles from './Group.module.css'
 import { RecipeComponent } from '../components/RecipeComponent'
+import EditRecipeComponent from '../components/EditRecipeComponent'
+
+import styles from './Ingredients.module.css'
 
 export default () => {
   const navigate = useNavigate()
 
   const params = useParams()
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
+
+  const [showRecipeModal, setShowRecipeModal] = createSignal(false)
 
   const [id, setId] = createSignal(Number(params.id))
   const [recipe, setRecipe] = createSignal<Recipe | undefined>()
@@ -117,21 +121,48 @@ export default () => {
   const refreshAll = async () => {
     fetchIngredients({ refetching: true })
     fetchRecipes({ refetching: true })
-    // refreshContent()
+  }
+
+  const updateRecipe = (updated: Recipe) => {
+    const promise = updated.id ? putRecipe(updated, state()!.identity!) : postRecipe(updated, state()!.identity!)
+
+    promise
+      .then(() => {
+        refreshAll()
+      })
+      .catch(e => {
+        setError(formatError('Error while updating recipe', e))
+      })
+
+    setShowRecipeModal(false)
+  }
+
+  const onEditRecipeClicked = (recipe?: Recipe) => {
+    setRecipe(recipe)
+    setShowRecipeModal(true)
+  }
+
+  const onDeleteRecipe = async (recipe: Recipe) => {
+    await deleteRecipe(recipe, state()!.identity!)
+
+    navigate(import.meta.env.BASE_URL + `recipes`)
   }
 
   return (
     <div class={styles.main}>
+      <Show when={showRecipeModal()}>
+        <EditRecipeComponent recipe={recipe} onDiscard={() => setShowRecipeModal(false)} onConfirm={updateRecipe} />
+      </Show>
       {recipe() ? (
         <Show when={recipe()} keyed>
           {recipe => (
             <RecipeComponent
               recipe={recipe}
-              onEdit={() => {}}
-              onRelatedRecipeClicked={id => {
-                setId(id)
-                navigate(import.meta.env.BASE_URL + `recipes/${id}`)
+              onNameClick={() => {
+                navigate(import.meta.env.BASE_URL + `recipes/${recipe.id}`)
               }}
+              onEdit={onEditRecipeClicked}
+              onDelete={onDeleteRecipe}
             />
           )}
         </Show>

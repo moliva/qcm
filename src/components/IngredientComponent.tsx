@@ -1,12 +1,11 @@
 import { A, useNavigate } from '@solidjs/router'
 
-import { Ingredient } from '../types'
+import { Ingredient, IngredientId } from '../types'
 
 import { useAppContext } from '../context'
 
 import styles from './IngredientComponent.module.css'
 import appStyles from '../App.module.css'
-import navStyles from './NavComponent.module.css'
 import {
   faCircleCheck,
   faCircleQuestion,
@@ -22,10 +21,11 @@ import { For } from 'solid-js'
 export type IngredientComponentProps = {
   ingredient: Ingredient
 
-  onRelatedIngredientClicked(id: number): void
+  onNameClick(recipe: Ingredient): void
+  onRelatedIngredientClicked(id: IngredientId): void
 
-  onEdit(ingredient: Ingredient): void
-  onDelete(ingredient: Ingredient): void
+  onEdit?(ingredient: Ingredient): void
+  onDelete?(ingredient: Ingredient): void
 }
 
 export const IngredientComponent = (props: IngredientComponentProps) => {
@@ -39,7 +39,9 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
   return (
     <div class={styles.ingredient}>
       <div class={styles['ingredient-name']}>
-        <label>{ingredient.name}</label>
+        <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(ingredient)}>
+          {ingredient.name}
+        </label>
         <span style={{ color: color }}>
           <Fa class={styles['ingredient-state-icon']} icon={icon} />
         </span>
