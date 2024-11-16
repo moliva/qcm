@@ -39,8 +39,8 @@ export default (props: EditIngredientProps) => {
     let key = 0
     const _ingredients = (ingredient()?.ingredients ?? []).map(e => ({
       key: key++,
-      id: e[0],
-      measure: e[1]
+      id: e.ingredient,
+      measure: e.measure
     }))
     setIngredients(_ingredients)
   })
@@ -49,7 +49,7 @@ export default (props: EditIngredientProps) => {
     ({
       id: ingredient()?.id,
       name: newIngredientName!.value,
-      state: 'good',
+      state: ingredientState!.value,
       tags: parseTags(tagsRef!.value),
       notes: newIngredientNotes!.value,
 
@@ -60,10 +60,10 @@ export default (props: EditIngredientProps) => {
     const _ingredients = []
 
     for (const row of ingredientsRef!.children) {
-      const ingredientId = Number(row.children[0].value)
+      const ingredient = Number(row.children[0].value)
       const measure = row.children[1].value
 
-      _ingredients.push([ingredientId, measure])
+      _ingredients.push({ ingredient, measure })
     }
 
     return _ingredients

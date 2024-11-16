@@ -23,7 +23,6 @@ const setRecipes = (recipes: Recipe[]) => {
   setState({
     ...state(),
     recipes: {
-      ...state().recipes,
       ...Object.fromEntries(recipes.map(recipe => [recipe.id, recipe]))
     }
   })
@@ -33,7 +32,6 @@ const setIngredients = (ingredients: Ingredient[]) => {
   setState({
     ...state(),
     ingredients: {
-      ...state().ingredients,
       ...Object.fromEntries(ingredients.map(ingredient => [ingredient.id, ingredient]))
     }
   })
