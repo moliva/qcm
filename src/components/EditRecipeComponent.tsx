@@ -1,13 +1,13 @@
 import { Accessor, createSignal, For, onMount } from 'solid-js'
 
-import { Ingredient, Recipe } from '../types'
+import { Recipe } from '../types'
 import { useAppContext } from '../context'
 
 import appStyles from '../App.module.css'
 import homeStyles from '../pages/Home.module.css'
 import navStyles from './NavComponent.module.css'
 import styles from './EditIngredientComponent.module.css'
-import expenseStyles from './ExpenseModal.module.css'
+
 import { faPlusSquare, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
@@ -98,10 +98,7 @@ export default (props: EditIngredientProps) => {
         />
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
           <label>State</label>
-          <select
-            class={expenseStyles['currency-select']}
-            ref={ingredientState}
-            value={ingredient()?.state ?? 'unknown'}>
+          <select class={styles['currency-select']} ref={ingredientState} value={ingredient()?.state ?? 'unknown'}>
             <For each={stateOptions}>
               {state => (
                 <option value={state} title={state}>
@@ -125,7 +122,7 @@ export default (props: EditIngredientProps) => {
             <For each={ingredients()}>
               {ingredient => (
                 <div style={{ display: 'flex', 'align-items': 'center' }}>
-                  <select class={expenseStyles['currency-select']} value={ingredient.id}>
+                  <select class={styles['currency-select']} value={ingredient.id}>
                     <For each={Object.values(state().ingredients!)}>
                       {ingredient => (
                         <option value={ingredient.id} title={ingredient.name}>

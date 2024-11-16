@@ -22,7 +22,7 @@ import appStyles from '../App.module.css'
 import navStyles from '../components/NavComponent.module.css'
 import homeStyles from './Home.module.css'
 import styles from './Ingredients.module.css'
-import groupStyles from './Group.module.css'
+import groupStyles from './Ingredients.module.css'
 
 export default () => {
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()

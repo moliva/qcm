@@ -3,10 +3,10 @@ import { Accessor, createSignal, For } from 'solid-js'
 import { Ingredient } from '../types'
 import { useAppContext } from '../context'
 
+import MultiSelect, { Ref } from '@moliva/solid-multiselect'
+
 import appStyles from '../App.module.css'
 import styles from './EditIngredientComponent.module.css'
-import expenseStyles from './ExpenseModal.module.css'
-import MultiSelect, { Ref } from '@moliva/solid-multiselect'
 
 export type EditIngredientProps = {
   ingredient: Accessor<Ingredient | undefined>
@@ -54,7 +54,7 @@ export default (props: EditIngredientProps) => {
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
           <label>State</label>
           <select
-            class={expenseStyles['currency-select']}
+            class={styles['currency-select']}
             ref={ingredientState}
             value={ingredient()?.state ?? 'unknown'}>
             <For each={stateOptions}>

@@ -12,14 +12,6 @@ import {
 } from 'solid-js'
 import { useNavigate, useSearchParams, Routes, Route } from '@solidjs/router'
 
-import { Notification, NotificationAction } from './types'
-import {
-  fetchCurrencies as doFetchCurrencies,
-  fetchNotifications as doFetchNotifications,
-  updateMembership,
-  updateNotification,
-  updateNotifications
-} from './services'
 import { useAppContext } from './context'
 
 import { Nav } from './components/NavComponent'
@@ -104,8 +96,8 @@ export default () => {
     const identity = state().identity
 
     if (identity) {
-      const currencies = await doFetchCurrencies(identity!)
-      setState({ ...state(), currencies: Object.fromEntries(currencies.map(c => [c.id, c])) })
+      // const currencies = await doFetchCurrencies(identity!)
+      // setState({ ...state(), currencies: Object.fromEntries(currencies.map(c => [c.id, c])) })
 
       return true
     }
@@ -122,9 +114,10 @@ export default () => {
         return []
       }
 
-      const result = await doFetchNotifications(identity!)
-
-      return result
+      // const result = await doFetchNotifications(identity!)
+      //
+      // return result
+      return []
     } catch (e) {
       setError(e)
       return []
@@ -137,9 +130,9 @@ export default () => {
   const [showNotifications, setShowNotifications] = createSignal(false)
   const toggleNotifications = async () => {
     if (!showNotifications()) {
-      await updateNotifications({ ids: (notifications() ?? []).map(n => n.id), status: 'read' }, state().identity!)
-      const newNotifications = (notifications() ?? []).map(n => ({ ...n, status: 'read' as const }))
-      setNotifications(newNotifications)
+      // await updateNotifications({ ids: (notifications() ?? []).map(n => n.id), status: 'read' }, state().identity!)
+      // const newNotifications = (notifications() ?? []).map(n => ({ ...n, status: 'read' as const }))
+      // setNotifications(newNotifications)
     }
 
     setShowNotifications(!showNotifications())
@@ -192,33 +185,31 @@ export default () => {
     // window.removeEventListener('keydown', handleAppKeydown)
   })
 
-  const onNotificationAction = async (action: NotificationAction, notification: Notification): Promise<void> => {
-    try {
-      await updateMembership(action, notification.data.group, state().identity!)
-      await updateNotification(notification, { status: 'archived' }, state().identity!)
-
-      // if (action === 'joined') {
-      //   const group = notification.data.group
-      //   setGroup(group)
-      // }
-
-      const ns = [...notifications()!]
-      const index = ns.indexOf(notification)
-      ns.splice(index, 1)
-      setNotifications(ns)
-    } catch (e) {
-      setError(formatError('Error while creating expense', e))
-    }
-  }
+  // const onNotificationAction = async (action: NotificationAction, notification: Notification): Promise<void> => {
+  //   try {
+  // await updateMembership(action, notification.data.group, state().identity!)
+  // await updateNotification(notification, { status: 'archived' }, state().identity!)
+  // if (action === 'joined') {
+  //   const group = notification.data.group
+  //   setGroup(group)
+  // }
+  // const ns = [...notifications()!]
+  // const index = ns.indexOf(notification)
+  // ns.splice(index, 1)
+  // setNotifications(ns)
+  //   } catch (e) {
+  //     setError(formatError('Error while creating expense', e))
+  //   }
+  // }
 
   const onArchiveNotifications = async (notifications_: Notification[]): Promise<void> => {
     try {
-      const ids = notifications_.map(n => n.id)
-
-      await updateNotifications({ ids, status: 'archived' }, state().identity!)
-
-      const ns = notifications()!.filter(n => !notifications_.includes(n))
-      setNotifications(ns)
+      // const ids = notifications_.map(n => n.id)
+      //
+      // await updateNotifications({ ids, status: 'archived' }, state().identity!)
+      //
+      // const ns = notifications()!.filter(n => !notifications_.includes(n))
+      // setNotifications(ns)
     } catch (e) {
       setError(formatError('Error while creating expense', e))
     }

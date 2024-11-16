@@ -20,6 +20,19 @@
   font-weight: bold;
 }
 
+select.currency-select {
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  cursor: pointer;
+
+  margin-right: 5px;
+  font-weight: bold;
+  padding: 3px 5px;
+  background-color: transparent;
+  color: white;
+}
+
+
 .modal-content {
   background-color: #282c34;
   border-radius: 10px;

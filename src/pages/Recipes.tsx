@@ -1,5 +1,5 @@
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
-import { useNavigate, useParams } from '@solidjs/router'
+import { useNavigate } from '@solidjs/router'
 
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
@@ -19,7 +19,7 @@ import appStyles from '../App.module.css'
 import navStyles from '../components/NavComponent.module.css'
 import homeStyles from './Home.module.css'
 import styles from './Ingredients.module.css'
-import groupStyles from './Group.module.css'
+import groupStyles from './Recipes.module.css'
 
 import { RecipeComponent } from '../components/RecipeComponent'
 import EditRecipeComponent from '../components/EditRecipeComponent'
