@@ -75,7 +75,7 @@ export default (props: EditIngredientProps) => {
             value={ingredient()?.tags?.join(',') ?? ''}></input>
         </div>
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
-          <textarea style={{ width: '100%' }} ref={newIngredientNotes} placeholder='Steps...' rows='10'>
+          <textarea style={{ width: '100%' }} ref={newIngredientNotes} placeholder='Notes' rows='10'>
             {ingredient() ? ingredient()?.notes : ''}
           </textarea>
         </div>
