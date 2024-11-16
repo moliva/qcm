@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
-import { Identity, Notification } from '../types'
+import { Identity } from '../types'
 
 import { ProfilePicture } from './ProfilePicture'
 
@@ -20,13 +20,14 @@ import styles from './NavComponent.module.css'
 
 export type NavProps = {
   identity: Identity
-  notifications: Resource<Notification[]>
 
-  onNotificationsClicked(): void
+  onSearchClicked(searchTerm: string): void
 }
 
 export const Nav = (props: NavProps) => {
   const { identity } = props
+
+  let searchTermRef
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -52,6 +53,7 @@ export const Nav = (props: NavProps) => {
         </div>
         <div class={styles['nav-app-controls']}>
           <input
+            ref={searchTermRef}
             style={{
               width: '100%',
               'max-width': '600px',
@@ -64,7 +66,7 @@ export const Nav = (props: NavProps) => {
           <button
             title='Search'
             class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
-            onClick={props.onNotificationsClicked}>
+            onClick={() => props.onSearchClicked(searchTermRef!.value)}>
             <Fa class={styles['nav-icon']} icon={faMagnifyingGlass} />
           </button>
         </div>

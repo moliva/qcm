@@ -1,15 +1,4 @@
-import {
-  For,
-  createSignal,
-  onMount,
-  Switch,
-  Match,
-  Show,
-  onCleanup,
-  createResource,
-  createEffect,
-  lazy
-} from 'solid-js'
+import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy } from 'solid-js'
 import { useNavigate, useSearchParams, Routes, Route } from '@solidjs/router'
 
 import { useAppContext } from './context'
@@ -18,62 +7,18 @@ import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
 
 import styles from './App.module.css'
-import { formatError, sleep } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
 const RecipePage = lazy(() => import('./pages/Recipe'))
 const IngredientPage = lazy(() => import('./pages/Ingredient'))
 const RecipesPage = lazy(() => import('./pages/Recipes'))
 const IngredientsPage = lazy(() => import('./pages/Ingredients'))
+const SearchPage = lazy(() => import('./pages/Search'))
 
 export default () => {
   const [state, { setState, setError }] = useAppContext()
 
   const navigate = useNavigate()
-
-  // FIXME - dupped method from group - moliva - 2024/04/10
-  // const fetchGroupData = async (id: string, opts: { refetching: boolean; field: string }): Promise<DetailedGroup> => {
-  //   try {
-  //     const group = state().groups[id]
-  //
-  //     // check if we currently have the group loaded with detailed fields as well or force fetch
-  //     if (!opts.refetching && group?.members) {
-  //       return group
-  //     }
-  //
-  //     const identity = state().identity
-  //
-  //     if (!identity) {
-  //       throw 'not authentified!'
-  //     }
-  //
-  //     let result
-  //     if (opts.field === 'expenses') {
-  //       const expensesFetch = fetchExpenses(identity!, Number(id))
-  //       const balancesFetch = fetchBalances(identity!, Number(id))
-  //       const [expenses, balances] = await Promise.all([expensesFetch, balancesFetch])
-  //       result = {
-  //         ...group,
-  //         expenses,
-  //         balances
-  //       }
-  //     } else {
-  //       const newGroup = await fetchGroup(identity!, Number(id))
-  //       result = {
-  //         ...group,
-  //         ...newGroup
-  //       }
-  //     }
-  //
-  //     setGroup(result)
-  //
-  //     return result
-  //   } catch (e) {
-  //     setError(formatError('Error while fetching detailed group', e))
-  //     const group = state().groups[id]
-  //     return group as DetailedGroup
-  //   }
-  // }
 
   // handle auth
   const [searchParams] = useSearchParams()
@@ -105,114 +50,23 @@ export default () => {
     return false
   }, false)
 
-  async function fetchNotifications() {
-    try {
-      const identity = state().identity
-
-      if (!identity) {
-        // return premaruterly if not logged in yet
-        return []
-      }
-
-      // const result = await doFetchNotifications(identity!)
-      //
-      // return result
-      return []
-    } catch (e) {
-      setError(e)
-      return []
-    }
-  }
-
-  const [notifications, { mutate: setNotifications, refetch: refetchNotifications }] =
-    createResource(fetchNotifications)
-
-  const [showNotifications, setShowNotifications] = createSignal(false)
-  const toggleNotifications = async () => {
-    if (!showNotifications()) {
-      // await updateNotifications({ ids: (notifications() ?? []).map(n => n.id), status: 'read' }, state().identity!)
-      // const newNotifications = (notifications() ?? []).map(n => ({ ...n, status: 'read' as const }))
-      // setNotifications(newNotifications)
-    }
-
-    setShowNotifications(!showNotifications())
-  }
-
   const handleAppKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
-      if (showNotifications()) {
-        // if notifications modal is currently on, discard it
-        setShowNotifications(false)
-      }
       return false
     }
   }
 
-  // const syncMaster = async () => {
-  //   while (!state().identity) {
-  //     await sleep(1000)
-  //   }
-  //
-  //   // long polling on fetch sync and processing events
-  //   while (true) {
-  //     const events = await fetchSync(state().identity!)
-  //     for (const event of events) {
-  //       switch (event.kind) {
-  //         case 'group': {
-  //           await fetchGroupData(`${event.id}`, { refetching: true, field: event.field })
-  //           break
-  //         }
-  //         case 'notification': {
-  //           await refetchNotifications()
-  //           break
-  //         }
-  //         default: {
-  //           console.warn('unknown event', event)
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
   onMount(() => {
-    // window.addEventListener('keydown', handleAppKeydown, true)
-    // syncMaster().catch(e => {
-    //   setError(formatError('Error while syncing', e))
-    // })
+    window.addEventListener('keydown', handleAppKeydown, true)
   })
 
   onCleanup(() => {
-    // window.removeEventListener('keydown', handleAppKeydown)
+    window.removeEventListener('keydown', handleAppKeydown)
   })
 
-  // const onNotificationAction = async (action: NotificationAction, notification: Notification): Promise<void> => {
-  //   try {
-  // await updateMembership(action, notification.data.group, state().identity!)
-  // await updateNotification(notification, { status: 'archived' }, state().identity!)
-  // if (action === 'joined') {
-  //   const group = notification.data.group
-  //   setGroup(group)
-  // }
-  // const ns = [...notifications()!]
-  // const index = ns.indexOf(notification)
-  // ns.splice(index, 1)
-  // setNotifications(ns)
-  //   } catch (e) {
-  //     setError(formatError('Error while creating expense', e))
-  //   }
-  // }
-
-  const onArchiveNotifications = async (notifications_: Notification[]): Promise<void> => {
-    try {
-      // const ids = notifications_.map(n => n.id)
-      //
-      // await updateNotifications({ ids, status: 'archived' }, state().identity!)
-      //
-      // const ns = notifications()!.filter(n => !notifications_.includes(n))
-      // setNotifications(ns)
-    } catch (e) {
-      setError(formatError('Error while creating expense', e))
-    }
+  async function onSearchClicked(searchTerm: string) {
+    console.log('searching', searchTerm)
+    navigate(import.meta.env.BASE_URL + `search?keywords=${searchTerm}`)
   }
 
   return (
@@ -230,11 +84,7 @@ export default () => {
       <Switch fallback={<Login />}>
         <Match when={typeof state().identity !== 'undefined'}>
           <header class={styles.header}>
-            <Nav
-              identity={state().identity!}
-              onNotificationsClicked={toggleNotifications}
-              notifications={notifications}
-            />
+            <Nav identity={state().identity!} onSearchClicked={onSearchClicked} />
             <hr class={styles['divider']} />
           </header>
           <main class={styles.main}>
@@ -246,6 +96,7 @@ export default () => {
                   <Route path='/ingredients' component={IngredientsPage} />
                   <Route path='/recipes/:id' component={RecipePage} />
                   <Route path='/ingredients/:id' component={IngredientPage} />
+                  <Route path='/search' component={SearchPage} />
                 </Route>
               </Routes>
             </section>

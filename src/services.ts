@@ -1,6 +1,27 @@
-import { Identity, Ingredient, Recipe } from './types'
+import { Identity, Ingredient, Recipe, Result, SearchOptions } from './types'
 
 export const API_HOST = import.meta.env.VITE_API_URL
+
+// *****************************************************************************************************
+// *************** search ***************
+// *****************************************************************************************************
+
+function encodeSearchOptions(searchOptions: SearchOptions): string {
+  const keywords = searchOptions.keywords.length > 0 ? 'keywords=' + searchOptions.keywords.join(',') : undefined
+  const states = searchOptions.states.length > 0 ? 'states=' + searchOptions.states.join(',') : undefined
+  const kinds = searchOptions.kinds.length > 0 ? 'kinds=' + searchOptions.kinds.join(',') : undefined
+
+  const populated = [keywords, states, kinds].filter(populate => populate !== undefined)
+
+  return populated.join('&')
+}
+
+export async function search(identity: Identity, searchOptions: SearchOptions): Promise<Result[]> {
+  const query = encodeSearchOptions(searchOptions)
+  const res = await authentifiedFetch(`${API_HOST}/search?${query}`, identity!)
+
+  return (await res.json()) as Result[]
+}
 
 // *****************************************************************************************************
 // *************** recipes ***************

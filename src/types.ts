@@ -1,4 +1,3 @@
-
 export type UserId = string
 
 export type NotificationStatus = 'new' | 'read' | 'archived'
@@ -29,6 +28,22 @@ export type Ingredient = {
 
 /** Ingredient id -> measure to be used in recipe */
 export type IngredientPair = { ingredient: number; measure: string }
+
+export type SearchOptions = {
+  keywords: string[]
+  states: string[] // subset of possible states: good, bad, warning, unknown
+  kinds: string[] // subset of possible kinds: recipe, ingredient
+}
+
+export type Result =
+  | {
+      kind: 'ingredient'
+      ingredient: Ingredient
+    }
+  | {
+      kind: 'recipe'
+      recipe: Recipe
+    }
 
 export type Recipe = {
   id: number | undefined
