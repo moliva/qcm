@@ -1,37 +1,25 @@
-import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
-import { useNavigate, useParams, useSearchParams } from '@solidjs/router'
+import { For, createEffect, createSignal, onMount } from 'solid-js'
+import { useNavigate, useSearchParams } from '@solidjs/router'
 
-import {
-  deleteIngredient,
-  fetchIngredients as fetchApiIngredients,
-  fetchRecipes as fetchApiRecipes,
-  postIngredient,
-  putIngredient,
-  search
-} from '../services'
+import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes, search } from '../services'
 import { Ingredient, Recipe, Result } from '../types'
 import { useAppContext } from '../context'
-import { formatError } from '../utils'
+import { formatError, useNavigateUtils } from '../utils'
 
 import { IngredientComponent } from '../components/IngredientComponent'
-
-import appStyles from '../App.module.css'
-import navStyles from '../components/NavComponent.module.css'
-import homeStyles from './Home.module.css'
-import styles from './Search.module.css'
-import EditIngredientComponent from '../components/EditIngredientComponent'
 import { RecipeComponent } from '../components/RecipeComponent'
+
+import styles from './Search.module.css'
 
 export default () => {
   const navigate = useNavigate()
+  const { searchTag } = useNavigateUtils(navigate)
 
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
 
   const [results, setResults] = createSignal<Result[] | undefined>()
-
-  const [showIngredientModal, setShowIngredientModal] = createSignal(false)
 
   function decodeArgument(arg: string | undefined): string[] {
     return arg ? decodeURI(arg).split(' ') : []
@@ -157,6 +145,7 @@ export default () => {
             result.kind === 'loading' ? null : result.kind === 'ingredient' ? (
               <IngredientComponent
                 ingredient={result.ingredient}
+                onTagClicked={searchTag}
                 onNameClick={() => {
                   navigate(import.meta.env.BASE_URL + `ingredients/${result.ingredient.id}`)
                 }}
@@ -165,6 +154,7 @@ export default () => {
             ) : (
               <RecipeComponent
                 recipe={result.recipe}
+                onTagClicked={searchTag}
                 onNameClick={() => {
                   navigate(import.meta.env.BASE_URL + `ingredients/${result.recipe.id}`)
                 }}

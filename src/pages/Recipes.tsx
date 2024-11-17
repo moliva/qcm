@@ -13,7 +13,7 @@ import {
 } from '../services'
 import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError } from '../utils'
+import { formatError, useNavigateUtils } from '../utils'
 
 import appStyles from '../App.module.css'
 import navStyles from '../components/NavComponent.module.css'
@@ -83,6 +83,7 @@ export default () => {
   }
 
   const navigate = useNavigate()
+  const { searchTag } = useNavigateUtils(navigate)
 
   onMount(() => {
     fetchIngredients({ refetching: false })
@@ -163,6 +164,7 @@ export default () => {
                 onNameClick={() => {
                   navigate(import.meta.env.BASE_URL + `recipes/${recipe.id}`)
                 }}
+                onTagClicked={searchTag}
                 onEdit={onEditRecipeClicked}
                 onDelete={onDeleteRecipe}
               />

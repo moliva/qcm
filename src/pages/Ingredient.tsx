@@ -10,7 +10,7 @@ import {
 } from '../services'
 import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError } from '../utils'
+import { formatError, useNavigateUtils } from '../utils'
 
 import { IngredientComponent } from '../components/IngredientComponent'
 import EditIngredientComponent from '../components/EditIngredientComponent'
@@ -19,6 +19,7 @@ import styles from './Ingredients.module.css'
 
 export default () => {
   const navigate = useNavigate()
+  const { searchTag } = useNavigateUtils(navigate)
 
   const params = useParams()
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
@@ -163,6 +164,7 @@ export default () => {
               onNameClick={() => {
                 navigate(import.meta.env.BASE_URL + `ingredients/${ingredient.id}`)
               }}
+              onTagClicked={searchTag}
               onEdit={onEditIngredientClicked}
               onDelete={onDeleteIngredient}
               onRelatedIngredientClicked={id => {

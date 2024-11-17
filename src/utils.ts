@@ -1,8 +1,15 @@
-import { AppState } from './context'
-import { DetailedGroup, FormatExpense, User } from './types'
+import { User } from './types'
 
 export function copyToClipboard(value: string): void {
   navigator.clipboard.writeText(value)
+}
+
+export function useNavigateUtils(navigate: any) {
+  const searchTag = (tag: string) => {
+    navigate(import.meta.env.BASE_URL + `search?keywords=${tag}`)
+  }
+
+  return { searchTag }
 }
 
 export const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
@@ -57,57 +64,6 @@ export const monthNumberToName = (m: string): string => {
     default:
       throw `month number out of range ${m}`
   }
-}
-
-export function formatExpenses(state: AppState, group: DetailedGroup): Record<string, FormatExpense[]> {
-  const expenses = state.groups[group.id!].expenses.map(expense => {
-    const date = new Date(Date.parse(expense.date))
-    const me = group.members.find(m => m.user.email === state.identity?.identity.email)!.user
-
-    const userIdToUser = (id: string): User => group.members.find(m => m.user.id === id)?.user!
-
-    const userIdToDisplay = (id: string): string => {
-      const user = userIdToUser(id)!
-
-      return user === me ? 'You' : userName(user)
-    }
-
-    // TODO - cache formatters per currency - moliva - 2024/03/22
-    const currency = state.currencies[expense.currency_id].acronym
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency
-    })
-
-    // Boris paid Constanza $ 10000
-    let relative, payment
-    switch (expense.split_strategy.kind) {
-      case 'equally': {
-        const status = expense.split_strategy.payer === me.id ? 'lent' : 'borrowed'
-        const description = status === 'lent' ? 'you lent' : 'you borrowed'
-        const cost = formatter.format(expense.amount / expense.split_strategy.split_between.length)
-        relative = [status, description, cost]
-
-        payment = `${userIdToDisplay(expense.split_strategy.payer)} paid ${formatter.format(expense.amount)}`
-        break
-      }
-      case 'payment': {
-        payment = `${userIdToDisplay(expense.split_strategy.payer)} paid ${userIdToDisplay(
-          expense.split_strategy.recipient
-        )} ${formatter.format(expense.amount)}`
-      }
-    }
-
-    return {
-      ...expense,
-      monthYear: expense.date.substring(0, 7),
-      day: [date.getDate(), dayNumberToName(date.getDay())],
-      payment,
-      relative
-    }
-  })
-
-  return groupBy(expenses, ({ monthYear }) => monthYear) as Record<string, FormatExpense[]>
 }
 
 /**

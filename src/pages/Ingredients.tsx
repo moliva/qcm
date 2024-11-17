@@ -13,7 +13,7 @@ import {
 } from '../services'
 import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError } from '../utils'
+import { formatError, useNavigateUtils } from '../utils'
 
 import { IngredientComponent } from '../components/IngredientComponent'
 import EditIngredientComponent from '../components/EditIngredientComponent'
@@ -88,7 +88,7 @@ export default () => {
 
   const refreshContent = async () => {
     try {
-      const currentIdentity = state().identity!
+      //const currentIdentity = state().identity!
       fetchIngredients({ refetching: true })
       fetchRecipes({ refetching: true })
     } catch (e) {
@@ -118,6 +118,7 @@ export default () => {
   }
 
   const navigate = useNavigate()
+  const { searchTag } = useNavigateUtils(navigate)
 
   const updateIngredient = (updated: Ingredient) => {
     const promise = updated.id
@@ -168,6 +169,7 @@ export default () => {
                 onNameClick={() => {
                   navigate(import.meta.env.BASE_URL + `ingredients/${ingredient.id}`)
                 }}
+                onTagClicked={searchTag}
                 onEdit={onEditIngredientClicked}
                 onDelete={onDeleteIngredient}
                 onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}

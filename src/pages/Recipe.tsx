@@ -9,11 +9,12 @@ import {
   fetchIngredients as fetchApiIngredients,
   fetchRecipes as fetchApiRecipes,
   postRecipe,
-  putRecipe
+  putRecipe,
+  search
 } from '../services'
 import { Ingredient, Recipe } from '../types'
 import { useAppContext } from '../context'
-import { formatError } from '../utils'
+import { formatError, useNavigateUtils } from '../utils'
 
 import { RecipeComponent } from '../components/RecipeComponent'
 import EditRecipeComponent from '../components/EditRecipeComponent'
@@ -22,6 +23,7 @@ import styles from './Ingredients.module.css'
 
 export default () => {
   const navigate = useNavigate()
+  const { searchTag } = useNavigateUtils(navigate)
 
   const params = useParams()
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
@@ -158,6 +160,7 @@ export default () => {
           {recipe => (
             <RecipeComponent
               recipe={recipe}
+              onTagClicked={searchTag}
               onNameClick={() => {
                 navigate(import.meta.env.BASE_URL + `recipes/${recipe.id}`)
               }}

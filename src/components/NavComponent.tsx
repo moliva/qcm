@@ -1,4 +1,3 @@
-import { Resource } from 'solid-js'
 import { useLocation, useNavigate } from '@solidjs/router'
 
 import {
@@ -17,6 +16,7 @@ import { ProfilePicture } from './ProfilePicture'
 
 import appStyles from '../App.module.css'
 import styles from './NavComponent.module.css'
+import { createMemo } from 'solid-js'
 
 export type NavProps = {
   identity: Identity
@@ -39,6 +39,12 @@ export const Nav = (props: NavProps) => {
       navigate(import.meta.env.BASE_URL)
     }
   }
+
+  console.log(location.pathname)
+  //const path = location.pathname.split('/').slice(2).join('/')
+  const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
+
+  console.log('cucu', path)
 
   return (
     <nav class={styles.nav}>
@@ -85,21 +91,26 @@ export const Nav = (props: NavProps) => {
       <div class={styles['nav-main']} style={{ 'align-items': 'center', 'justify-content': 'center' }}>
         <button
           title='Home'
-          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
+          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === '' ? appStyles.selected : null}`}
           onClick={() => navigate(import.meta.env.BASE_URL)}>
-          <Fa class={styles['nav2-icon']} icon={faHouse} />
+          <Fa 
+            class={`${styles['nav2-icon']} ${path() === '' ? appStyles.home : null}`}
+          icon={faHouse} />
         </button>
         <button
           title='Recipes'
-          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
+          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === 'recipes' ? appStyles.selected : null}`}
           onClick={() => navigate(`${import.meta.env.BASE_URL}recipes`)}>
-          <Fa class={styles['nav2-icon']} icon={faBlender} />
+          <Fa class={`${styles['nav2-icon']} ${path() === 'recipes' ? appStyles.recipes : null}`} icon={faBlender} />
         </button>
         <button
           title='Ingredients'
-          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
+          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${styles['nav-button']} ${path() === 'ingredients' ? appStyles.selected : null}`}
           onClick={() => navigate(`${import.meta.env.BASE_URL}ingredients`)}>
-          <Fa class={styles['nav2-icon']} icon={faCarrot} />
+          <Fa
+            class={`${styles['nav2-icon']} ${path() === 'ingredients' ? appStyles.ingredients : null}`}
+            icon={faCarrot}
+          />
         </button>
       </div>
     </nav>

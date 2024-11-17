@@ -17,12 +17,12 @@ import { For, Show } from 'solid-js'
 
 import styles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
-import navStyles from './NavComponent.module.css'
 
 export type RecipeComponentProps = {
   recipe: Recipe
 
   onNameClick(recipe: Recipe): void
+  onTagClicked(tag: string): void
 
   onEdit?: ((recipe: Recipe) => void) | undefined
   onDelete?: ((recipe: Recipe) => void) | undefined
@@ -64,11 +64,7 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
       <div class={styles['note-tags']}>
         <For each={recipe.tags}>
           {tag => (
-            <label
-              class={`${styles['note-tag']} ${appStyles.button}`}
-              // classList={{ [styles.active]: activeTag?.() === tag }}
-              // onClick={() => onTagClicked(tag)}
-            >
+            <label class={`${styles['note-tag']} ${appStyles.button}`} onClick={() => props.onTagClicked(tag)}>
               {tag}
             </label>
           )}

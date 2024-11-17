@@ -61,7 +61,22 @@
 
   height: 1px;
   background: linear-gradient(to right, rgba(85, 85, 85, 0.2), #555, rgba(85, 85, 85, 0.2));
+}
 
+.selected {
+  /*filter: brightness(120%);*/
+}
+
+.home {
+  color: #c3729f;
+}
+
+.recipes {
+  color: #c2c239;
+}
+
+.ingredients {
+  color: #ce6100;
 }
 
 /* ***************************************************************************************************** */

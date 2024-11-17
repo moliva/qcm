@@ -22,6 +22,7 @@ export type IngredientComponentProps = {
   ingredient: Ingredient
 
   onNameClick(recipe: Ingredient): void
+  onTagClicked(tag: string): void
   onRelatedIngredientClicked(id: IngredientId): void
 
   onEdit?(ingredient: Ingredient): void
@@ -66,11 +67,7 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
       <div class={styles['note-tags']}>
         <For each={ingredient.tags}>
           {tag => (
-            <label
-              class={`${styles['note-tag']} ${appStyles.button}`}
-              // classList={{ [styles.active]: activeTag?.() === tag }}
-              // onClick={() => onTagClicked(tag)}
-            >
+            <label class={`${styles['note-tag']} ${appStyles.button}`} onClick={() => props.onTagClicked(tag)}>
               {tag}
             </label>
           )}
