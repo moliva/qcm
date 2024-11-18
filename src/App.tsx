@@ -1,10 +1,13 @@
-import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy } from 'solid-js'
+import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal } from 'solid-js'
 import { useNavigate, useSearchParams, Routes, Route, Navigate } from '@solidjs/router'
 
 import { useAppContext } from './context'
 
 import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
+import { SearchOptions } from './types'
+
+import EditSearchOptions from './components/EditSearchOptions'
 
 import styles from './App.module.css'
 
@@ -65,7 +68,33 @@ export default () => {
   })
 
   async function onSearchClicked(searchTerm: string) {
-    navigate(import.meta.env.BASE_URL + `search?keywords=${searchTerm}`)
+    const states = searchOptions().states.join(' ')
+    const kinds = searchOptions().kinds.join(' ')
+    const query = `keywords=${searchTerm}&states=${states}&kinds=${kinds}`
+    navigate(import.meta.env.BASE_URL + `search?${query}`)
+  }
+
+  const [showSearchOptionsModal, setShowSearchOptionsModal] = createSignal(false)
+  const [searchOptions, setSearchOptions] = createSignal<SearchOptions>({
+    keywords: [],
+    states: ['good', 'bad', 'unknown', 'warning'],
+    kinds: ['ingredient', 'recipe']
+  })
+
+  function onFilterClicked() {
+    setShowSearchOptionsModal(true)
+  }
+
+  function updateSearchOptions(options: SearchOptions) {
+    console.log(options)
+    setSearchOptions(options)
+    setShowSearchOptionsModal(false)
+
+    onSearchClicked(searchOptions().keywords.join(' '))
+  }
+
+  function onSearchTermChanged(searchTerm: string) {
+    setSearchOptions({ ...searchOptions(), keywords: searchTerm.split(' ') })
   }
 
   return (
@@ -83,11 +112,23 @@ export default () => {
       <Switch fallback={<Login />}>
         <Match when={typeof state().identity !== 'undefined'}>
           <header class={styles.header}>
-            <Nav identity={state().identity!} onSearchClicked={onSearchClicked} />
+            <Nav
+              identity={state().identity!}
+              onSearchTermChanged={onSearchTermChanged}
+              onSearchClicked={onSearchClicked}
+              onFilterClicked={onFilterClicked}
+            />
             <hr class={styles['divider']} />
           </header>
           <main class={styles.main}>
             <section class={styles.content}>
+              <Show when={showSearchOptionsModal()}>
+                <EditSearchOptions
+                  searchOptions={searchOptions}
+                  onDiscard={() => setShowSearchOptionsModal(false)}
+                  onConfirm={updateSearchOptions}
+                />
+              </Show>
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
                   <Route path='/' component={<Navigate href={import.meta.env.BASE_URL + `recipes`} />} />

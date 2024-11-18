@@ -1,3 +1,4 @@
+import { createMemo } from 'solid-js'
 import { useLocation, useNavigate } from '@solidjs/router'
 
 import {
@@ -6,7 +7,7 @@ import {
   faMagnifyingGlass,
   faBlender,
   faCarrot,
-  faHouse
+  faFilter
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
@@ -16,12 +17,13 @@ import { ProfilePicture } from './ProfilePicture'
 
 import appStyles from '../App.module.css'
 import styles from './NavComponent.module.css'
-import { createMemo } from 'solid-js'
 
 export type NavProps = {
   identity: Identity
 
+  onSearchTermChanged(searchTerm: string): void
   onSearchClicked(searchTerm: string): void
+  onFilterClicked(): void
 }
 
 export const Nav = (props: NavProps) => {
@@ -43,54 +45,65 @@ export const Nav = (props: NavProps) => {
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
   return (
-    <nav class={styles.nav}>
-      <div class={styles['nav-main']}>
-        <div class={styles['nav-left-controls']}>
-          <button
-            title='Go back'
-            class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.back}`}
-            onClick={goBack}>
-            <Fa class={styles['nav-icon']} icon={faAngleLeft} />
-          </button>
-        </div>
-        <div class={styles['nav-app-controls']}>
-          <input
-            ref={searchTermRef}
-            style={{
-              width: '100%',
-              'max-width': '600px',
-              'border-style': 'solid',
-              'border-width': '1px',
-              'border-radius': '5px',
-              'border-color': '#3b3b3b'
-            }}
-            onKeyDown={event => {
-              if (event.key === 'Enter') {
-                props.onSearchClicked(searchTermRef!.value)
-              }
-            }}
-          />
-          <button
-            title='Search'
-            class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
-            onClick={() => props.onSearchClicked(searchTermRef!.value)}>
-            <Fa class={styles['nav-icon']} icon={faMagnifyingGlass} />
-          </button>
-        </div>
-        <div class={styles['nav-auth-controls']}>
-          <div class={styles['nav-auth-actions']}>
-            <a
-              title='Log out'
-              class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.logout}`}
-              href={import.meta.env.BASE_URL}>
-              <Fa class={styles['nav-icon']} icon={faUnlockKeyhole} />
-            </a>
+    <>
+      <nav class={styles.nav}>
+        <div class={styles['nav-main']}>
+          <div class={styles['nav-left-controls']}>
+            <button
+              title='Go back'
+              class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.back}`}
+              onClick={goBack}>
+              <Fa class={styles['nav-icon']} icon={faAngleLeft} />
+            </button>
           </div>
-          <ProfilePicture title={identity.identity.name} picture={identity.identity.picture} />
+          <div class={styles['nav-app-controls']}>
+            <input
+              ref={searchTermRef}
+              style={{
+                width: '100%',
+                'max-width': '600px',
+                'border-style': 'solid',
+                'border-width': '1px',
+                'border-radius': '5px',
+                'border-color': '#3b3b3b'
+              }}
+              onInput={event => {
+                props.onSearchTermChanged(searchTermRef!.value)
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  props.onSearchClicked(searchTermRef!.value)
+                }
+              }}
+            />
+            <button
+              title='Filter'
+              style={{ padding: '0 0 0 5px' }}
+              class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.back}`}
+              onClick={props.onFilterClicked}>
+              <Fa class={`${styles['nav-icon']} ${styles['filter']}`} icon={faFilter} />
+            </button>
+            <button
+              title='Search'
+              class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']}`}
+              onClick={() => props.onSearchClicked(searchTermRef!.value)}>
+              <Fa class={styles['nav-icon']} icon={faMagnifyingGlass} />
+            </button>
+          </div>
+          <div class={styles['nav-auth-controls']}>
+            <div class={styles['nav-auth-actions']}>
+              <a
+                title='Log out'
+                class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.logout}`}
+                href={import.meta.env.BASE_URL}>
+                <Fa class={styles['nav-icon']} icon={faUnlockKeyhole} />
+              </a>
+            </div>
+            <ProfilePicture title={identity.identity.name} picture={identity.identity.picture} />
+          </div>
         </div>
-      </div>
-      <div class={styles['nav-main']} style={{ 'align-items': 'center', 'justify-content': 'center' }}>
-        {/**
+        <div class={styles['nav-main']} style={{ 'align-items': 'center', 'justify-content': 'center' }}>
+          {/**
         <button
           title='Home'
           class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === '' ? appStyles.selected : null}`}
@@ -100,22 +113,23 @@ export const Nav = (props: NavProps) => {
           icon={faHouse} />
         </button>
       */}
-        <button
-          title='Recipes'
-          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === 'recipes' ? appStyles.selected : null}`}
-          onClick={() => navigate(`${import.meta.env.BASE_URL}recipes`)}>
-          <Fa class={`${styles['nav2-icon']} ${path() === 'recipes' ? appStyles.recipes : null}`} icon={faBlender} />
-        </button>
-        <button
-          title='Ingredients'
-          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${styles['nav-button']} ${path() === 'ingredients' ? appStyles.selected : null}`}
-          onClick={() => navigate(`${import.meta.env.BASE_URL}ingredients`)}>
-          <Fa
-            class={`${styles['nav2-icon']} ${path() === 'ingredients' ? appStyles.ingredients : null}`}
-            icon={faCarrot}
-          />
-        </button>
-      </div>
-    </nav>
+          <button
+            title='Recipes'
+            class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === 'recipes' ? appStyles.selected : null}`}
+            onClick={() => navigate(`${import.meta.env.BASE_URL}recipes`)}>
+            <Fa class={`${styles['nav2-icon']} ${path() === 'recipes' ? appStyles.recipes : null}`} icon={faBlender} />
+          </button>
+          <button
+            title='Ingredients'
+            class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${styles['nav-button']} ${path() === 'ingredients' ? appStyles.selected : null}`}
+            onClick={() => navigate(`${import.meta.env.BASE_URL}ingredients`)}>
+            <Fa
+              class={`${styles['nav2-icon']} ${path() === 'ingredients' ? appStyles.ingredients : null}`}
+              icon={faCarrot}
+            />
+          </button>
+        </div>
+      </nav>
+    </>
   )
 }

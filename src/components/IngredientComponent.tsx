@@ -1,22 +1,15 @@
-import { A, useNavigate } from '@solidjs/router'
+import { useNavigate } from '@solidjs/router'
 
-import { Ingredient, IngredientId } from '../types'
-
-import { useAppContext } from '../context'
-
-import styles from './IngredientComponent.module.css'
-import appStyles from '../App.module.css'
-import {
-  faCircleCheck,
-  faCircleQuestion,
-  faCircleXmark,
-  faPenToSquare,
-  faTriangleExclamation,
-  faXmark,
-  IconDefinition
-} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 import { For } from 'solid-js'
+
+import { Ingredient, IngredientId } from '../types'
+import { useAppContext } from '../context'
+import { renderState } from '../utils'
+import styles from './IngredientComponent.module.css'
+
+import appStyles from '../App.module.css'
 
 export type IngredientComponentProps = {
   ingredient: Ingredient
@@ -35,7 +28,7 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
 
   const navigate = useNavigate()
 
-  const [icon, color] = renderState(ingredient)
+  const [icon, color] = renderState(ingredient.state)
 
   return (
     <div class={styles.ingredient}>
@@ -110,17 +103,4 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
       ) : null}
     </div>
   )
-}
-
-function renderState(ingredient: Ingredient): [IconDefinition, string] {
-  switch (ingredient.state) {
-    case 'good':
-      return [faCircleCheck, 'green']
-    case 'bad':
-      return [faCircleXmark, 'red']
-    case 'warning':
-      return [faTriangleExclamation, 'yellow']
-    default:
-      return [faCircleQuestion, 'lightgrey']
-  }
 }

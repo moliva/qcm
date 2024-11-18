@@ -1,22 +1,15 @@
+import { For } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 
-import { Recipe } from '../types'
-
-import { useAppContext } from '../context'
-import {
-  faCircleCheck,
-  faCircleQuestion,
-  faCircleXmark,
-  faPenToSquare,
-  faTriangleExclamation,
-  faXmark,
-  IconDefinition
-} from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
-import { For, Show } from 'solid-js'
+
+import { Recipe } from '../types'
+import { useAppContext } from '../context'
 
 import styles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
+import { renderState } from '../utils'
 
 export type RecipeComponentProps = {
   recipe: Recipe
@@ -34,7 +27,7 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
 
   const navigate = useNavigate()
 
-  const [icon, color] = renderState(recipe)
+  const [icon, color] = renderState(recipe.state)
 
   return (
     <div class={styles.ingredient}>
@@ -45,7 +38,6 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
         <span style={{ color: color }}>
           <Fa class={styles['ingredient-state-icon']} icon={icon} />
         </span>
-
         <div class={styles['note-controls']}>
           {props.onEdit ? (
             <button class={`${styles['edit-control']} ${styles['note-control']}`} onClick={() => props.onEdit!(recipe)}>
@@ -96,17 +88,4 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
       </textarea>
     </div>
   )
-}
-
-function renderState(recipe: Recipe): [IconDefinition, string] {
-  switch (recipe.state) {
-    case 'good':
-      return [faCircleCheck, 'green']
-    case 'bad':
-      return [faCircleXmark, 'red']
-    case 'warning':
-      return [faTriangleExclamation, 'yellow']
-    default:
-      return [faCircleQuestion, 'lightgrey']
-  }
 }

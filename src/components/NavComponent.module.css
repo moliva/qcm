@@ -73,6 +73,11 @@
   border-radius: 15%;
 }
 
+.filter {
+  font-size: 16px;
+  color: lightgrey;
+}
+
 .back:hover {
   color: #b9b9b9;
 }

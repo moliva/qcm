@@ -48,7 +48,7 @@ export default (props: EditIngredientProps) => {
         <input
           ref={newIngredientName}
           class={styles['modal-name']}
-          placeholder='Ingrdient name'
+          placeholder='Ingredient name'
           value={ingredient()?.name ?? ''}
         />
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>

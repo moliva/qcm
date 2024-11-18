@@ -3,21 +3,10 @@ export type UserId = string
 export type IngredientId = number
 export type RecipeId = number
 
-export type NotificationStatus = 'new' | 'read' | 'archived'
-
-export type NotificationsUpdate = NotificationUpdate & { ids: number[] }
-
-export type NotificationUpdate = {
-  status: NotificationStatus
-}
-
-export type NotificationAction = 'joined' | 'rejected'
-export type MembershipStatus = 'joined' | 'rejected' | 'pending'
-
 export type State = 'bad' | 'good' | 'warning' | 'unknown'
 
 export type Ingredient = {
-  id: number | undefined
+  id: IngredientId | undefined
   name: string
   created_at?: string | undefined
 
@@ -25,17 +14,22 @@ export type Ingredient = {
   tags: string[]
   notes: string
 
-  related: number[]
-  recipes: number[]
+  related: IngredientId[]
+  recipes: RecipeId[]
 }
 
+export type Kind = 'recipe' | 'ingredient'
+
 /** Ingredient id -> measure to be used in recipe */
-export type IngredientPair = { ingredient: number; measure: string }
+export type IngredientPair = {
+  ingredient: IngredientId
+  measure: string
+}
 
 export type SearchOptions = {
   keywords: string[]
-  states: string[] // subset of possible states: good, bad, warning, unknown
-  kinds: string[] // subset of possible kinds: recipe, ingredient
+  states: State[] // subset of possible states: good, bad, warning, unknown
+  kinds: Kind[] // subset of possible kinds: recipe, ingredient
 }
 
 export type Result =
@@ -49,7 +43,7 @@ export type Result =
     }
 
 export type Recipe = {
-  id: number | undefined
+  id: RecipeId | undefined
   name: string
   created_at?: string | undefined
 

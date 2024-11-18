@@ -1,7 +1,39 @@
-import { User } from './types'
+import { Kind, State, User } from './types'
+
+import {
+  faBlender,
+  faCarrot,
+  faCircleCheck,
+  faCircleQuestion,
+  faCircleXmark,
+  faTriangleExclamation,
+  IconDefinition
+} from '@fortawesome/free-solid-svg-icons'
 
 export function copyToClipboard(value: string): void {
   navigator.clipboard.writeText(value)
+}
+
+export function renderKind(kind: Kind): [IconDefinition, string] {
+  switch (kind) {
+    case 'ingredient':
+      return [faCarrot, '#ce6100']
+    case 'recipe':
+      return [faBlender, '#c2c239']
+  }
+}
+
+export function renderState(state: State): [IconDefinition, string] {
+  switch (state) {
+    case 'good':
+      return [faCircleCheck, 'green']
+    case 'bad':
+      return [faCircleXmark, 'red']
+    case 'warning':
+      return [faTriangleExclamation, 'yellow']
+    default:
+      return [faCircleQuestion, 'lightgrey']
+  }
 }
 
 export function useNavigateUtils(navigate: any) {
