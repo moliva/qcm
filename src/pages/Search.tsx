@@ -149,7 +149,7 @@ export default () => {
                   ingredient={result.ingredient}
                   onTagClicked={searchTag}
                   onNameClick={() => {
-                    navigate(import.meta.env.BASE_URL + `ingredients/${result.ingredient.id}`)
+                    navigate(import.meta.env.BASE_URL + `recipes/${result.ingredient.id}`)
                   }}
                   onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
                 />
