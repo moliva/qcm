@@ -149,7 +149,7 @@ export default () => {
                   ingredient={result.ingredient}
                   onTagClicked={searchTag}
                   onNameClick={() => {
-                    navigate(import.meta.env.BASE_URL + `recipes/${result.ingredient.id}`)
+                    navigate(import.meta.env.BASE_URL + `ingredients/${result.ingredient.id}`)
                   }}
                   onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
                 />
@@ -158,7 +158,7 @@ export default () => {
                   recipe={result.recipe}
                   onTagClicked={searchTag}
                   onNameClick={() => {
-                    navigate(import.meta.env.BASE_URL + `ingredients/${result.recipe.id}`)
+                    navigate(import.meta.env.BASE_URL + `recipes/${result.recipe.id}`)
                   }}
                 />
               )
