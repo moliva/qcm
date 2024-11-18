@@ -1,4 +1,4 @@
-import { For, createEffect, createSignal, onMount } from 'solid-js'
+import { For, Match, Switch, createEffect, createSignal, onMount } from 'solid-js'
 import { useNavigate, useSearchParams } from '@solidjs/router'
 
 import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes, search } from '../services'
@@ -135,32 +135,37 @@ export default () => {
 
   return (
     <div class={styles.main}>
-      {results() ? (
-        <For each={results()}>
-          {result =>
-            result.kind === 'loading' ? null : result.kind === 'ingredient' ? (
-              <IngredientComponent
-                ingredient={result.ingredient}
-                onTagClicked={searchTag}
-                onNameClick={() => {
-                  navigate(import.meta.env.BASE_URL + `ingredients/${result.ingredient.id}`)
-                }}
-                onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
-              />
-            ) : (
-              <RecipeComponent
-                recipe={result.recipe}
-                onTagClicked={searchTag}
-                onNameClick={() => {
-                  navigate(import.meta.env.BASE_URL + `ingredients/${result.recipe.id}`)
-                }}
-              />
-            )
-          }
-        </For>
-      ) : (
-        'Loading'
-      )}
+      <Switch fallback={<p>Loading...</p>}>
+        <Match when={results()?.length === 0}>
+          <p style={{ 'font-style': 'italic', color: 'grey' }}>
+            No results for '{decodeURI(searchParams.keywords)}' for the current filtering options
+          </p>
+        </Match>
+        <Match when={results() !== undefined && results()!.length > 0}>
+          <For each={results()}>
+            {result =>
+              result.kind === 'loading' ? null : result.kind === 'ingredient' ? (
+                <IngredientComponent
+                  ingredient={result.ingredient}
+                  onTagClicked={searchTag}
+                  onNameClick={() => {
+                    navigate(import.meta.env.BASE_URL + `ingredients/${result.ingredient.id}`)
+                  }}
+                  onRelatedIngredientClicked={id => navigate(import.meta.env.BASE_URL + `ingredients/${id}`)}
+                />
+              ) : (
+                <RecipeComponent
+                  recipe={result.recipe}
+                  onTagClicked={searchTag}
+                  onNameClick={() => {
+                    navigate(import.meta.env.BASE_URL + `ingredients/${result.recipe.id}`)
+                  }}
+                />
+              )
+            }
+          </For>
+        </Match>
+      </Switch>
     </div>
   )
 }

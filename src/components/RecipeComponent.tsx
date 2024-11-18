@@ -9,7 +9,7 @@ import { useAppContext } from '../context'
 
 import styles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
-import { renderState } from '../utils'
+import { renderKind, renderState } from '../utils'
 
 export type RecipeComponentProps = {
   recipe: Recipe
@@ -27,16 +27,20 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
 
   const navigate = useNavigate()
 
-  const [icon, color] = renderState(recipe.state)
+  const [stateIcon, stateColor] = renderState(recipe.state)
+  const [kindIcon, kindColor] = renderKind('recipe')
 
   return (
     <div class={styles.ingredient}>
       <div class={styles['ingredient-name']}>
+        <span style={{ color: kindColor }}>
+          <Fa class={styles['ingredient-kind-icon']} icon={kindIcon} />
+        </span>
         <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(recipe)}>
           {recipe.name}
         </label>
-        <span style={{ color: color }}>
-          <Fa class={styles['ingredient-state-icon']} icon={icon} />
+        <span style={{ color: stateColor }}>
+          <Fa class={styles['ingredient-state-icon']} icon={stateIcon} />
         </span>
         <div class={styles['note-controls']}>
           {props.onEdit ? (

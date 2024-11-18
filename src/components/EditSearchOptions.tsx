@@ -1,4 +1,4 @@
-import { Accessor, createSignal, For } from 'solid-js'
+import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
 
 import { Ingredient, Kind, SearchOptions, State } from '../types'
 import { useAppContext } from '../context'
@@ -27,6 +27,21 @@ export default (props: EditSearchOptionsProps) => {
   const stateChecked = Object.fromEntries(stateOptions.map(e => [e, undefined]))
   const kindChecked = Object.fromEntries(kindOptions.map(e => [e, undefined]))
 
+  const handleAppKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      props.onDiscard()
+      return false
+    }
+  }
+
+  onMount(() => {
+    window.addEventListener('keydown', handleAppKeydown, true)
+  })
+
+  onCleanup(() => {
+    window.removeEventListener('keydown', handleAppKeydown)
+  })
+
   function onConfirm() {
     const keywords = searchTerm!.value.split(' ')
     const states = Object.entries(stateChecked)
@@ -41,7 +56,13 @@ export default (props: EditSearchOptionsProps) => {
 
   return (
     <div class={styles.modal}>
-      <div class={styles['modal-content']}>
+      <div
+        class={styles['modal-content']}
+        onKeyDown={event => {
+          if (event.key === 'Enter') {
+            onConfirm()
+          }
+        }}>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
           <label>Keywords</label>
           <input

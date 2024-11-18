@@ -90,10 +90,14 @@
   display: flex;
   font-weight: 600;
   margin: 0 0 3px;
+  gap: 5px;
+}
+
+.ingredient-kind-icon {
+  font-size: 12px;
 }
 
 .ingredient-state-icon {
-  padding-left: 5px;
   font-size: 12px;
 }
 

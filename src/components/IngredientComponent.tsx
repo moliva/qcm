@@ -6,7 +6,7 @@ import { For } from 'solid-js'
 
 import { Ingredient, IngredientId } from '../types'
 import { useAppContext } from '../context'
-import { renderState } from '../utils'
+import { renderKind, renderState } from '../utils'
 import styles from './IngredientComponent.module.css'
 
 import appStyles from '../App.module.css'
@@ -28,16 +28,20 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
 
   const navigate = useNavigate()
 
-  const [icon, color] = renderState(ingredient.state)
+  const [kindIcon, kindColor] = renderKind('ingredient')
+  const [stateIcon, stateColor] = renderState(ingredient.state)
 
   return (
     <div class={styles.ingredient}>
       <div class={styles['ingredient-name']}>
+        <span style={{ color: kindColor }}>
+          <Fa class={styles['ingredient-kind-icon']} icon={kindIcon} />
+        </span>
         <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(ingredient)}>
           {ingredient.name}
         </label>
-        <span style={{ color: color }}>
-          <Fa class={styles['ingredient-state-icon']} icon={icon} />
+        <span style={{ color: stateColor }}>
+          <Fa class={styles['ingredient-state-icon']} icon={stateIcon} />
         </span>
 
         <div class={styles['note-controls']}>
@@ -103,4 +107,7 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
       ) : null}
     </div>
   )
+}
+function renderkind(arg0: string): [any, any] {
+  throw new Error('Function not implemented.')
 }

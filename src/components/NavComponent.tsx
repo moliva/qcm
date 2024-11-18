@@ -1,4 +1,4 @@
-import { Accessor, createEffect, createMemo } from 'solid-js'
+import { Accessor, createEffect, createMemo, onCleanup, onMount } from 'solid-js'
 import { useLocation, useNavigate, useSearchParams } from '@solidjs/router'
 
 import {
@@ -55,6 +55,18 @@ export const Nav = (props: NavProps) => {
       navigate(import.meta.env.BASE_URL)
     }
   }
+  const handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      const ref = searchTermRef
+
+      if (ref) {
+        ref.focus()
+      }
+    }
+  }
+
+  onMount(() => window.addEventListener('keydown', handleKeydown, true))
+  onCleanup(() => window.removeEventListener('keydown', handleKeydown))
 
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
@@ -81,7 +93,7 @@ export const Nav = (props: NavProps) => {
                 'border-radius': '5px',
                 'border-color': '#3b3b3b'
               }}
-              onInput={event => {
+              onInput={() => {
                 props.onSearchTermChanged(searchTermRef!.value)
               }}
               onKeyDown={event => {
