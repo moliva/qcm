@@ -23,10 +23,12 @@ export default (props: EditSearchOptionsProps) => {
   const stateOptions = ['unknown', 'good', 'warning', 'bad'] as State[]
   const kindOptions = ['recipe', 'ingredient'] as Kind[]
 
+  let searchTerm
   const stateChecked = Object.fromEntries(stateOptions.map(e => [e, undefined]))
   const kindChecked = Object.fromEntries(kindOptions.map(e => [e, undefined]))
 
   function onConfirm() {
+    const keywords = searchTerm!.value.split(' ')
     const states = Object.entries(stateChecked)
       .filter(([, ref]) => ref.checked)
       .map(([e]) => e) as State[]
@@ -34,13 +36,27 @@ export default (props: EditSearchOptionsProps) => {
       .filter(([, ref]) => ref.checked)
       .map(([e]) => e) as Kind[]
 
-    console.log('edit', searchOptions())
-    props.onConfirm({ keywords: searchOptions().keywords, states, kinds })
+    props.onConfirm({ keywords, states, kinds })
   }
 
   return (
     <div class={styles.modal}>
       <div class={styles['modal-content']}>
+        <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
+          <label>Keywords</label>
+          <input
+            style={{
+              width: '100%',
+              'max-width': '600px',
+              'border-style': 'solid',
+              'border-width': '1px',
+              'border-radius': '5px',
+              'border-color': '#3b3b3b'
+            }}
+            ref={searchTerm}
+            value={searchOptions().keywords.join(' ')}
+          />
+        </div>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
           <label>States</label>
           <For each={stateOptions}>

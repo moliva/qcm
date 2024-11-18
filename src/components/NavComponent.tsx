@@ -1,4 +1,4 @@
-import { createMemo } from 'solid-js'
+import { Accessor, createMemo } from 'solid-js'
 import { useLocation, useNavigate } from '@solidjs/router'
 
 import {
@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
-import { Identity } from '../types'
+import { Identity, SearchOptions } from '../types'
 
 import { ProfilePicture } from './ProfilePicture'
 
@@ -20,6 +20,7 @@ import styles from './NavComponent.module.css'
 
 export type NavProps = {
   identity: Identity
+  searchOptions: Accessor<SearchOptions>
 
   onSearchTermChanged(searchTerm: string): void
   onSearchClicked(searchTerm: string): void
@@ -75,10 +76,11 @@ export const Nav = (props: NavProps) => {
                   props.onSearchClicked(searchTermRef!.value)
                 }
               }}
+              value={props.searchOptions().keywords.join(' ')}
             />
             <button
               title='Filter'
-              style={{ padding: '0 0 0 5px' }}
+              style={{ padding: '0', 'margin-left': '5px' }}
               class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.back}`}
               onClick={props.onFilterClicked}>
               <Fa class={`${styles['nav-icon']} ${styles['filter']}`} icon={faFilter} />

@@ -86,7 +86,6 @@ export default () => {
   }
 
   function updateSearchOptions(options: SearchOptions) {
-    console.log(options)
     setSearchOptions(options)
     setShowSearchOptionsModal(false)
 
@@ -114,6 +113,7 @@ export default () => {
           <header class={styles.header}>
             <Nav
               identity={state().identity!}
+              searchOptions={searchOptions}
               onSearchTermChanged={onSearchTermChanged}
               onSearchClicked={onSearchClicked}
               onFilterClicked={onFilterClicked}
