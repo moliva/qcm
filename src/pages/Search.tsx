@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from '@solidjs/router'
 import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes, search } from '../services'
 import { Ingredient, Recipe, Result } from '../types'
 import { useAppContext } from '../context'
-import { formatError, useNavigateUtils } from '../utils'
+import { decodeArgument, formatError, useNavigateUtils } from '../utils'
 
 import { IngredientComponent } from '../components/IngredientComponent'
 import { RecipeComponent } from '../components/RecipeComponent'
@@ -20,10 +20,6 @@ export default () => {
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
 
   const [results, setResults] = createSignal<Result[] | undefined>()
-
-  function decodeArgument(arg: string | undefined): string[] {
-    return arg ? decodeURI(arg).split(' ') : []
-  }
 
   createEffect(async () => {
     const keywords = decodeArgument(searchParams.keywords)

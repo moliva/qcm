@@ -36,9 +36,15 @@ export function renderState(state: State): [IconDefinition, string] {
   }
 }
 
+export function decodeArgument(arg: string | undefined): string[] {
+  return arg ? decodeURI(arg).split(' ') : []
+}
+
 export function useNavigateUtils(navigate: any) {
   const searchTag = (tag: string) => {
-    navigate(import.meta.env.BASE_URL + `search?keywords=${tag}`)
+    navigate(
+      import.meta.env.BASE_URL + `search?keywords=${tag}&states=good,bad,warning,unknown&kinds=ingredient,recipe`
+    )
   }
 
   return { searchTag }

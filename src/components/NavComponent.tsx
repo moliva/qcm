@@ -1,5 +1,5 @@
-import { Accessor, createMemo } from 'solid-js'
-import { useLocation, useNavigate } from '@solidjs/router'
+import { Accessor, createEffect, createMemo } from 'solid-js'
+import { useLocation, useNavigate, useSearchParams } from '@solidjs/router'
 
 import {
   faUnlockKeyhole,
@@ -30,10 +30,22 @@ export type NavProps = {
 export const Nav = (props: NavProps) => {
   const { identity } = props
 
-  let searchTermRef
+  let searchTermRef: any
 
   const navigate = useNavigate()
   const location = useLocation()
+
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  createEffect(async () => {
+    const searchTerm = decodeURI(searchParams.keywords)
+    console.log(searchTerm)
+
+    if (searchTerm && searchTermRef) {
+      searchTermRef.value = searchTerm
+      props.onSearchTermChanged(searchTerm)
+    }
+  })
 
   const goBack = () => {
     if (location.pathname === import.meta.env.BASE_URL) {
