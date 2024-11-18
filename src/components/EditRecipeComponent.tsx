@@ -131,7 +131,7 @@ export default (props: EditIngredientProps) => {
                       )}
                     </For>
                   </select>
-                  <input style={{ width: '100%' }} value={ingredient.measure} />
+                  <input style={{ width: '100%' }} placeholder="N units/tablespoons/grams..." value={ingredient.measure} />
                   <button
                     title='Remove ingredient'
                     style={{ 'margin-left': 'auto' }}
