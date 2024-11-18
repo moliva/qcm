@@ -38,12 +38,13 @@ export const Nav = (props: NavProps) => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   createEffect(async () => {
-    const searchTerm = decodeURI(searchParams.keywords)
-    console.log(searchTerm)
+    if (searchParams.keywords) {
+      const searchTerm = decodeURI(searchParams.keywords)
 
-    if (searchTerm && searchTermRef) {
-      searchTermRef.value = searchTerm
-      props.onSearchTermChanged(searchTerm)
+      if (searchTerm && searchTermRef && searchTerm !== searchTermRef.value) {
+        searchTermRef.value = searchTerm
+        props.onSearchTermChanged(searchTerm)
+      }
     }
   })
 
