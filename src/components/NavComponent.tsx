@@ -40,11 +40,7 @@ export const Nav = (props: NavProps) => {
     }
   }
 
-  console.log(location.pathname)
-  //const path = location.pathname.split('/').slice(2).join('/')
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
-
-  console.log('cucu', path)
 
   return (
     <nav class={styles.nav}>
@@ -68,6 +64,11 @@ export const Nav = (props: NavProps) => {
               'border-radius': '5px',
               'border-color': '#3b3b3b'
             }}
+            onKeyDown={event => {
+              if (event.key === 'Enter') {
+                props.onSearchClicked(searchTermRef!.value)
+              }
+            }}
           />
           <button
             title='Search'
@@ -89,6 +90,7 @@ export const Nav = (props: NavProps) => {
         </div>
       </div>
       <div class={styles['nav-main']} style={{ 'align-items': 'center', 'justify-content': 'center' }}>
+        {/**
         <button
           title='Home'
           class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === '' ? appStyles.selected : null}`}
@@ -97,6 +99,7 @@ export const Nav = (props: NavProps) => {
             class={`${styles['nav2-icon']} ${path() === '' ? appStyles.home : null}`}
           icon={faHouse} />
         </button>
+      */}
         <button
           title='Recipes'
           class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === 'recipes' ? appStyles.selected : null}`}

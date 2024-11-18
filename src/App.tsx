@@ -1,5 +1,5 @@
 import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy } from 'solid-js'
-import { useNavigate, useSearchParams, Routes, Route } from '@solidjs/router'
+import { useNavigate, useSearchParams, Routes, Route, Navigate } from '@solidjs/router'
 
 import { useAppContext } from './context'
 
@@ -90,7 +90,7 @@ export default () => {
             <section class={styles.content}>
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
-                  <Route path='/' component={Home} />
+                  <Route path='/' component={<Navigate href={import.meta.env.BASE_URL + `recipes`} />} />
                   <Route path='/recipes' component={RecipesPage} />
                   <Route path='/ingredients' component={IngredientsPage} />
                   <Route path='/recipes/:id' component={RecipePage} />
