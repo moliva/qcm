@@ -122,6 +122,9 @@ export const Nav = (props: NavProps) => {
               <a
                 title='Log out'
                 class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.logout}`}
+                onClick={() => {
+                  document.cookie = 'idToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+                }}
                 href={import.meta.env.BASE_URL}>
                 <Fa class={styles['nav-icon']} icon={faUnlockKeyhole} />
               </a>

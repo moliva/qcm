@@ -1,5 +1,5 @@
-import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal } from 'solid-js'
-import { useNavigate, useSearchParams, Routes, Route, Navigate } from '@solidjs/router'
+import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal, createMemo } from 'solid-js'
+import { useNavigate, useSearchParams, Routes, Route, Navigate, useLocation } from '@solidjs/router'
 
 import { useAppContext } from './context'
 
@@ -27,15 +27,31 @@ export default () => {
   const [searchParams] = useSearchParams()
   const token = searchParams.login_success
 
+  // const location = useLocation()
+  // const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
+  //
+  // if (state().redirect && path() === state().redirect) {
+  //   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
+  //
+  //   const path_ = state().redirect
+  //   console.log('path', path_)
+  //   console.log('path2', import.meta.env.BASE_URL + path_)
+  //   navigate(import.meta.env.BASE_URL + path_, { resolve: true, replace: true })
+  // }
+
   if (!state().identity && typeof token === 'string') {
+    setCookie('idToken', token, 7)
+
     const idToken = token.split('.')[1]
     const decoded = atob(idToken)
     const identity = JSON.parse(decoded)
 
     const newIdentityState = { identity, token }
 
-    setState({ ...state(), identity: newIdentityState })
-    navigate(import.meta.env.BASE_URL)
+    const path = searchParams.redirect
+    const redirect = path ?? ''
+
+    setState({ ...state(), redirect, identity: newIdentityState })
   }
 
   createEffect(async alreadyFetched => {
@@ -145,4 +161,11 @@ export default () => {
       </Switch>
     </div>
   )
+}
+
+function setCookie(name: string, value: string, expirationDays: number): void {
+  const date = new Date()
+  date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000) // millis to days
+
+  document.cookie = `${name}=${value};SameSite=Strict;Secure;expires=${date.toUTCString()};path=/`
 }
