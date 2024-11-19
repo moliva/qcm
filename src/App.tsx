@@ -169,5 +169,7 @@ function setCookie(name: string, value: string, expirationDays: number): void {
 
   // document.cookie = `${name}=${value};SameSite=Strict;Secure;expires=${date.toUTCString()};path=/`
   // document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
-  document.cookie = `${name}=${value};path=/`
+  // document.cookie = `${name}=${value};path=/`
+
+  localStorage.setItem(name, value)
 }

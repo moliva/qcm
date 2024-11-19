@@ -16,7 +16,7 @@ export function Login() {
   const location = useLocation()
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
-  if (idToken !== undefined && idToken.length > 0) {
+  if (idToken !== null && idToken.length > 0) {
     window.location.replace(import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${path()}`)
   }
 
@@ -39,7 +39,7 @@ export function Login() {
           </a>
         </div>
       }>
-      <Match when={idToken === undefined || idToken.length === 0}>
+      <Match when={idToken === null || idToken.length === 0}>
         <div style={{ 'min-height': '100vh', 'align-items': 'center', display: 'flex', 'justify-content': 'center' }}>
           <a
             href={`${API_HOST}/login`}
@@ -53,18 +53,20 @@ export function Login() {
   )
 }
 
-function getCookie(cname: string): string {
-  let name = cname + '='
-  let decodedCookie = decodeURIComponent(document.cookie)
-  let ca = decodedCookie.split(';')
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i]
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1)
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length)
-    }
-  }
-  return ''
+function getCookie(cname: string): string | null {
+  // let name = cname + '='
+  // let decodedCookie = decodeURIComponent(document.cookie)
+  // let ca = decodedCookie.split(';')
+  // for (let i = 0; i < ca.length; i++) {
+  //   let c = ca[i]
+  //   while (c.charAt(0) == ' ') {
+  //     c = c.substring(1)
+  //   }
+  //   if (c.indexOf(name) == 0) {
+  //     return c.substring(name.length, c.length)
+  //   }
+  // }
+  // return ''
+
+  return localStorage.getItem(cname)
 }
