@@ -168,5 +168,6 @@ function setCookie(name: string, value: string, expirationDays: number): void {
   date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000) // millis to days
 
   // document.cookie = `${name}=${value};SameSite=Strict;Secure;expires=${date.toUTCString()};path=/`
-  document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
+  // document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
+  document.cookie = `${name}=${value};path=/`
 }
