@@ -2,7 +2,7 @@ import { For, Match, Switch, createEffect, createSignal, onMount } from 'solid-j
 import { useNavigate, useSearchParams } from '@solidjs/router'
 
 import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes, search } from '../services'
-import { Ingredient, Recipe, Result } from '../types'
+import { Ingredient, Kind, Recipe, Result, State } from '../types'
 import { useAppContext } from '../context'
 import { decodeArgument, formatError, useNavigateUtils } from '../utils'
 
@@ -20,30 +20,6 @@ export default () => {
   const [state, { setError, setIngredients, setRecipes }] = useAppContext()
 
   const [results, setResults] = createSignal<Result[] | undefined>()
-
-  createEffect(async () => {
-    const keywords = decodeArgument(searchParams.keywords)
-    const states = decodeArgument(searchParams.states)
-    const kinds = decodeArgument(searchParams.kinds)
-
-    const searchOptions = {
-      keywords,
-      states,
-      kinds
-    }
-
-    const results = await search(state().identity!, searchOptions)
-
-    const merged = results.map(r => {
-      return r.kind === 'recipe' && state().recipes && state().recipes![r.recipe as any]
-        ? { kind: 'recipe', recipe: state().recipes![r.recipe as unknown as number] }
-        : r.kind === 'ingredient' && state().ingredients && state().ingredients![r.ingredient as any]
-          ? { kind: 'ingredient', ingredient: state().ingredients![r.ingredient as unknown as number] }
-          : { kind: 'loading' }
-    })
-
-    setResults(merged)
-  })
 
   const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
     try {
@@ -131,6 +107,34 @@ export default () => {
   onMount(() => {
     fetchIngredients({ refetching: false })
     fetchRecipes({ refetching: false })
+  })
+
+  createEffect(async () => {
+    if (!state().recipes || !state().ingredients) {
+      return
+    }
+
+    const keywords = decodeArgument(searchParams.keywords)
+    const states = decodeArgument(searchParams.states) as State[]
+    const kinds = decodeArgument(searchParams.kinds) as Kind[]
+
+    const searchOptions = {
+      keywords,
+      states,
+      kinds
+    }
+
+    const results = await search(state().identity!, searchOptions)
+
+    const merged = results.map(r => {
+      return r.kind === 'recipe' && state().recipes && state().recipes![r.recipe as any]
+        ? { kind: 'recipe', recipe: state().recipes![r.recipe as unknown as number] }
+        : r.kind === 'ingredient' && state().ingredients && state().ingredients![r.ingredient as any]
+          ? { kind: 'ingredient', ingredient: state().ingredients![r.ingredient as unknown as number] }
+          : { kind: 'loading' }
+    })
+
+    setResults(merged)
   })
 
   return (

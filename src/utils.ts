@@ -40,6 +40,42 @@ export function decodeArgument(arg: string | undefined): string[] {
   return arg ? decodeURI(arg).split(' ') : []
 }
 
+export function getCookie(cname: string): string | null {
+  // let name = cname + '='
+  // let decodedCookie = decodeURIComponent(document.cookie)
+  // let ca = decodedCookie.split(';')
+  // for (let i = 0; i < ca.length; i++) {
+  //   let c = ca[i]
+  //   while (c.charAt(0) == ' ') {
+  //     c = c.substring(1)
+  //   }
+  //   if (c.indexOf(name) == 0) {
+  //     return c.substring(name.length, c.length)
+  //   }
+  // }
+  // return ''
+
+  return localStorage.getItem(cname)
+}
+
+export function setCookie(name: string, value: string, expirationDays: number): void {
+  const date = new Date()
+  date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000) // millis to days
+
+  // document.cookie = `${name}=${value};SameSite=Strict;Secure;expires=${date.toUTCString()};path=/`
+  // document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
+  // document.cookie = `${name}=${value};path=/`
+
+  localStorage.setItem(name, value)
+}
+
+export function parseIdToken(token: string): any {
+  const idToken = token.split('.')[1]
+  const decoded = atob(idToken)
+  const identity = JSON.parse(decoded)
+  return identity
+}
+
 export function useNavigateUtils(navigate: any) {
   const searchTag = (tag: string) => {
     navigate(

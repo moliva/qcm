@@ -7,17 +7,24 @@ import styles from '../App.module.css'
 import navStyles from './NavComponent.module.css'
 import { createMemo, Match, Switch } from 'solid-js'
 import { useLocation } from '@solidjs/router'
+import { getCookie, parseIdToken, setCookie } from '../utils'
 
 export type LoginProps = {}
 
 export function Login() {
-  const idToken = getCookie('idToken')
+  let idToken = getCookie('idToken')
 
   const location = useLocation()
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
   if (idToken !== null && idToken.length > 0) {
-    window.location.replace(import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${path()}`)
+    const token = parseIdToken(idToken)
+    if (new Date() < new Date(token.exp * 1000)) {
+      window.location.replace(import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${path()}`)
+    } else {
+      setCookie('idToken', '', 1)
+      idToken = ''
+    }
   }
 
   return (
@@ -51,22 +58,4 @@ export function Login() {
       </Match>
     </Switch>
   )
-}
-
-function getCookie(cname: string): string | null {
-  // let name = cname + '='
-  // let decodedCookie = decodeURIComponent(document.cookie)
-  // let ca = decodedCookie.split(';')
-  // for (let i = 0; i < ca.length; i++) {
-  //   let c = ca[i]
-  //   while (c.charAt(0) == ' ') {
-  //     c = c.substring(1)
-  //   }
-  //   if (c.indexOf(name) == 0) {
-  //     return c.substring(name.length, c.length)
-  //   }
-  // }
-  // return ''
-
-  return localStorage.getItem(cname)
 }

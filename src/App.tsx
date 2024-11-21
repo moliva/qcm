@@ -10,6 +10,7 @@ import { SearchOptions } from './types'
 import EditSearchOptions from './components/EditSearchOptions'
 
 import styles from './App.module.css'
+import { parseIdToken, setCookie } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
 const RecipePage = lazy(() => import('./pages/Recipe'))
@@ -27,31 +28,20 @@ export default () => {
   const [searchParams] = useSearchParams()
   const token = searchParams.login_success
 
-  // const location = useLocation()
-  // const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
-  //
-  // if (state().redirect && path() === state().redirect) {
-  //   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
-  //
-  //   const path_ = state().redirect
-  //   console.log('path', path_)
-  //   console.log('path2', import.meta.env.BASE_URL + path_)
-  //   navigate(import.meta.env.BASE_URL + path_, { resolve: true, replace: true })
-  // }
+  const [redirect, setRedirect] = createSignal()
 
   if (!state().identity && typeof token === 'string') {
     setCookie('idToken', token, 7)
 
-    const idToken = token.split('.')[1]
-    const decoded = atob(idToken)
-    const identity = JSON.parse(decoded)
+    const identity = parseIdToken(token)
 
     const newIdentityState = { identity, token }
 
-    const path = searchParams.redirect
-    const redirect = path ?? ''
+    const redirect_ = searchParams.redirect
+    console.log('redirect', redirect_)
+    setRedirect(redirect_)
 
-    setState({ ...state(), redirect, identity: newIdentityState })
+    setState({ ...state(), identity: newIdentityState })
   }
 
   createEffect(async alreadyFetched => {
@@ -92,7 +82,7 @@ export default () => {
 
   const [showSearchOptionsModal, setShowSearchOptionsModal] = createSignal(false)
   const [searchOptions, setSearchOptions] = createSignal<SearchOptions>({
-    keywords: [],
+    keywords: (searchParams.keywords ?? '').split(' '),
     states: ['good', 'bad', 'unknown', 'warning'],
     kinds: ['ingredient', 'recipe']
   })
@@ -111,6 +101,12 @@ export default () => {
   function onSearchTermChanged(searchTerm: string) {
     setSearchOptions({ ...searchOptions(), keywords: searchTerm.split(' ') })
   }
+
+  onMount(() => {
+    if (redirect()) {
+      navigate(import.meta.env.BASE_URL + redirect())
+    }
+  })
 
   return (
     <div class={styles.App}>
@@ -147,6 +143,7 @@ export default () => {
               </Show>
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
+                  <Route path='/redirect' component={<Navigate href={import.meta.env.BASE_URL + redirect()} />} />
                   <Route path='/' component={<Navigate href={import.meta.env.BASE_URL + `recipes`} />} />
                   <Route path='/recipes' component={RecipesPage} />
                   <Route path='/ingredients' component={IngredientsPage} />
@@ -161,15 +158,4 @@ export default () => {
       </Switch>
     </div>
   )
-}
-
-function setCookie(name: string, value: string, expirationDays: number): void {
-  const date = new Date()
-  date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000) // millis to days
-
-  // document.cookie = `${name}=${value};SameSite=Strict;Secure;expires=${date.toUTCString()};path=/`
-  // document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`
-  // document.cookie = `${name}=${value};path=/`
-
-  localStorage.setItem(name, value)
 }
