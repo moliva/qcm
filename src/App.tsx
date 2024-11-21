@@ -5,7 +5,7 @@ import { useAppContext } from './context'
 
 import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
-import { SearchOptions } from './types'
+import { SearchOptions, State } from './types'
 
 import EditSearchOptions from './components/EditSearchOptions'
 
@@ -28,7 +28,7 @@ export default () => {
   const [searchParams] = useSearchParams()
   const token = searchParams.login_success
 
-  const [redirect, setRedirect] = createSignal()
+  const [redirect, setRedirect] = createSignal<string | undefined>()
 
   if (!state().identity && typeof token === 'string') {
     setCookie('idToken', token, 7)
@@ -38,8 +38,9 @@ export default () => {
     const newIdentityState = { identity, token }
 
     const redirect_ = searchParams.redirect
-    console.log('redirect', redirect_)
-    setRedirect(redirect_)
+    if (redirect_ && redirect_.length > 0) {
+      setRedirect(decodeURIComponent(redirect_))
+    }
 
     setState({ ...state(), identity: newIdentityState })
   }
@@ -86,6 +87,19 @@ export default () => {
     states: ['good', 'bad', 'unknown', 'warning'],
     kinds: ['ingredient', 'recipe']
   })
+
+  // init search options when coming from a permalink with them
+  const path = redirect()
+  if (path && path.startsWith('search') && path.includes('?')) {
+    const searchParams = new URLSearchParams(path.substring(path.indexOf('?')))
+
+    let searchOptions = {} as Record<string, string[]>
+    for (const searchParam of searchParams) {
+      searchOptions[searchParam[0]] = searchParam[1].split(' ')
+    }
+
+    setSearchOptions(searchOptions as SearchOptions)
+  }
 
   function onFilterClicked() {
     setShowSearchOptionsModal(true)

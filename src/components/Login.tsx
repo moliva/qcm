@@ -20,7 +20,7 @@ export function Login() {
   if (idToken !== null && idToken.length > 0) {
     const token = parseIdToken(idToken)
     if (new Date() < new Date(token.exp * 1000)) {
-      window.location.replace(import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${path()}`)
+      window.location.replace(import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${encodeURIComponent(path() + location.search)}`)
     } else {
       setCookie('idToken', '', 1)
       idToken = ''
