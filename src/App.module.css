@@ -128,11 +128,14 @@ button:hover .ingredients,
 }
 
 .button.primary:not([disabled]) {
-  background-color: #00ac00;
+  color: var(--background);
+  background-color: var(--decoration);
 }
 
 .button.secondary {
-  background-color: gray;
+  background-color: var(--background);
+  color: var(--text);
+  border: 1px solid var(--decoration);
 }
 
 .button.delete {

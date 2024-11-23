@@ -7,6 +7,8 @@ import { renderKind, renderState } from '../utils'
 
 import appStyles from '../App.module.css'
 import styles from './EditSearchOptions.module.css'
+import navStyles from './NavComponent.module.css'
+import ingStyles from './RecipeComponent.module.css'
 
 export type EditSearchOptionsProps = {
   searchOptions: Accessor<SearchOptions>
@@ -76,22 +78,18 @@ export default (props: EditSearchOptionsProps) => {
           }
         }}>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
-          <label>Keywords</label>
+          <label class={ingStyles['ingredient-subtitle']}>Keywords</label>
           <input
+            class={navStyles['search-input']}
             style={{
-              width: '100%',
-              'max-width': '600px',
-              'border-style': 'solid',
-              'border-width': '1px',
-              'border-radius': '5px',
-              'border-color': '#3b3b3b'
+              width: 'auto'
             }}
             ref={searchTerm}
             value={searchOptions().keywords.join(' ')}
           />
         </div>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
-          <div style={{ display: 'inline-flex', 'align-items': 'center' }}>
+          <div style={{ display: 'inline-flex', 'align-items': 'end' }}>
             <input
               type='checkbox'
               ref={statesChecked}
@@ -99,7 +97,9 @@ export default (props: EditSearchOptionsProps) => {
               onClick={onStatesClicked}
               checked={searchOptions().states.length === Object.keys(stateChecked).length}
             />
-            <label style={{ 'font-weight': '600' }}>States</label>
+            <label class={ingStyles['ingredient-subtitle']} style={{ 'font-weight': '600' }}>
+              States
+            </label>
           </div>
           <For each={stateOptions}>
             {state => {
@@ -123,7 +123,7 @@ export default (props: EditSearchOptionsProps) => {
           </For>
         </div>
         <div style={{ 'margin-top': '10px', display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
-          <div style={{ display: 'inline-flex', 'align-items': 'center' }}>
+          <div style={{ display: 'inline-flex', 'align-items': 'end' }}>
             <input
               type='checkbox'
               ref={kindsChecked}
@@ -131,7 +131,9 @@ export default (props: EditSearchOptionsProps) => {
               onClick={onKindsClicked}
               checked={searchOptions().kinds.length === Object.keys(kindChecked).length}
             />
-            <label style={{ 'font-weight': '600' }}>Kinds</label>
+            <label class={ingStyles['ingredient-subtitle']} style={{ 'font-weight': '600' }}>
+              Kinds
+            </label>
           </div>
           <For each={kindOptions}>
             {kind => {
