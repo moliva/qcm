@@ -1,11 +1,12 @@
 import { Accessor, For, onCleanup, onMount } from 'solid-js'
 
+import Fa from 'solid-fa'
+
 import { Kind, SearchOptions, State } from '../types'
+import { renderKind, renderState } from '../utils'
 
 import appStyles from '../App.module.css'
 import styles from './EditSearchOptions.module.css'
-import { renderKind, renderState } from '../utils'
-import Fa from 'solid-fa'
 
 export type EditSearchOptionsProps = {
   searchOptions: Accessor<SearchOptions>

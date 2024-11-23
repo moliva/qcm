@@ -4,6 +4,9 @@
   --middle: #6a6a6a;
   --decoration: #4b8459;
 
+  --ingredient: #ce6100;
+  --recipe: #b2b239;
+
   background-color: var(--background);
   color: var(--text);
 }
@@ -80,12 +83,12 @@
 
 button:hover .recipes,
 .recipes.selected {
-  color: #c2c239;
+  color: var(--recipe);
 }
 
 button:hover .ingredients,
 .ingredients.selected {
-  color: #ce6100;
+  color: var(--ingredient);
 }
 
 /* ***************************************************************************************************** */

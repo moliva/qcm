@@ -26,13 +26,13 @@ export function renderKind(kind: Kind): [IconDefinition, string] {
 export function renderState(state: State): [IconDefinition, string] {
   switch (state) {
     case 'good':
-      return [faCircleCheck, 'green']
+      return [faCircleCheck, '#7fc87f']
     case 'bad':
-      return [faCircleXmark, 'red']
+      return [faCircleXmark, '#c65a5a']
     case 'warning':
-      return [faTriangleExclamation, 'yellow']
+      return [faTriangleExclamation, '#caca21']
     default:
-      return [faCircleQuestion, 'lightgrey']
+      return [faCircleQuestion, '#b4b4b4']
   }
 }
 

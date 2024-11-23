@@ -168,9 +168,9 @@
 
   width: fit-content;
 
-  border-color: var(--middle);
+  border-color: var(--text);
   border: solid 1px;
-  color: var(--middle);
+  color: var(--text);
 }
 
 .ingredient-related:hover {

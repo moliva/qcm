@@ -28,6 +28,55 @@
   font-size: 25px;
 }
 
+.nav-icon-base {
+  font-size: 40px;
+  color: var(--text);
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button:hover .nav-icon-base.recipe {
+  color: var(--recipe);
+}
+
+button:hover .nav-icon-base.ingredient {
+  color: var(--ingredient);
+}
+
+.nav-icon-overlap-main.recipe {
+  font-size: 20px;
+  left: 35%;
+}
+
+.nav-icon-overlap-main {
+  font-size: 25px;
+  color: var(--background);
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nav-icon-overlap-decoration.recipe {
+  right: -9px;
+}
+
+.nav-icon-overlap-decoration {
+  color: var(--background);
+
+  position: absolute;
+  transform: translate(-50%, -50%);
+  right: -5px;
+  bottom: -10px;
+
+  font-size: 0.55em;
+  font-weight: 900;
+}
+
 .tiny {
   max-height: 2rem;
 }
@@ -106,11 +155,11 @@
 }
 
 .logout:hover {
-  color: tan;
+  color: #b98136;
 }
 
 .notifications:hover {
-  color: #c2b96e;
+  color: #b2a96e;
 }
 
 .nav-auth-actions {

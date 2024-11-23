@@ -1,7 +1,7 @@
 import { For, Show, createSignal, onMount } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import { faBlender, faPlus, faPlusSquare, faSquare } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
 import { deleteRecipe, postRecipe, putRecipe } from '../services'
@@ -85,7 +85,15 @@ export default () => {
               title='New recipe'
               class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
               onClick={() => onEditRecipeClicked()}>
-              <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />
+              <Fa class={`${navStyles['nav-icon-base']} ${navStyles['recipe']}`} icon={faSquare} />
+              <Fa
+                class={`${navStyles['nav-icon']} ${navStyles['recipe']} ${navStyles['nav-icon-overlap-main']}`}
+                icon={faBlender}
+              />
+              <Fa
+                class={`${navStyles['nav-icon']} ${navStyles['recipe']}  ${navStyles['nav-icon-overlap-decoration']}`}
+                icon={faPlus}
+              />
             </button>
           </div>
         </>
