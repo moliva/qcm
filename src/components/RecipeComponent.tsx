@@ -31,7 +31,7 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
   const [kindIcon, kindColor] = renderKind('recipe')
 
   return (
-    <div class={styles.ingredient}>
+    <div class={styles.recipe}>
       <div class={styles['ingredient-name']}>
         <span style={{ color: kindColor }}>
           <Fa class={styles['ingredient-kind-icon']} icon={kindIcon} />
@@ -86,7 +86,7 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
           </For>
         ) : null}
       </div>
-      <label class={styles['ingredient-subtitle']}>Instructions</label>
+      <label class={styles['ingredient-subtitle']}>Steps</label>
       <textarea class={styles['ingredient-notes']} readonly={true}>
         {recipe.notes}
       </textarea>

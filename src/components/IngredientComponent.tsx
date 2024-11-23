@@ -7,8 +7,8 @@ import { For } from 'solid-js'
 import { Ingredient, IngredientId } from '../types'
 import { useAppContext } from '../context'
 import { renderKind, renderState } from '../utils'
-import styles from './IngredientComponent.module.css'
 
+import recipeStyles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
 
 export type IngredientComponentProps = {
@@ -24,7 +24,7 @@ export type IngredientComponentProps = {
 
 export const IngredientComponent = (props: IngredientComponentProps) => {
   const { ingredient } = props
-  const [state, { setError, setIngredients }] = useAppContext()
+  const [state] = useAppContext()
 
   const navigate = useNavigate()
 
@@ -32,55 +32,55 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
   const [stateIcon, stateColor] = renderState(ingredient.state)
 
   return (
-    <div class={styles.ingredient}>
-      <div class={styles['ingredient-name']}>
+    <div class={recipeStyles.recipe}>
+      <div class={recipeStyles['ingredient-name']}>
         <span style={{ color: kindColor }}>
-          <Fa class={styles['ingredient-kind-icon']} icon={kindIcon} />
+          <Fa class={recipeStyles['ingredient-kind-icon']} icon={kindIcon} />
         </span>
         <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(ingredient)}>
           {ingredient.name}
         </label>
         <span style={{ color: stateColor }}>
-          <Fa class={styles['ingredient-state-icon']} icon={stateIcon} />
+          <Fa class={recipeStyles['ingredient-state-icon']} icon={stateIcon} />
         </span>
 
-        <div class={styles['note-controls']}>
+        <div class={recipeStyles['note-controls']}>
           {props.onEdit ? (
             <button
-              class={`${styles['edit-control']} ${styles['note-control']}`}
+              class={`${recipeStyles['edit-control']} ${recipeStyles['note-control']}`}
               onClick={() => props.onEdit!(ingredient)}>
               <Fa icon={faPenToSquare} />
             </button>
           ) : null}
           {props.onDelete ? (
             <button
-              class={`${styles['delete-control']} ${styles['note-control']}`}
+              class={`${recipeStyles['delete-control']} ${recipeStyles['note-control']}`}
               onClick={() => props.onDelete!(ingredient)}>
               <Fa icon={faXmark} />
             </button>
           ) : null}
         </div>
       </div>
-      <div class={styles['note-tags']}>
+      <div class={recipeStyles['note-tags']}>
         <For each={ingredient.tags}>
           {tag => (
-            <label class={`${styles['note-tag']} ${appStyles.button}`} onClick={() => props.onTagClicked(tag)}>
+            <label class={`${recipeStyles['note-tag']} ${appStyles.button}`} onClick={() => props.onTagClicked(tag)}>
               {tag}
             </label>
           )}
         </For>
       </div>
-      <textarea class={styles['ingredient-notes']} readonly={true}>
+      <textarea class={recipeStyles['ingredient-notes']} readonly={true}>
         {ingredient.notes}
       </textarea>
       {ingredient.related.length > 0 ? (
         <>
-          <label class={styles['ingredient-subtitle']}>Related</label>
-          <div class={styles['ingredient-related-set']}>
+          <label class={recipeStyles['ingredient-subtitle']}>Related</label>
+          <div class={recipeStyles['ingredient-related-set']}>
             <For each={ingredient.related.map(id => state().ingredients![id])}>
               {related => (
                 <label
-                  class={`${styles['ingredient-related']} ${appStyles.button}`}
+                  class={`${recipeStyles['ingredient-related']} ${appStyles.button}`}
                   onClick={() => props.onRelatedIngredientClicked(related.id!)}>
                   {related.name}
                 </label>
@@ -91,12 +91,12 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
       ) : null}
       {state().recipes && ingredient.recipes.length > 0 ? (
         <>
-          <label class={styles['ingredient-subtitle']}>Recipes</label>
-          <div class={styles['ingredient-related-set']}>
+          <label class={recipeStyles['ingredient-subtitle']}>Recipes</label>
+          <div class={recipeStyles['ingredient-related-set']}>
             <For each={ingredient.recipes.map(id => state().recipes![id])}>
               {recipe => (
                 <label
-                  class={`${styles['ingredient-related']} ${appStyles.button}`}
+                  class={`${recipeStyles['ingredient-related']} ${appStyles.button}`}
                   onClick={() => navigate(import.meta.env.BASE_URL + `recipes/${recipe.id}`)}>
                   {recipe.name}
                 </label>
@@ -107,7 +107,4 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
       ) : null}
     </div>
   )
-}
-function renderkind(arg0: string): [any, any] {
-  throw new Error('Function not implemented.')
 }

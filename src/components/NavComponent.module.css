@@ -81,6 +81,8 @@
   border-radius: 5px;
 
   color: var(--text);
+  line-height: 30px;
+  padding: 1px 10px;
 
   border-color: var(--decoration);
   background-color: var(--background);

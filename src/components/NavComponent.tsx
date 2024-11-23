@@ -152,14 +152,14 @@ export const Nav = (props: NavProps) => {
             title='Recipes'
             class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === 'recipes' ? appStyles.selected : null}`}
             onClick={() => navigate(`${import.meta.env.BASE_URL}recipes`)}>
-            <Fa class={`${styles['nav2-icon']} ${path() === 'recipes' ? appStyles.recipes : null}`} icon={faBlender} />
+            <Fa class={`${styles['nav2-icon']} ${appStyles.recipes} ${path() === 'recipes' ? appStyles.selected : null}`} icon={faBlender} />
           </button>
           <button
             title='Ingredients'
             class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${styles['nav-button']} ${path() === 'ingredients' ? appStyles.selected : null}`}
             onClick={() => navigate(`${import.meta.env.BASE_URL}ingredients`)}>
             <Fa
-              class={`${styles['nav2-icon']} ${path() === 'ingredients' ? appStyles.ingredients : null}`}
+              class={`${styles['nav2-icon']} ${appStyles.ingredients} ${path() === 'ingredients' ? appStyles.selected : null}`}
               icon={faCarrot}
             />
           </button>

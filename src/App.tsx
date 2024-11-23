@@ -46,7 +46,7 @@ export default () => {
     setCookie('idToken', token, 7)
 
     let identity = parseIdToken(token)
-    if (oldId) {
+    if (oldId != null) {
       const oldIdentity = parseIdToken(oldId)
 
       identity = {

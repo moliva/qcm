@@ -1,14 +1,22 @@
-.ingredient {
+.recipe {
   display: flex;
   flex-direction: column;
 
-  border-radius: 10px;
+  border-radius: 0px;
   padding: 15px 15px 30px;
   margin: 4px 0;
-  width: 300px;
+  width: 100%;
+  max-width: 450px;
 
-  background-color: #393b40;
-  box-shadow: 0 0 1rem 1px rgb(30, 30, 30);
+  color: var(--text);
+  background-color: var(--background);
+  box-shadow: 0 0 0.3rem 0px var(--middle);
+}
+
+@media screen and (min-width: 800px) {
+  .recipe {
+    max-width: 100%;
+  }
 }
 
 .note {
@@ -43,11 +51,11 @@
 }
 
 .delete-control:hover {
-  color: LightCoral;
+  color: Coral;
 }
 
 .edit-control:hover {
-  color: LightCyan;
+  color: #3ed3d3;
 }
 
 .note-control {
@@ -107,23 +115,28 @@
   margin-top: 5px;
 }
 
-.note-tag:hover {
-  color: #282c34;
-  background-color: white;
-}
-
 .note-tag {
   font-size: 10px;
   border: solid 0.1px;
   border-radius: 4px;
   padding: 2px 3px;
-  border-color: white;
+
+  border-color: var(--middle);
+  color: var(--middle);
+}
+
+.note-tag:hover {
+  color: var(--background);
+  background-color: var(--middle);
 }
 
 .ingredient-notes {
   padding: 10px 3px 0;
   resize: none;
   background: transparent;
+
+  color: var(--text);
+  height: 100px;
 }
 
 .ingredient-notes:focus {
@@ -133,28 +146,37 @@
 }
 
 .ingredient-subtitle {
-  margin: 5px 0 0;
+  margin: 10px 0 0;
   font-size: 12px;
   font-weight: 600;
+
+  color: var(--middle);
 }
 
 .ingredient-related-set {
   display: flex;
   flex-direction: column;
+
   padding: 5px 0 0;
   gap: 5px;
-}
-
-.ingredient-related:hover {
-  color: #282c34;
-  background-color: white;
 }
 
 .ingredient-related {
   border: none;
   border-radius: 4px;
   padding: 2px 5px;
-  background-color: grey;
+
+  width: fit-content;
+
+  border-color: var(--middle);
+  border: solid 1px;
+  color: var(--middle);
+}
+
+.ingredient-related:hover {
+  color: var(--decoration);
+  outline: solid;
+  outline-color: var(--decoration);
 }
 
 /* ***************************************************************************************************** */

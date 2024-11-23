@@ -1,7 +1,7 @@
 :root {
   --background: #f2f2f2;
   --text: #191919;
-  --middle: #2e1818;
+  --middle: #6a6a6a;
   --decoration: #4b8459;
 
   background-color: var(--background);
@@ -78,11 +78,13 @@
   color: #c3729f;
 }
 
-.recipes {
+button:hover .recipes,
+.recipes.selected {
   color: #c2c239;
 }
 
-.ingredients {
+button:hover .ingredients,
+.ingredients.selected {
   color: #ce6100;
 }
 
