@@ -58,9 +58,13 @@ export function getCookie(cname: string): string | null {
   return localStorage.getItem(cname)
 }
 
-export function setCookie(name: string, value: string, expirationDays: number): void {
-  const date = new Date()
-  date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000) // millis to days
+export function setCookie(name: string, value: string, expirationDays?: number): void {
+  let expirationString = undefined
+  if (expirationDays) {
+    const date = new Date()
+    date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000) // millis to days
+    expirationString = date.toUTCString()
+  }
 
   // document.cookie = `${name}=${value};SameSite=Strict;Secure;expires=${date.toUTCString()};path=/`
   // document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`

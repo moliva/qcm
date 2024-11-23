@@ -1,11 +1,11 @@
-import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal, createMemo } from 'solid-js'
-import { useNavigate, useSearchParams, Routes, Route, Navigate, useLocation } from '@solidjs/router'
+import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal } from 'solid-js'
+import { useNavigate, useSearchParams, Routes, Route, Navigate } from '@solidjs/router'
 
 import { useAppContext } from './context'
 
 import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
-import { SearchOptions, State } from './types'
+import { SearchOptions } from './types'
 
 import EditSearchOptions from './components/EditSearchOptions'
 
@@ -37,10 +37,26 @@ export default () => {
     let identity = parseIdToken(token)
     if (oldId) {
       const oldIdentity = parseIdToken(oldId)
+
       identity = {
         ...oldIdentity,
         ...identity
       }
+
+      const name = getCookie('name')
+      if (name) {
+        identity.name = name
+      }
+      const picture = getCookie('picture')
+      if (picture) {
+        identity.picture = picture
+      }
+    }
+    if (identity.name) {
+      setCookie('name', identity.name)
+    }
+    if (identity.picture) {
+      setCookie('picture', identity.picture)
     }
 
     const refreshToken = searchParams.refresh_token
@@ -170,7 +186,6 @@ export default () => {
               </Show>
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
-                  <Route path='/redirect' component={<Navigate href={import.meta.env.BASE_URL + redirect()} />} />
                   <Route path='/' component={<Navigate href={import.meta.env.BASE_URL + `recipes`} />} />
                   <Route path='/recipes' component={RecipesPage} />
                   <Route path='/ingredients' component={IngredientsPage} />
