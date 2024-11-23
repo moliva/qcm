@@ -23,13 +23,6 @@ type IngredientWorkingType = { key: number; id: number; measure: string }
 export default (props: EditIngredientProps) => {
   const { recipe: ingredient } = props
 
-  const handleAppKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' || e.key === 'Esc') {
-      props.onDiscard()
-      return false
-    }
-  }
-
   onMount(() => {
     window.addEventListener('keydown', handleAppKeydown, true)
   })
@@ -49,6 +42,16 @@ export default (props: EditIngredientProps) => {
   let ingredientState
   let tagsRef
   let ingredientsRef
+
+  const handleAppKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      props.onDiscard()
+      return false
+    } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
+      props.onConfirm(newIngredient())
+      return false
+    }
+  }
 
   onMount(() => {
     let key = 0

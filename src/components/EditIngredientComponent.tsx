@@ -20,9 +20,19 @@ export default (props: EditIngredientProps) => {
 
   const [state] = useAppContext()
 
+  const stateOptions = ['unknown', 'good', 'warning', 'bad']
+
+  let newIngredientName
+  let newIngredientNotes
+  let ingredientState
+  let tagsRef
+
   const handleAppKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
       props.onDiscard()
+      return false
+    } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
+      props.onConfirm(newIngredient())
       return false
     }
   }
@@ -34,13 +44,6 @@ export default (props: EditIngredientProps) => {
   onCleanup(() => {
     window.removeEventListener('keydown', handleAppKeydown)
   })
-
-  const stateOptions = ['unknown', 'good', 'warning', 'bad']
-
-  let newIngredientName
-  let newIngredientNotes
-  let ingredientState
-  let tagsRef
 
   const [relatedRef, setRelatedRef] = createSignal<Ref<Ingredient> | undefined>()
 
