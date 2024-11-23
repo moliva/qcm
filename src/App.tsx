@@ -10,7 +10,7 @@ import { SearchOptions } from './types'
 import EditSearchOptions from './components/EditSearchOptions'
 
 import styles from './App.module.css'
-import { getCookie, parseIdToken, setCookie } from './utils'
+import { getCookie, parseIdToken, removeCookie, setCookie } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
 const RecipePage = lazy(() => import('./pages/Recipe'))
@@ -19,10 +19,21 @@ const RecipesPage = lazy(() => import('./pages/Recipes'))
 const IngredientsPage = lazy(() => import('./pages/Ingredients'))
 const SearchPage = lazy(() => import('./pages/Search'))
 
+function cleanUp() {
+  removeCookie('idToken')
+  removeCookie('name')
+  removeCookie('picture')
+  removeCookie('refreshToken')
+  removeCookie('accessToken')
+}
+
 export default () => {
   const [state, { setState, setError }] = useAppContext()
 
   const navigate = useNavigate()
+
+  // TODO(miguel): remove - 2024/11/23
+  cleanUp()
 
   // handle auth
   const [searchParams] = useSearchParams()
