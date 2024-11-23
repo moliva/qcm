@@ -40,6 +40,11 @@ export function decodeArgument(arg: string | undefined): string[] {
   return arg ? decodeURI(arg).split(' ') : []
 }
 
+export function removeCookie(cname: string): void {
+  // document.cookie = `${cname}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+  localStorage.removeItem(cname)
+}
+
 export function getCookie(cname: string): string | null {
   // let name = cname + '='
   // let decodedCookie = decodeURIComponent(document.cookie)

@@ -17,6 +17,8 @@ import { ProfilePicture } from './ProfilePicture'
 
 import appStyles from '../App.module.css'
 import styles from './NavComponent.module.css'
+import { getCookie, removeCookie } from '../utils'
+import { logout } from '../services'
 
 export type NavProps = {
   identity: Identity
@@ -67,6 +69,18 @@ export const Nav = (props: NavProps) => {
 
   onMount(() => window.addEventListener('keydown', handleKeydown, true))
   onCleanup(() => window.removeEventListener('keydown', handleKeydown))
+
+  const onLogoutClicked = async () => {
+    removeCookie('idToken')
+    removeCookie('name')
+    removeCookie('picture')
+    removeCookie('refreshToken')
+
+    const accessToken = getCookie('accessToken')
+    removeCookie('accessToken')
+
+    await logout(identity, accessToken!)
+  }
 
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
@@ -122,10 +136,7 @@ export const Nav = (props: NavProps) => {
               <a
                 title='Log out'
                 class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.logout}`}
-                onClick={() => {
-                  // document.cookie = 'idToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-                  localStorage.removeItem('idToken')
-                }}
+                onClick={onLogoutClicked}
                 href={import.meta.env.BASE_URL}>
                 <Fa class={styles['nav-icon']} icon={faUnlockKeyhole} />
               </a>

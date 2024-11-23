@@ -59,6 +59,11 @@ export default () => {
       setCookie('picture', identity.picture)
     }
 
+    const accessToken = searchParams.access_token
+    if (accessToken) {
+      setCookie('accessToken', accessToken, 7)
+    }
+
     const refreshToken = searchParams.refresh_token
     if (refreshToken) {
       setCookie('refreshToken', refreshToken, 7)

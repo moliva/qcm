@@ -109,6 +109,10 @@ export async function deleteIngredient(ingredient: Ingredient, identity: Identit
 // *************** utils ***************
 // *****************************************************************************************************
 
+export async function logout(identity: Identity, accessToken: string): Promise<void> {
+  await authentifiedFetch(`${API_HOST}/logout?access_token=${accessToken}`, identity!, { method: 'POST' })
+}
+
 async function authentifiedFetch(url: string, identity: Identity, init: RequestInit | undefined = {}) {
   return await fetch(url, {
     ...init,
