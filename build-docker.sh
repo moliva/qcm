@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 dockerfile='Dockerfile'
-image_name='qcm:v33'
+image_name='qcm:v34'
 
 echo "Building $image_name"
 docker build  -f "$dockerfile" -t "$image_name" .

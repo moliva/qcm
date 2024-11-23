@@ -20,11 +20,11 @@ const IngredientsPage = lazy(() => import('./pages/Ingredients'))
 const SearchPage = lazy(() => import('./pages/Search'))
 
 function cleanUp() {
-  removeCookie('idToken')
-  removeCookie('name')
-  removeCookie('picture')
-  removeCookie('refreshToken')
-  removeCookie('accessToken')
+  localStorage.removeItem('idToken')
+  localStorage.removeItem('name')
+  localStorage.removeItem('picture')
+  localStorage.removeItem('refreshToken')
+  localStorage.removeItem('accessToken')
 }
 
 export default () => {
