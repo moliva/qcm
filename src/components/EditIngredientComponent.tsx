@@ -1,4 +1,4 @@
-import { Accessor, createSignal, For } from 'solid-js'
+import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
 
 import { Ingredient } from '../types'
 import { useAppContext } from '../context'
@@ -19,6 +19,21 @@ export default (props: EditIngredientProps) => {
   const { ingredient } = props
 
   const [state] = useAppContext()
+
+  const handleAppKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      props.onDiscard()
+      return false
+    }
+  }
+
+  onMount(() => {
+    window.addEventListener('keydown', handleAppKeydown, true)
+  })
+
+  onCleanup(() => {
+    window.removeEventListener('keydown', handleAppKeydown)
+  })
 
   const stateOptions = ['unknown', 'good', 'warning', 'bad']
 
@@ -53,10 +68,7 @@ export default (props: EditIngredientProps) => {
         />
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
           <label>State</label>
-          <select
-            class={styles['currency-select']}
-            ref={ingredientState}
-            value={ingredient()?.state ?? 'unknown'}>
+          <select class={styles['currency-select']} ref={ingredientState} value={ingredient()?.state ?? 'unknown'}>
             <For each={stateOptions}>
               {state => (
                 <option value={state} title={state}>

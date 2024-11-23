@@ -1,4 +1,4 @@
-import { Accessor, createSignal, For, onMount } from 'solid-js'
+import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
 
 import { Recipe } from '../types'
 import { useAppContext } from '../context'
@@ -22,6 +22,21 @@ type IngredientWorkingType = { key: number; id: number; measure: string }
 
 export default (props: EditIngredientProps) => {
   const { recipe: ingredient } = props
+
+  const handleAppKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      props.onDiscard()
+      return false
+    }
+  }
+
+  onMount(() => {
+    window.addEventListener('keydown', handleAppKeydown, true)
+  })
+
+  onCleanup(() => {
+    window.removeEventListener('keydown', handleAppKeydown)
+  })
 
   const [state] = useAppContext()
 
@@ -131,7 +146,11 @@ export default (props: EditIngredientProps) => {
                       )}
                     </For>
                   </select>
-                  <input style={{ width: '100%' }} placeholder="N units/tablespoons/grams..." value={ingredient.measure} />
+                  <input
+                    style={{ width: '100%' }}
+                    placeholder='N units/tablespoons/grams...'
+                    value={ingredient.measure}
+                  />
                   <button
                     title='Remove ingredient'
                     style={{ 'margin-left': 'auto' }}

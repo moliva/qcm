@@ -1,9 +1,6 @@
-import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
+import { Accessor, For, onCleanup, onMount } from 'solid-js'
 
-import { Ingredient, Kind, SearchOptions, State } from '../types'
-import { useAppContext } from '../context'
-
-import MultiSelect, { Ref } from '@moliva/solid-multiselect'
+import { Kind, SearchOptions, State } from '../types'
 
 import appStyles from '../App.module.css'
 import styles from './EditSearchOptions.module.css'
@@ -24,6 +21,8 @@ export default (props: EditSearchOptionsProps) => {
   const kindOptions = ['recipe', 'ingredient'] as Kind[]
 
   let searchTerm
+  let statesChecked
+  let kindsChecked
   const stateChecked = Object.fromEntries(stateOptions.map(e => [e, undefined]))
   const kindChecked = Object.fromEntries(kindOptions.map(e => [e, undefined]))
 
@@ -54,6 +53,18 @@ export default (props: EditSearchOptionsProps) => {
     props.onConfirm({ keywords, states, kinds })
   }
 
+  function onKindsClicked() {
+    Object.entries(kindChecked).forEach(([, v]) => {
+      ;(v as any)!.checked = kindsChecked!.checked
+    })
+  }
+
+  function onStatesClicked() {
+    Object.entries(stateChecked).forEach(([, v]) => {
+      ;(v as any)!.checked = statesChecked!.checked
+    })
+  }
+
   return (
     <div class={styles.modal}>
       <div
@@ -79,7 +90,16 @@ export default (props: EditSearchOptionsProps) => {
           />
         </div>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
-          <label>States</label>
+          <div style={{ display: 'inline-flex', 'align-items': 'center' }}>
+            <input
+              type='checkbox'
+              ref={statesChecked}
+              class={styles['modal-name']}
+              onClick={onStatesClicked}
+              checked={searchOptions().states.length === Object.keys(stateChecked).length}
+            />
+            <label style={{ 'font-weight': '600' }}>States</label>
+          </div>
           <For each={stateOptions}>
             {state => {
               const [icon, color] = renderState(state)
@@ -101,8 +121,17 @@ export default (props: EditSearchOptionsProps) => {
             }}
           </For>
         </div>
-        <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
-          <label>Kinds</label>
+        <div style={{ 'margin-top': '10px', display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
+          <div style={{ display: 'inline-flex', 'align-items': 'center' }}>
+            <input
+              type='checkbox'
+              ref={kindsChecked}
+              class={styles['modal-name']}
+              onClick={onKindsClicked}
+              checked={searchOptions().kinds.length === Object.keys(kindChecked).length}
+            />
+            <label style={{ 'font-weight': '600' }}>Kinds</label>
+          </div>
           <For each={kindOptions}>
             {kind => {
               const [icon, color] = renderKind(kind)

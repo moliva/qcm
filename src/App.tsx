@@ -10,7 +10,7 @@ import { SearchOptions, State } from './types'
 import EditSearchOptions from './components/EditSearchOptions'
 
 import styles from './App.module.css'
-import { parseIdToken, setCookie } from './utils'
+import { getCookie, parseIdToken, setCookie } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
 const RecipePage = lazy(() => import('./pages/Recipe'))
@@ -31,9 +31,22 @@ export default () => {
   const [redirect, setRedirect] = createSignal<string | undefined>()
 
   if (!state().identity && typeof token === 'string') {
+    const oldId = getCookie('idToken')
     setCookie('idToken', token, 7)
 
-    const identity = parseIdToken(token)
+    let identity = parseIdToken(token)
+    if (oldId) {
+      const oldIdentity = parseIdToken(oldId)
+      identity = {
+        ...oldIdentity,
+        ...identity
+      }
+    }
+
+    const refreshToken = searchParams.refresh_token
+    if (refreshToken) {
+      setCookie('refreshToken', refreshToken, 7)
+    }
 
     const newIdentityState = { identity, token }
 

@@ -13,6 +13,7 @@ export type LoginProps = {}
 
 export function Login() {
   let idToken = getCookie('idToken')
+  let refreshToken = getCookie('refreshToken')
 
   const location = useLocation()
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
@@ -20,7 +21,28 @@ export function Login() {
   if (idToken !== null && idToken.length > 0) {
     const token = parseIdToken(idToken)
     if (new Date() < new Date(token.exp * 1000)) {
-      window.location.replace(import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${encodeURIComponent(path() + location.search)}`)
+      window.location.replace(
+        import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${encodeURIComponent(path() + location.search)}`
+      )
+    } else if (refreshToken !== null && refreshToken.length > 0) {
+      fetch(`${API_HOST}/refresh`, {
+        method: 'PUT',
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        body: JSON.stringify(refreshToken),
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+        .then(r => r.json())
+        .then(json => {
+          const { id_token: refreshedToken } = json
+
+          window.location.replace(
+            import.meta.env.BASE_URL +
+              `?login_success=${refreshedToken}&redirect=${encodeURIComponent(path() + location.search)}`
+          )
+        })
     } else {
       setCookie('idToken', '', 1)
       idToken = ''
