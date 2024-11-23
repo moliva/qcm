@@ -6,10 +6,6 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import { DetailedGroup, Group } from '../types'
 import { useAppContext } from '../context'
 
-import { Filter } from '../components/FilterComponent'
-import { EditGroup } from '../components/EditGroupComponent'
-import { GroupComponent } from '../components/GroupComponent'
-
 import styles from './Home.module.css'
 import navStyles from '../components/NavComponent.module.css'
 import appStyles from '../App.module.css'

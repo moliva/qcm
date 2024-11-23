@@ -1,17 +1,11 @@
-import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
+import { For, Show, createSignal, onMount } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
-import {
-  deleteRecipe,
-  fetchIngredients as fetchApiIngredients,
-  fetchRecipes as fetchApiRecipes,
-  postRecipe,
-  putRecipe
-} from '../services'
-import { Ingredient, Recipe } from '../types'
+import { deleteRecipe, postRecipe, putRecipe } from '../services'
+import { Recipe } from '../types'
 import { useAppContext } from '../context'
 import { formatError, useNavigateUtils } from '../utils'
 
@@ -25,101 +19,22 @@ import { RecipeComponent } from '../components/RecipeComponent'
 import EditRecipeComponent from '../components/EditRecipeComponent'
 
 export default () => {
-  const [state, { setError, setIngredients, setRecipes }] = useAppContext()
+  const [state, { setError, fetchIngredients, fetchRecipes }] = useAppContext()
+
+  onMount(() => {
+    refreshAll(false)
+  })
+
+  const refreshAll = async (refetching: boolean = true) => {
+    fetchIngredients({ refetching })
+    fetchRecipes({ refetching })
+  }
 
   const [showRecipeModal, setShowRecipeModal] = createSignal(false)
   const [recipe, setCurrentRecipe] = createSignal<Recipe | undefined>()
 
-  const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
-    try {
-      const recipes = state().recipes
-
-      // check if we currently have the ingredients or force fetch
-      if (!opts.refetching) {
-        return recipes!
-      }
-
-      const identity = state().identity
-
-      if (!identity) {
-        throw 'not authentified!'
-      }
-
-      const result = await fetchApiRecipes(identity!)
-      setRecipes(result)
-
-      return result
-    } catch (e) {
-      setError(formatError('Error while fetching detailed group', e))
-      const recipes = state().recipes!
-      return recipes
-    }
-  }
-
-  const fetchIngredients = async (opts: { refetching: boolean }): Promise<Record<number, Ingredient>> => {
-    try {
-      const ingredients = state().ingredients
-
-      // check if we currently have the ingredients or force fetch
-      if (!opts.refetching) {
-        return ingredients!
-      }
-
-      const identity = state().identity
-
-      if (!identity) {
-        throw 'not authentified!'
-      }
-
-      const result = await fetchApiIngredients(identity!)
-      setIngredients(result)
-
-      return result
-    } catch (e) {
-      setError(formatError('Error while fetching detailed group', e))
-      const ingredients = state().ingredients
-      return ingredients!
-    }
-  }
-
   const navigate = useNavigate()
   const { searchTag } = useNavigateUtils(navigate)
-
-  onMount(() => {
-    fetchIngredients({ refetching: false })
-    fetchRecipes({ refetching: false })
-  })
-
-  const refreshContent = async () => {
-    try {
-      const _currentIdentity = state().identity!
-      fetchIngredients({ refetching: true })
-      fetchRecipes({ refetching: true })
-    } catch (e) {
-      setError(formatError('Error while refreshing content', e))
-      throw e
-    }
-  }
-
-  let alreadyFetch = false
-  createEffect(async () => {
-    if (!alreadyFetch) {
-      if (!state().ingredients) {
-        alreadyFetch = true
-        try {
-          await refreshContent()
-        } catch (e) {
-          // put back to false due to error thrown
-          alreadyFetch = false
-        }
-      }
-    }
-  })
-
-  const refreshAll = async () => {
-    fetchIngredients({ refetching: true })
-    fetchRecipes({ refetching: true })
-  }
 
   const onEditRecipeClicked = (recipe?: Recipe) => {
     setCurrentRecipe(recipe)
@@ -143,11 +58,6 @@ export default () => {
       })
 
     setShowRecipeModal(false)
-  }
-
-  const onNewRecipeClicked = () => {
-    setCurrentRecipe(undefined)
-    setShowRecipeModal(true)
   }
 
   return (

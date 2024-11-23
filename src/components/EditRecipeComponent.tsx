@@ -47,9 +47,9 @@ export default (props: EditIngredientProps) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
       props.onDiscard()
       return false
-    } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
-      props.onConfirm(newIngredient())
-      return false
+    // } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
+    //   props.onConfirm(newIngredient())
+    //   return false
     }
   }
 

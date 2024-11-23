@@ -1,20 +1,21 @@
 import { JSXElement, createContext, createSignal, useContext } from 'solid-js'
 
-import { Currency, DetailedGroup, Identity, Ingredient, Recipe } from './types'
+import { Identity, Ingredient, Recipe } from './types'
+
+import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes } from './services'
+import { formatError } from './utils'
 
 export type AppState = {
   identity: Identity | undefined
   ingredients: Record<number, Ingredient> | undefined
   recipes: Record<number, Recipe> | undefined
-  currencies: Record<number, Currency>
   error?: any
 }
 
 const INITIAL_STATE: AppState = {
   identity: undefined,
   ingredients: undefined,
-  recipes: undefined,
-  currencies: {}
+  recipes: undefined
 }
 
 const [state, setState] = createSignal(INITIAL_STATE)
@@ -46,7 +47,59 @@ const setError = (error?: any) => {
   })
 }
 
-const appState = [state, { setState, setError, setIngredients, setRecipes }] as const
+const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<number, Recipe>> => {
+  try {
+    const recipes = state().recipes
+
+    // check if we currently have the ingredients or force fetch
+    if (recipes && !opts.refetching) {
+      return recipes!
+    }
+
+    const identity = state().identity
+
+    if (!identity) {
+      throw 'not authentified!'
+    }
+
+    const result = await fetchApiRecipes(identity!)
+    setRecipes(result)
+
+    return result
+  } catch (e) {
+    setError(formatError('Error while fetching detailed group', e))
+    const recipes = state().recipes!
+    return recipes
+  }
+}
+
+const fetchIngredients = async (opts: { refetching: boolean }): Promise<Record<number, Ingredient>> => {
+  try {
+    const ingredients = state().ingredients
+
+    // check if we currently have the ingredients or force fetch
+    if (ingredients && !opts.refetching) {
+      return ingredients!
+    }
+
+    const identity = state().identity
+
+    if (!identity) {
+      throw 'not authentified!'
+    }
+
+    const result = await fetchApiIngredients(identity!)
+    setIngredients(result)
+
+    return result
+  } catch (e) {
+    setError(formatError('Error while fetching detailed group', e))
+    const ingredients = state().ingredients
+    return ingredients!
+  }
+}
+
+const appState = [state, { setState, setError, setIngredients, setRecipes, fetchIngredients, fetchRecipes }] as const
 
 const AppContext = createContext<typeof appState>()
 
