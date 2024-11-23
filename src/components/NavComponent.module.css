@@ -73,9 +73,26 @@
   border-radius: 15%;
 }
 
+.search-input {
+  width: 100%;
+  max-width: 600px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+
+  color: var(--text);
+
+  border-color: var(--decoration);
+  background-color: var(--background);
+}
+
+.search-input:focus {
+  outline-color: var(--decoration);
+}
+
 .filter {
   font-size: 16px;
-  color: lightgrey;
+  color: color-mix(in srgb, var(--text), #888);
 }
 
 .back:hover {

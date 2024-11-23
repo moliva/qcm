@@ -1,3 +1,13 @@
+:root {
+  --background: #f2f2f2;
+  --text: #191919;
+  --middle: #2e1818;
+  --decoration: #4b8459;
+
+  background-color: var(--background);
+  color: var(--text);
+}
+
 .App {
   width: 100%;
   margin: auto;
@@ -11,7 +21,7 @@
   width: 100%;
 
   padding: 10px 0;
-  background-color: #282c34;
+  background-color: var(--background);
 
   display: flex;
   flex-direction: column;
@@ -20,18 +30,18 @@
   font-size: calc(10px + 2vmin);
   z-index: 1;
 
-  box-shadow: 0 0 1rem 1px rgb(40, 44, 52);
+  box-shadow: 0 0 0.3rem 0px color-mix(in srgb, var(--background), #ccc);
 }
 
 .main {
-  background-color: #282c34;
+  background-color: var(--background);
   color: white;
   width: auto;
 
   padding: 0 14px;
 
   min-height: 100vh;
-  margin-top: 120px;
+  margin-top: 130px;
 
   display: flex;
   flex-direction: column;
@@ -60,11 +70,8 @@
   margin-inline-end: auto;
 
   height: 1px;
-  background: linear-gradient(to right, rgba(85, 85, 85, 0.2), #555, rgba(85, 85, 85, 0.2));
-}
-
-.selected {
-  /*filter: brightness(120%);*/
+  --corner: var(--background);
+  background: linear-gradient(to right, var(--corner), var(--text), var(--corner));
 }
 
 .home {
@@ -84,13 +91,8 @@
 /* ***************************************************************************************************** */
 
 .link {
-  color: white;
+  color: var(--text);
   text-decoration: none;
-}
-
-.group-name {
-  color: green;
-  font-style: italic;
 }
 
 /* ***************************************************************************************************** */
@@ -105,7 +107,7 @@
   background-color: transparent;
   cursor: pointer;
 
-  color: white;
+  color: var(--text);
   font-family: var(--font-family);
   font-size: 16px;
 }
@@ -130,60 +132,6 @@
 
 .button.delete {
   background-color: #9b2d2d;
-}
-
-/* ***************************************************************************************************** */
-/* *************** Notifications *************** */
-/* ***************************************************************************************************** */
-
-.notification-button {
-  border: 0;
-  border-radius: 5px;
-  padding: 7px 10px;
-
-  background-color: transparent;
-  cursor: pointer;
-
-  color: white;
-  font-family: var(--font-family);
-  font-size: 10px;
-}
-
-.notification-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.notification-card {
-  color: white;
-  background-color: #191a1f;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.notification-card-controls {
-  margin-left: 10px;
-  display: inline-flex;
-  gap: 3px;
-}
-
-.notification-button.primary {
-  background-color: #00ac00;
-}
-
-.notification-button.cancel {
-  background-color: #ca0808;
-}
-
-.archive-notification {
-  width: 10px;
-  float: right;
-  margin-left: 8px;
-  cursor: pointer;
-  font-size: 20px;
-  color: #b0b0b0;
-  padding-bottom: 6.5px;
 }
 
 /* ***************************************************************************************************** */

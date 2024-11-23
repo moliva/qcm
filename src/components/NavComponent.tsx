@@ -99,14 +99,7 @@ export const Nav = (props: NavProps) => {
           <div class={styles['nav-app-controls']}>
             <input
               ref={searchTermRef}
-              style={{
-                width: '100%',
-                'max-width': '600px',
-                'border-style': 'solid',
-                'border-width': '1px',
-                'border-radius': '5px',
-                'border-color': '#3b3b3b'
-              }}
+              class={styles['search-input']}
               onInput={() => {
                 props.onSearchTermChanged(searchTermRef!.value)
               }}

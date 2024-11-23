@@ -10,7 +10,7 @@ import { SearchOptions } from './types'
 import EditSearchOptions from './components/EditSearchOptions'
 
 import styles from './App.module.css'
-import { getCookie, parseIdToken, removeCookie, setCookie } from './utils'
+import { getCookie, parseIdToken, setCookie } from './utils'
 
 const Home = lazy(() => import('./pages/Home'))
 const RecipePage = lazy(() => import('./pages/Recipe'))
