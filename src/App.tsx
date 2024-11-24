@@ -2,17 +2,15 @@ import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, creat
 import { useNavigate, useSearchParams, Routes, Route, Navigate } from '@solidjs/router'
 
 import { useAppContext } from './context'
+import { SearchOptions } from './types'
+import { getCookie, parseIdToken, setCookie } from './utils'
 
 import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
-import { SearchOptions } from './types'
-
 import EditSearchOptions from './components/EditSearchOptions'
 
 import styles from './App.module.css'
-import { getCookie, parseIdToken, setCookie } from './utils'
 
-const Home = lazy(() => import('./pages/Home'))
 const RecipePage = lazy(() => import('./pages/Recipe'))
 const IngredientPage = lazy(() => import('./pages/Ingredient'))
 const RecipesPage = lazy(() => import('./pages/Recipes'))

@@ -8,10 +8,10 @@ import { Recipe } from '../types'
 import { useAppContext } from '../context'
 
 import KindComponent from './KindComponent'
+import StateComponent from './StateComponent'
 
 import styles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
-import StateComponent from './StateComponent'
 
 export type RecipeComponentProps = {
   recipe: Recipe

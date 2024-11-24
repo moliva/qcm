@@ -9,7 +9,7 @@ import { decodeArgument, useNavigateUtils } from '../utils'
 import { IngredientComponent } from '../components/IngredientComponent'
 import { RecipeComponent } from '../components/RecipeComponent'
 
-import styles from './Search.module.css'
+import appStyles from '../App.module.css'
 
 export default () => {
   const [state, { fetchIngredients, fetchRecipes }] = useAppContext()
@@ -59,7 +59,7 @@ export default () => {
   })
 
   return (
-    <div class={styles.main}>
+    <div class={appStyles['main-page']}>
       <Switch fallback={<p>Loading...</p>}>
         <Match when={results()?.length === 0}>
           <p style={{ 'font-style': 'italic', color: 'grey' }}>

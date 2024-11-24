@@ -1,14 +1,13 @@
 import { Accessor, For, onCleanup, onMount } from 'solid-js'
 
-import Fa from 'solid-fa'
-
 import { Kind, SearchOptions, State } from '../types'
-import { renderKind, renderState } from '../utils'
 
 import appStyles from '../App.module.css'
 import styles from './EditSearchOptions.module.css'
 import navStyles from './NavComponent.module.css'
 import ingStyles from './RecipeComponent.module.css'
+import StateComponent from './StateComponent'
+import KindComponent from './KindComponent'
 
 export type EditSearchOptionsProps = {
   searchOptions: Accessor<SearchOptions>
@@ -104,24 +103,18 @@ export default (props: EditSearchOptionsProps) => {
             </label>
           </div>
           <For each={stateOptions}>
-            {state => {
-              const [icon, color] = renderState(state)
-
-              return (
-                <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '2px' }}>
-                  <input
-                    type='checkbox'
-                    ref={stateChecked[state]}
-                    class={styles['modal-name']}
-                    checked={!!searchOptions().states.find(e => e === state)}
-                  />
-                  <label>{state}</label>
-                  <span style={{ color }}>
-                    <Fa class={styles['ingredient-state-icon']} icon={icon} />
-                  </span>
-                </div>
-              )
-            }}
+            {state => (
+              <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '2px' }}>
+                <input
+                  type='checkbox'
+                  ref={stateChecked[state]}
+                  class={styles['modal-name']}
+                  checked={!!searchOptions().states.find(e => e === state)}
+                />
+                <label>{state}</label>
+                <StateComponent state={state} iconClass='' />
+              </div>
+            )}
           </For>
         </div>
         <div style={{ 'margin-top': '10px', display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
@@ -138,27 +131,20 @@ export default (props: EditSearchOptionsProps) => {
             </label>
           </div>
           <For each={kindOptions}>
-            {kind => {
-              const [icon, color] = renderKind(kind)
-
-              return (
-                <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '2px' }}>
-                  <input
-                    type='checkbox'
-                    ref={kindChecked[kind]}
-                    class={styles['modal-name']}
-                    checked={!!searchOptions().kinds.find(e => e === kind)}
-                  />
-                  <label>{kind} </label>
-                  <span style={{ color }}>
-                    <Fa class={styles['ingredient-state-icon']} icon={icon} />
-                  </span>
-                </div>
-              )
-            }}
+            {kind => (
+              <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '2px' }}>
+                <input
+                  type='checkbox'
+                  ref={kindChecked[kind]}
+                  class={styles['modal-name']}
+                  checked={!!searchOptions().kinds.find(e => e === kind)}
+                />
+                <label>{kind} </label>
+                <KindComponent kind={kind} iconClass={''} />
+              </div>
+            )}
           </For>
         </div>
-        <hr class={styles.divider} />
         <div class={styles['modal-controls']}>
           <button class={`${appStyles.button} ${appStyles.primary}`} onClick={onConfirm}>
             Search

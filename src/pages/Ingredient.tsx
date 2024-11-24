@@ -9,7 +9,7 @@ import { formatError, useNavigateUtils } from '../utils'
 import { IngredientComponent } from '../components/IngredientComponent'
 import EditIngredientComponent from '../components/EditIngredientComponent'
 
-import styles from './Ingredients.module.css'
+import appStyles from '../App.module.css'
 
 export default () => {
   const [state, { setError, fetchIngredients, fetchRecipes }] = useAppContext()
@@ -64,7 +64,7 @@ export default () => {
   }
 
   return (
-    <div class={styles.main}>
+    <div class={appStyles['main-page']}>
       <Show when={showIngredientModal()}>
         <EditIngredientComponent
           ingredient={ingredient}

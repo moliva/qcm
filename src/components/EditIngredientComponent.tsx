@@ -8,7 +8,6 @@ import KindComponent from './KindComponent'
 
 import appStyles from '../App.module.css'
 import styles from './EditSearchOptions.module.css'
-import searchStyles from './EditSearchOptions.module.css'
 import ingStyles from './RecipeComponent.module.css'
 
 export type EditIngredientProps = {
@@ -64,11 +63,11 @@ export default (props: EditIngredientProps) => {
     }) as Ingredient
 
   return (
-    <div class={searchStyles.modal}>
-      <div class={searchStyles['modal-content']}>
+    <div class={styles.modal}>
+      <div class={styles['modal-content']}>
 
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
-          <KindComponent kind='ingredient' iconClass={searchStyles['big-icon']} />
+          <KindComponent kind='ingredient' iconClass={styles['big-icon']} />
           <input
             ref={newIngredientName}
             style={{ width: '100%' }}
@@ -103,7 +102,7 @@ export default (props: EditIngredientProps) => {
           <label class={ingStyles['ingredient-subtitle']}>Notes</label>
           <textarea
             style={{ width: 'auto' }}
-            class={searchStyles['steps']}
+            class={styles['steps']}
             ref={newIngredientNotes}
             placeholder='Notes'
             rows='10'>

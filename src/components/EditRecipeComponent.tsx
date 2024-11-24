@@ -9,7 +9,6 @@ import { useAppContext } from '../context'
 import KindComponent from './KindComponent'
 
 import appStyles from '../App.module.css'
-import navStyles from './NavComponent.module.css'
 import searchStyles from './EditSearchOptions.module.css'
 import ingStyles from './RecipeComponent.module.css'
 

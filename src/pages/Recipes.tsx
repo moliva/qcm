@@ -61,7 +61,7 @@ export default () => {
   }
 
   return (
-    <div class={styles.main}>
+    <div class={appStyles['main-page']}>
       <Show when={showRecipeModal()}>
         <EditRecipeComponent recipe={recipe} onDiscard={() => setShowRecipeModal(false)} onConfirm={updateRecipe} />
       </Show>

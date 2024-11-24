@@ -1,16 +1,17 @@
+import { For } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 
 import { faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
-import { For } from 'solid-js'
 
 import { Ingredient, IngredientId } from '../types'
 import { useAppContext } from '../context'
 
-import recipeStyles from './RecipeComponent.module.css'
-import appStyles from '../App.module.css'
 import KindComponent from './KindComponent'
 import StateComponent from './StateComponent'
+
+import recipeStyles from './RecipeComponent.module.css'
+import appStyles from '../App.module.css'
 
 export type IngredientComponentProps = {
   ingredient: Ingredient

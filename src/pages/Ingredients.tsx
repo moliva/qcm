@@ -1,7 +1,7 @@
 import { For, Show, createSignal, onMount } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 
-import { faCarrot, faPlus, faPlusSquare, faSquare } from '@fortawesome/free-solid-svg-icons'
+import { faCarrot, faPlus, faSquare } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
 import { deleteIngredient, postIngredient, putIngredient } from '../services'
@@ -14,7 +14,6 @@ import EditIngredientComponent from '../components/EditIngredientComponent'
 
 import appStyles from '../App.module.css'
 import navStyles from '../components/NavComponent.module.css'
-import homeStyles from './Home.module.css'
 import styles from './Ingredients.module.css'
 
 export default () => {
@@ -67,7 +66,7 @@ export default () => {
   }
 
   return (
-    <div class={styles.main}>
+    <div class={appStyles['main-page']}>
       <Show when={showIngredientModal()}>
         <EditIngredientComponent
           ingredient={ingredient}
@@ -94,7 +93,7 @@ export default () => {
           <div class={styles.actions}>
             <button
               title='New ingredient'
-              class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-ingredient']}`}
+              class={`${appStyles.button} ${appStyles.link}`}
               onClick={onNewIngredientClicked}>
               <Fa class={`${navStyles['nav-icon-base']} ${navStyles['ingredient']}`} icon={faSquare} />
               <Fa class={`${navStyles['nav-icon']} ${navStyles['nav-icon-overlap-main']}`} icon={faCarrot} />

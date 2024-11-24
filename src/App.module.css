@@ -24,18 +24,34 @@
 }
 
 .main {
-  background-color: var(--background);
-  color: white;
   width: auto;
-
   padding: 0 14px;
-
   min-height: 100vh;
   margin-top: 130px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  background-color: var(--background);
+  color: var(--text);
+}
+
+.main-page {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  margin-bottom: 50px;
+}
+
+@media screen and (min-width: 800px) {
+  .main-page {
+    width: 80%;
+  }
 }
 
 .content {

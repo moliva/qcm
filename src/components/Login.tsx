@@ -1,10 +1,10 @@
+import { createMemo, Match, Switch } from 'solid-js'
+import { useLocation } from '@solidjs/router'
+
 import Fa from 'solid-fa'
 import { faKey } from '@fortawesome/free-solid-svg-icons'
 
 import { API_HOST } from '../services'
-
-import { createMemo, Match, Switch } from 'solid-js'
-import { useLocation } from '@solidjs/router'
 import { getCookie, parseIdToken, setCookie } from '../utils'
 
 import styles from '../App.module.css'
