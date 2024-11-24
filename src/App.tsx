@@ -34,7 +34,7 @@ export default () => {
   cleanUp()
 
   // handle auth
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const token = searchParams.login_success
 
   const [redirect, setRedirect] = createSignal<string | undefined>()
@@ -88,6 +88,7 @@ export default () => {
       }
 
       setState({ ...state(), identity: newIdentityState })
+      setSearchParams({})
     } catch (e) {
       setError(formatError(`Error while parsing id token ${token}`, e))
     }
