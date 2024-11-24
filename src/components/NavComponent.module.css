@@ -62,7 +62,7 @@ button:hover .nav-icon-base.ingredient {
 }
 
 .nav-icon-overlap-decoration.recipe {
-  right: -9px;
+  right: -12px;
 }
 
 .nav-icon-overlap-decoration {
@@ -70,10 +70,10 @@ button:hover .nav-icon-base.ingredient {
 
   position: absolute;
   transform: translate(-50%, -50%);
-  right: -5px;
+  right: -12px;
   bottom: -10px;
 
-  font-size: 0.55em;
+  font-size: 0.75em;
   font-weight: 900;
 }
 

@@ -6,10 +6,11 @@ import { For } from 'solid-js'
 
 import { Ingredient, IngredientId } from '../types'
 import { useAppContext } from '../context'
-import { renderKind, renderState } from '../utils'
 
 import recipeStyles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
+import KindComponent from './KindComponent'
+import StateComponent from './StateComponent'
 
 export type IngredientComponentProps = {
   ingredient: Ingredient
@@ -28,34 +29,29 @@ export const IngredientComponent = (props: IngredientComponentProps) => {
 
   const navigate = useNavigate()
 
-  const [kindIcon, kindColor] = renderKind('ingredient')
-  const [stateIcon, stateColor] = renderState(ingredient.state)
-
   return (
     <div class={recipeStyles.recipe}>
       <div class={recipeStyles['ingredient-name']}>
-        <span style={{ color: kindColor }}>
-          <Fa class={recipeStyles['ingredient-kind-icon']} icon={kindIcon} />
-        </span>
+        <KindComponent kind='ingredient' />
         <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(ingredient)}>
           {ingredient.name}
         </label>
-        <span style={{ color: stateColor }}>
-          <Fa class={recipeStyles['ingredient-state-icon']} icon={stateIcon} />
-        </span>
+        <StateComponent state={ingredient.state} />
 
         <div class={recipeStyles['note-controls']}>
           {props.onEdit ? (
             <button
               class={`${recipeStyles['edit-control']} ${recipeStyles['note-control']}`}
-              onClick={() => props.onEdit!(ingredient)}>
+              onClick={() => props.onEdit!(ingredient)}
+              title='Edit'>
               <Fa icon={faPenToSquare} />
             </button>
           ) : null}
           {props.onDelete ? (
             <button
               class={`${recipeStyles['delete-control']} ${recipeStyles['note-control']}`}
-              onClick={() => props.onDelete!(ingredient)}>
+              onClick={() => props.onDelete!(ingredient)}
+              title='Delete'>
               <Fa icon={faXmark} />
             </button>
           ) : null}

@@ -6,12 +6,12 @@ import Fa from 'solid-fa'
 
 import { Recipe } from '../types'
 import { useAppContext } from '../context'
-import { renderState } from '../utils'
 
 import KindComponent from './KindComponent'
 
 import styles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
+import StateComponent from './StateComponent'
 
 export type RecipeComponentProps = {
   recipe: Recipe
@@ -29,8 +29,6 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
 
   const navigate = useNavigate()
 
-  const [stateIcon, stateColor] = renderState(recipe.state)
-
   return (
     <div class={styles.recipe}>
       <div class={styles['ingredient-name']}>
@@ -38,19 +36,21 @@ export const RecipeComponent = (props: RecipeComponentProps) => {
         <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(recipe)}>
           {recipe.name}
         </label>
-        <span style={{ color: stateColor }}>
-          <Fa class={styles['ingredient-state-icon']} icon={stateIcon} />
-        </span>
+        <StateComponent state={recipe.state} />
         <div class={styles['note-controls']}>
           {props.onEdit ? (
-            <button class={`${styles['edit-control']} ${styles['note-control']}`} onClick={() => props.onEdit!(recipe)}>
+            <button
+              class={`${styles['edit-control']} ${styles['note-control']}`}
+              onClick={() => props.onEdit!(recipe)}
+              title='Edit'>
               <Fa icon={faPenToSquare} />
             </button>
           ) : null}
           {props.onDelete ? (
             <button
               class={`${styles['delete-control']} ${styles['note-control']}`}
-              onClick={() => props.onDelete!(recipe)}>
+              onClick={() => props.onDelete!(recipe)}
+              title='Delete'>
               <Fa icon={faXmark} />
             </button>
           ) : null}
