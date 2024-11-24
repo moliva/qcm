@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Routes, Route, Navigate } from '@solidjs/
 
 import { useAppContext } from './context'
 import { SearchOptions } from './types'
-import { getCookie, parseIdToken, setCookie } from './utils'
+import { formatError, getCookie, parseIdToken, setCookie } from './utils'
 
 import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
@@ -41,51 +41,56 @@ export default () => {
 
   if (!state().identity && typeof token === 'string') {
     const oldId = getCookie('idToken')
-    setCookie('idToken', token, 7)
 
-    let identity = parseIdToken(token)
-    if (oldId != null) {
-      const oldIdentity = parseIdToken(oldId)
+    try {
+      let identity = parseIdToken(token)
+      setCookie('idToken', token, 7)
 
-      identity = {
-        ...oldIdentity,
-        ...identity
+      if (oldId != null) {
+        const oldIdentity = parseIdToken(oldId)
+
+        identity = {
+          ...oldIdentity,
+          ...identity
+        }
+
+        const name = getCookie('name')
+        if (name) {
+          identity.name = name
+        }
+        const picture = getCookie('picture')
+        if (picture) {
+          identity.picture = picture
+        }
+      }
+      if (identity.name) {
+        setCookie('name', identity.name)
+      }
+      if (identity.picture) {
+        setCookie('picture', identity.picture)
       }
 
-      const name = getCookie('name')
-      if (name) {
-        identity.name = name
+      const accessToken = searchParams.access_token
+      if (accessToken) {
+        setCookie('accessToken', accessToken, 7)
       }
-      const picture = getCookie('picture')
-      if (picture) {
-        identity.picture = picture
+
+      const refreshToken = searchParams.refresh_token
+      if (refreshToken) {
+        setCookie('refreshToken', refreshToken, 7)
       }
-    }
-    if (identity.name) {
-      setCookie('name', identity.name)
-    }
-    if (identity.picture) {
-      setCookie('picture', identity.picture)
-    }
 
-    const accessToken = searchParams.access_token
-    if (accessToken) {
-      setCookie('accessToken', accessToken, 7)
+      const newIdentityState = { identity, token }
+
+      const redirect_ = searchParams.redirect
+      if (redirect_ && redirect_.length > 0) {
+        setRedirect(decodeURIComponent(redirect_))
+      }
+
+      setState({ ...state(), identity: newIdentityState })
+    } catch (e) {
+      setError(formatError(`Error while parsing id token ${token}`, e))
     }
-
-    const refreshToken = searchParams.refresh_token
-    if (refreshToken) {
-      setCookie('refreshToken', refreshToken, 7)
-    }
-
-    const newIdentityState = { identity, token }
-
-    const redirect_ = searchParams.redirect
-    if (redirect_ && redirect_.length > 0) {
-      setRedirect(decodeURIComponent(redirect_))
-    }
-
-    setState({ ...state(), identity: newIdentityState })
   }
 
   createEffect(async alreadyFetched => {
