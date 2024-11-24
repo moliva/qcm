@@ -17,7 +17,7 @@ export default (props: KindProps) => {
   const classes = props.iconClass ?? styles['ingredient-kind-icon']
 
   return (
-    <span style={{ color: kindColor }}>
+    <span style={{ color: kindColor }} title={props.kind}>
       <Fa class={classes} icon={kindIcon} />
     </span>
   )
