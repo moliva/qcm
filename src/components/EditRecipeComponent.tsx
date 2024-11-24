@@ -1,6 +1,6 @@
 import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
 
-import { faPlusSquare, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare, faXmark, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
 import { Recipe } from '../types'
@@ -9,7 +9,6 @@ import { useAppContext } from '../context'
 import KindComponent from './KindComponent'
 
 import appStyles from '../App.module.css'
-import homeStyles from '../pages/Home.module.css'
 import navStyles from './NavComponent.module.css'
 import searchStyles from './EditSearchOptions.module.css'
 import ingStyles from './RecipeComponent.module.css'
@@ -111,8 +110,8 @@ export default (props: EditIngredientProps) => {
   return (
     <div class={searchStyles.modal}>
       <div class={searchStyles['modal-content']}>
-        <div style={{ display: 'inline-flex', 'align-items': 'start', gap: '10px' }}>
-          <KindComponent kind='recipe' />
+        <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
+          <KindComponent kind='recipe' iconClass={searchStyles['big-icon']} />
           <input
             ref={newIngredientName}
             class={searchStyles['modal-name']}
@@ -138,7 +137,8 @@ export default (props: EditIngredientProps) => {
             </For>
           </select>
         </div>
-        <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
+        <div style={{ display: 'inline-flex', 'flex-direction': 'column', 'align-items': 'start', gap: '10px' }}>
+          <label class={ingStyles['ingredient-subtitle']}>Tags</label>
           <input
             ref={tagsRef}
             style={{ width: '100%' }}
@@ -166,14 +166,15 @@ export default (props: EditIngredientProps) => {
                     placeholder='N units/tablespoons/grams...'
                     value={ingredient.measure}
                   />
+
                   <button
                     title='Remove ingredient'
                     style={{ 'margin-left': 'auto' }}
-                    class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
+                    class={`${appStyles.button} ${appStyles.link} ${ingStyles['delete-control']}`}
                     onClick={() => {
                       removeIngredient(ingredient.key)
                     }}>
-                    <Fa class={navStyles['nav-icon']} icon={faXmarkCircle} />
+                    <Fa class={ingStyles['delete-icon']} icon={faXmark} />
                   </button>
                 </div>
               )}
@@ -182,11 +183,11 @@ export default (props: EditIngredientProps) => {
           <button
             title='Add ingredient'
             style={{ 'margin-left': 'auto' }}
-            class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
+            class={`${appStyles.button} ${appStyles.link} ${searchStyles['add-ingredient']}`}
             onClick={() => {
               addIngredient()
             }}>
-            <Fa class={navStyles['nav-icon']} icon={faPlusSquare} />
+            <Fa class={ingStyles['add-icon']} icon={faPlusSquare} />
           </button>
         </div>
         <div style={{ display: 'flex', width: '100%', 'flex-direction': 'column', gap: '10px' }}>
@@ -195,7 +196,6 @@ export default (props: EditIngredientProps) => {
             {ingredient() ? ingredient()?.notes : ''}
           </textarea>
         </div>
-        <hr class={searchStyles.divider} />
         <div class={searchStyles['modal-controls']}>
           <button class={`${appStyles.button} ${appStyles.primary}`} onClick={() => props.onConfirm(newIngredient())}>
             {ingredient() ? 'Edit' : 'Create'}

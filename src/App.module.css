@@ -155,3 +155,25 @@ button:hover .ingredients,
   color: #6f0a0a;
   font-weight: 650;
 }
+
+/* // ***************************************************************************************************** */
+/* // *************** Login *************** */
+/* // ***************************************************************************************************** */
+
+.login-container {
+  background-color: var(--background);
+}
+
+.login {
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.redirect-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+}

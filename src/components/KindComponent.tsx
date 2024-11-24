@@ -7,14 +7,18 @@ import styles from './RecipeComponent.module.css'
 
 export type KindProps = {
   kind: Kind
+
+  iconClass?: string | undefined
 }
 
 export default (props: KindProps) => {
   const [kindIcon, kindColor] = renderKind(props.kind)
 
+  const classes = props.iconClass ?? styles['ingredient-kind-icon']
+
   return (
     <span style={{ color: kindColor }}>
-      <Fa class={styles['ingredient-kind-icon']} icon={kindIcon} />
+      <Fa class={classes} icon={kindIcon} />
     </span>
   )
 }

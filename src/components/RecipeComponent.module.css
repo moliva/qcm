@@ -50,6 +50,10 @@
   gap: 5px;
 }
 
+.delete-control {
+  color: var(--middle);
+}
+
 .delete-control:hover {
   color: Coral;
 }
@@ -177,6 +181,14 @@
   color: var(--decoration);
   outline: solid;
   outline-color: var(--decoration);
+}
+
+.add-icon {
+  font-size: 30px;
+}
+
+.delete-icon {
+  font-size: 16px;
 }
 
 /* ***************************************************************************************************** */

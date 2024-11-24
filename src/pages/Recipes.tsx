@@ -30,7 +30,7 @@ export default () => {
     fetchRecipes({ refetching })
   }
 
-  const [showRecipeModal, setShowRecipeModal] = createSignal(false)
+  const [showRecipeModal, setShowRecipeModal] = createSignal(true)
   const [recipe, setCurrentRecipe] = createSignal<Recipe | undefined>()
 
   const navigate = useNavigate()
@@ -83,7 +83,7 @@ export default () => {
           <div class={groupStyles.actions}>
             <button
               title='New recipe'
-              class={`${appStyles.button} ${appStyles.link} ${homeStyles['new-group']}`}
+              class={`${appStyles.button} ${appStyles.link}`}
               onClick={() => onEditRecipeClicked()}>
               <Fa class={`${navStyles['nav-icon-base']} ${navStyles['recipe']}`} icon={faSquare} />
               <Fa

@@ -43,6 +43,7 @@
 }
 
 .modal-controls {
+  margin-top: 20px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -70,3 +71,10 @@
   outline-color: var(--decoration);
 }
 
+.big-icon {
+  font-size: 18px;
+}
+
+.add-ingredient:hover {
+  color: var(--decoration);
+}

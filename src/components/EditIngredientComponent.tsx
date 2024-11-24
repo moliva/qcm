@@ -66,8 +66,9 @@ export default (props: EditIngredientProps) => {
   return (
     <div class={searchStyles.modal}>
       <div class={searchStyles['modal-content']}>
-        <div style={{ display: 'inline-flex', 'align-items': 'start', gap: '10px' }}>
-          <KindComponent kind='ingredient' />
+
+        <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
+          <KindComponent kind='ingredient' iconClass={searchStyles['big-icon']} />
           <input
             ref={newIngredientName}
             style={{ width: '100%' }}
@@ -140,7 +141,6 @@ export default (props: EditIngredientProps) => {
             }}
           />
         </div>
-        <hr class={styles.divider} />
         <div class={styles['modal-controls']}>
           <button class={`${appStyles.button} ${appStyles.primary}`} onClick={() => props.onConfirm(newIngredient())}>
             {ingredient() ? 'Edit' : 'Create'}
