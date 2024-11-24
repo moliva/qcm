@@ -1,57 +1,58 @@
 import { createMemo, Match, Switch } from 'solid-js'
-import { useLocation } from '@solidjs/router'
 
 import Fa from 'solid-fa'
 import { faKey } from '@fortawesome/free-solid-svg-icons'
 
 import { API_HOST } from '../services'
-import { getCookie, parseIdToken, setCookie } from '../utils'
 
 import styles from '../App.module.css'
 import navStyles from './NavComponent.module.css'
+import { getCookie, parseIdToken, setCookie } from '../utils'
+import { useLocation } from '@solidjs/router'
 
 export type LoginProps = {}
 
-export function Login() {
+export function Login(props: LoginProps) {
   let idToken = getCookie('idToken')
   let refreshToken = getCookie('refreshToken')
 
   const location = useLocation()
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
-  if (idToken !== null && idToken.length > 0 && idToken !== 'null') {
+  console.log('idToken', idToken)
+  if (idToken !== null && idToken.length > 0) {
     const token = parseIdToken(idToken)
     if (new Date() < new Date(token.exp * 1000)) {
       window.location.replace(
         import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${encodeURIComponent(path() + location.search)}`
       )
+      // } else if (refreshToken !== null && refreshToken.length > 0) {
+      //   fetch(`${API_HOST}/refresh`, {
+      //     method: 'PUT',
+      //     mode: 'cors', // no-cors, *cors, same-origin
+      //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      //     body: JSON.stringify(refreshToken),
+      //     headers: {
+      //       'content-type': 'application/json'
+      //     }
+      //   })
+      //     .then(r => r.json())
+      //     .then(json => {
+      //       const { id_token: refreshedToken, access_token: accessToken } = json
+      //
+      //       if (!refreshedToken || refreshedToken === null) {
+      //         debugger
+      //       }
+      //
+      //       window.location.replace(
+      //         import.meta.env.BASE_URL +
+      //           `?login_success=${refreshedToken}&access_token=${accessToken}&redirect=${encodeURIComponent(path() + location.search)}`
+      //       )
+      //     })
+    } else {
+      setCookie('idToken', '', 1)
+      idToken = null
     }
-  } else if (refreshToken !== null && refreshToken.length > 0) {
-    fetch(`${API_HOST}/refresh`, {
-      method: 'PUT',
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      body: JSON.stringify(refreshToken),
-      headers: {
-        'content-type': 'application/json'
-      }
-    })
-      .then(r => r.json())
-      .then(json => {
-        const { id_token: refreshedToken, access_token: accessToken } = json
-
-        if (!refreshedToken || refreshedToken === null) {
-          debugger
-        }
-
-        window.location.replace(
-          import.meta.env.BASE_URL +
-            `?login_success=${refreshedToken}&access_token=${accessToken}&redirect=${encodeURIComponent(path() + location.search)}`
-        )
-      })
-  } else {
-    setCookie('idToken', '', 1)
-    idToken = null
   }
 
   return (

@@ -1,5 +1,5 @@
-import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal } from 'solid-js'
-import { useNavigate, useSearchParams, Routes, Route, Navigate } from '@solidjs/router'
+import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal, createMemo } from 'solid-js'
+import { useNavigate, useSearchParams, Routes, Route, Navigate, useLocation } from '@solidjs/router'
 
 import { useAppContext } from './context'
 import { SearchOptions } from './types'
@@ -34,80 +34,59 @@ export default () => {
   cleanUp()
 
   // handle auth
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const token = searchParams.login_success
 
   const [redirect, setRedirect] = createSignal<string | undefined>()
 
   if (!state().identity && typeof token === 'string') {
     const oldId = getCookie('idToken')
+    setCookie('idToken', token, 7)
 
-    try {
-      let identity = parseIdToken(token)
-      setCookie('idToken', token, 7)
+    let identity = parseIdToken(token)
+    if (oldId != null) {
+      const oldIdentity = parseIdToken(oldId)
 
-      if (oldId != null) {
-        const oldIdentity = parseIdToken(oldId)
-
-        identity = {
-          ...oldIdentity,
-          ...identity
-        }
-
-        const name = getCookie('name')
-        if (name) {
-          identity.name = name
-        }
-        const picture = getCookie('picture')
-        if (picture) {
-          identity.picture = picture
-        }
-      }
-      if (identity.name) {
-        setCookie('name', identity.name)
-      }
-      if (identity.picture) {
-        setCookie('picture', identity.picture)
+      identity = {
+        ...oldIdentity,
+        ...identity
       }
 
-      const accessToken = searchParams.access_token
-      if (accessToken) {
-        setCookie('accessToken', accessToken, 7)
+      const name = getCookie('name')
+      if (name) {
+        identity.name = name
       }
-
-      const refreshToken = searchParams.refresh_token
-      if (refreshToken) {
-        setCookie('refreshToken', refreshToken, 7)
+      const picture = getCookie('picture')
+      if (picture) {
+        identity.picture = picture
       }
-
-      const newIdentityState = { identity, token }
-
-      const redirect_ = searchParams.redirect
-      if (redirect_ && redirect_.length > 0) {
-        setRedirect(decodeURIComponent(redirect_))
-      }
-
-      setState({ ...state(), identity: newIdentityState })
-      setSearchParams({})
-    } catch (e) {
-      setError(formatError(`Error while parsing id token ${token}`, e))
     }
+    if (identity.name) {
+      setCookie('name', identity.name)
+    }
+    if (identity.picture) {
+      setCookie('picture', identity.picture)
+    }
+
+    const accessToken = searchParams.access_token
+    if (accessToken) {
+      setCookie('accessToken', accessToken, 7)
+    }
+
+    const refreshToken = searchParams.refresh_token
+    if (refreshToken) {
+      setCookie('refreshToken', refreshToken, 7)
+    }
+
+    const newIdentityState = { identity, token }
+
+    const redirect_ = searchParams.redirect
+    if (redirect_ && redirect_.length > 0) {
+      setRedirect(decodeURIComponent(redirect_))
+    }
+
+    setState({ ...state(), identity: newIdentityState })
   }
-
-  createEffect(async alreadyFetched => {
-    if (alreadyFetched) return
-
-    const identity = state().identity
-
-    if (identity) {
-      // const currencies = await doFetchCurrencies(identity!)
-      // setState({ ...state(), currencies: Object.fromEntries(currencies.map(c => [c.id, c])) })
-
-      return true
-    }
-
-    return false
-  }, false)
 
   const handleAppKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
@@ -138,9 +117,9 @@ export default () => {
   })
 
   // init search options when coming from a permalink with them
-  const path = redirect()
-  if (path && path.startsWith('search') && path.includes('?')) {
-    const searchParams = new URLSearchParams(path.substring(path.indexOf('?')))
+  const redirect__ = redirect()
+  if (redirect__ && redirect__.startsWith('search') && redirect__.includes('?')) {
+    const searchParams = new URLSearchParams(redirect__.substring(redirect__.indexOf('?')))
 
     let searchOptions = {} as Record<string, string[]>
     for (const searchParam of searchParams) {
