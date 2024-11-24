@@ -30,7 +30,7 @@ export default () => {
     fetchRecipes({ refetching })
   }
 
-  const [showRecipeModal, setShowRecipeModal] = createSignal(true)
+  const [showRecipeModal, setShowRecipeModal] = createSignal(false)
   const [recipe, setCurrentRecipe] = createSignal<Recipe | undefined>()
 
   const navigate = useNavigate()
