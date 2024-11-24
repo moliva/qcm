@@ -127,7 +127,7 @@ button:hover .nav-icon-base.ingredient {
   max-width: 600px;
   border-style: solid;
   border-width: 1px;
-  border-radius: 5px;
+  border-radius: 0px;
 
   color: var(--text);
   line-height: 30px;

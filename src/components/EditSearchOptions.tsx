@@ -78,11 +78,13 @@ export default (props: EditSearchOptionsProps) => {
           }
         }}>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
+          <label class={styles['modal-title']}>Search</label>
           <label class={ingStyles['ingredient-subtitle']}>Keywords</label>
           <input
             class={navStyles['search-input']}
             style={{
-              width: 'auto'
+              width: 'auto',
+              'max-width': '100%'
             }}
             ref={searchTerm}
             value={searchOptions().keywords.join(' ')}

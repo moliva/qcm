@@ -24,25 +24,29 @@ export function Login() {
       window.location.replace(
         import.meta.env.BASE_URL + `?login_success=${idToken}&redirect=${encodeURIComponent(path() + location.search)}`
       )
-    } else if (refreshToken !== null && refreshToken.length > 0) {
-      fetch(`${API_HOST}/refresh`, {
-        method: 'PUT',
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        body: JSON.stringify(refreshToken),
-        headers: {
-          'content-type': 'application/json'
-        }
-      })
-        .then(r => r.json())
-        .then(json => {
-          const { id_token: refreshedToken } = json
-
-          window.location.replace(
-            import.meta.env.BASE_URL +
-              `?login_success=${refreshedToken}&redirect=${encodeURIComponent(path() + location.search)}`
-          )
-        })
+      // } else if (refreshToken !== null && refreshToken.length > 0) {
+      //   fetch(`${API_HOST}/refresh`, {
+      //     method: 'PUT',
+      //     mode: 'cors', // no-cors, *cors, same-origin
+      //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      //     body: JSON.stringify(refreshToken),
+      //     headers: {
+      //       'content-type': 'application/json'
+      //     }
+      //   })
+      //     .then(r => r.json())
+      //     .then(json => {
+      //       const { id_token: refreshedToken } = json
+      //
+      // if (!refreshedToken || refreshedToken === null) {
+      // debugger
+      //}
+      //
+      //       window.location.replace(
+      //         import.meta.env.BASE_URL +
+      //           `?login_success=${refreshedToken}&redirect=${encodeURIComponent(path() + location.search)}`
+      //       )
+      //     })
     } else {
       setCookie('idToken', '', 1)
       idToken = ''

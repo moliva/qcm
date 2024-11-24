@@ -6,10 +6,12 @@ import Fa from 'solid-fa'
 
 import { Recipe } from '../types'
 import { useAppContext } from '../context'
+import { renderState } from '../utils'
+
+import KindComponent from './KindComponent'
 
 import styles from './RecipeComponent.module.css'
 import appStyles from '../App.module.css'
-import { renderKind, renderState } from '../utils'
 
 export type RecipeComponentProps = {
   recipe: Recipe
@@ -23,19 +25,16 @@ export type RecipeComponentProps = {
 
 export const RecipeComponent = (props: RecipeComponentProps) => {
   const { recipe } = props
-  const [state, { setError, setIngredients }] = useAppContext()
+  const [state] = useAppContext()
 
   const navigate = useNavigate()
 
   const [stateIcon, stateColor] = renderState(recipe.state)
-  const [kindIcon, kindColor] = renderKind('recipe')
 
   return (
     <div class={styles.recipe}>
       <div class={styles['ingredient-name']}>
-        <span style={{ color: kindColor }}>
-          <Fa class={styles['ingredient-kind-icon']} icon={kindIcon} />
-        </span>
+        <KindComponent kind={'recipe'} />
         <label style={{ cursor: 'pointer' }} onClick={() => props.onNameClick(recipe)}>
           {recipe.name}
         </label>

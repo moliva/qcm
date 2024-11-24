@@ -4,9 +4,12 @@ import { Ingredient } from '../types'
 import { useAppContext } from '../context'
 
 import MultiSelect, { Ref } from '@moliva/solid-multiselect'
+import KindComponent from './KindComponent'
 
 import appStyles from '../App.module.css'
-import styles from './EditIngredientComponent.module.css'
+import styles from './EditSearchOptions.module.css'
+import searchStyles from './EditSearchOptions.module.css'
+import ingStyles from './RecipeComponent.module.css'
 
 export type EditIngredientProps = {
   ingredient: Accessor<Ingredient | undefined>
@@ -31,9 +34,9 @@ export default (props: EditIngredientProps) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
       props.onDiscard()
       return false
-    // } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
-    //   props.onConfirm(newIngredient())
-    //   return false
+      // } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
+      //   props.onConfirm(newIngredient())
+      //   return false
     }
   }
 
@@ -61,16 +64,22 @@ export default (props: EditIngredientProps) => {
     }) as Ingredient
 
   return (
-    <div class={styles.modal}>
-      <div class={styles['modal-content']}>
-        <input
-          ref={newIngredientName}
-          class={styles['modal-name']}
-          placeholder='Ingredient name'
-          value={ingredient()?.name ?? ''}
-        />
+    <div class={searchStyles.modal}>
+      <div class={searchStyles['modal-content']}>
+        <div style={{ display: 'inline-flex', 'align-items': 'start', gap: '10px' }}>
+          <KindComponent kind='ingredient' />
+          <input
+            ref={newIngredientName}
+            style={{ width: '100%' }}
+            class={styles['modal-name']}
+            placeholder='Ingredient name'
+            value={ingredient()?.name ?? ''}
+          />
+        </div>
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
-          <label>State</label>
+          <label style={{ 'margin-top': 0 }} class={ingStyles['ingredient-subtitle']}>
+            State
+          </label>
           <select class={styles['currency-select']} ref={ingredientState} value={ingredient()?.state ?? 'unknown'}>
             <For each={stateOptions}>
               {state => (
@@ -89,20 +98,27 @@ export default (props: EditIngredientProps) => {
             placeholder='Comma separated tags'
             value={ingredient()?.tags?.join(',') ?? ''}></input>
         </div>
-        <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
-          <textarea style={{ width: '100%' }} ref={newIngredientNotes} placeholder='Notes' rows='10'>
+        <div style={{ display: 'flex', width: '100%', 'flex-direction': 'column', gap: '10px' }}>
+          <label class={ingStyles['ingredient-subtitle']}>Notes</label>
+          <textarea
+            style={{ width: 'auto' }}
+            class={searchStyles['steps']}
+            ref={newIngredientNotes}
+            placeholder='Notes'
+            rows='10'>
             {ingredient() ? ingredient()?.notes : ''}
           </textarea>
         </div>
-        <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
-          <label>Related ingredients</label>
+        <div style={{ display: 'inline-flex', 'align-items': 'start', 'flex-direction': 'column', gap: '10px' }}>
+          <label class={ingStyles['ingredient-subtitle']}>Related Ingredients</label>
           <MultiSelect
             ref={setRelatedRef}
             // onSelect={props.onChange}
             // onRemove={props.onChange}
             emptyRecordMsg='No ingredients'
-            options={Object.values(state().ingredients!)}
+            options={Object.values(state().ingredients ?? [])}
             isObject
+            avoidHighlightFirstOption={true}
             displayValue='id'
             renderValue={(member: Ingredient) => <label>{member.name}</label>}
             selectedValues={ingredient()?.related.map(e => state()!.ingredients![e])}
@@ -112,8 +128,15 @@ export default (props: EditIngredientProps) => {
             // closeOnSelect={props.closeOnSelect}
             // disable={props.disable}
             style={{
-              optionContainer: { 'background-color': '#282c34' },
-              option: { display: 'flex', 'align-items': 'center', height: '40px', margin: '0', padding: '0 10px' }
+              multiSelectContainer: { cursor: 'pointer' },
+              searchBox: { cursor: 'pointer', 'border-radius': 0 },
+              optionContainer: { 'background-color': 'var(--background)' },
+              chips: {
+                'background-color': 'var(--background)',
+                border: '1px solid var(--decoration)',
+                'border-radius': 0,
+                color: 'var(--text)'
+              }
             }}
           />
         </div>

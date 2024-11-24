@@ -1,15 +1,18 @@
 import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
 
+import { faPlusSquare, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
+import Fa from 'solid-fa'
+
 import { Recipe } from '../types'
 import { useAppContext } from '../context'
+
+import KindComponent from './KindComponent'
 
 import appStyles from '../App.module.css'
 import homeStyles from '../pages/Home.module.css'
 import navStyles from './NavComponent.module.css'
-import styles from './EditIngredientComponent.module.css'
-
-import { faPlusSquare, faXmarkCircle } from '@fortawesome/free-solid-svg-icons'
-import Fa from 'solid-fa'
+import searchStyles from './EditSearchOptions.module.css'
+import ingStyles from './RecipeComponent.module.css'
 
 export type EditIngredientProps = {
   recipe: Accessor<Recipe | undefined>
@@ -47,9 +50,9 @@ export default (props: EditIngredientProps) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
       props.onDiscard()
       return false
-    // } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
-    //   props.onConfirm(newIngredient())
-    //   return false
+      // } else if (e.key === 'Enter' && newIngredientNotes !== document.activeElement) {
+      //   props.onConfirm(newIngredient())
+      //   return false
     }
   }
 
@@ -106,17 +109,26 @@ export default (props: EditIngredientProps) => {
   }
 
   return (
-    <div class={styles.modal}>
-      <div class={styles['modal-content']}>
-        <input
-          ref={newIngredientName}
-          class={styles['modal-name']}
-          placeholder='Recipe name'
-          value={ingredient()?.name ?? ''}
-        />
+    <div class={searchStyles.modal}>
+      <div class={searchStyles['modal-content']}>
+        <div style={{ display: 'inline-flex', 'align-items': 'start', gap: '10px' }}>
+          <KindComponent kind='recipe' />
+          <input
+            ref={newIngredientName}
+            class={searchStyles['modal-name']}
+            style={{ width: '100%' }}
+            placeholder='Recipe name'
+            value={ingredient()?.name ?? ''}
+          />
+        </div>
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
-          <label>State</label>
-          <select class={styles['currency-select']} ref={ingredientState} value={ingredient()?.state ?? 'unknown'}>
+          <label style={{ 'margin-top': 0 }} class={ingStyles['ingredient-subtitle']}>
+            State
+          </label>
+          <select
+            class={searchStyles['currency-select']}
+            ref={ingredientState}
+            value={ingredient()?.state ?? 'unknown'}>
             <For each={stateOptions}>
               {state => (
                 <option value={state} title={state}>
@@ -130,17 +142,17 @@ export default (props: EditIngredientProps) => {
           <input
             ref={tagsRef}
             style={{ width: '100%' }}
-            class={styles['modal-tags']}
+            class={searchStyles['modal-tags']}
             placeholder='Comma separated tags'
             value={ingredient()?.tags?.join(',') ?? ''}></input>
         </div>
         <div style={{ display: 'flex', width: '100%', 'flex-direction': 'column', gap: '10px' }}>
-          <label>Ingredients</label>
+          <label class={ingStyles['ingredient-subtitle']}>Ingredients</label>
           <div ref={ingredientsRef}>
             <For each={ingredients()}>
               {ingredient => (
                 <div style={{ display: 'flex', 'align-items': 'center' }}>
-                  <select class={styles['currency-select']} value={ingredient.id}>
+                  <select value={ingredient.id}>
                     <For each={Object.values(state().ingredients!)}>
                       {ingredient => (
                         <option value={ingredient.id} title={ingredient.name}>
@@ -178,13 +190,13 @@ export default (props: EditIngredientProps) => {
           </button>
         </div>
         <div style={{ display: 'flex', width: '100%', 'flex-direction': 'column', gap: '10px' }}>
-          <label>Instructions</label>
-          <textarea style={{ width: '100%' }} ref={newIngredientNotes} placeholder='Steps...' rows='10'>
+          <label class={ingStyles['ingredient-subtitle']}>Steps</label>
+          <textarea class={searchStyles['steps']} ref={newIngredientNotes} placeholder='Steps...' rows='10'>
             {ingredient() ? ingredient()?.notes : ''}
           </textarea>
         </div>
-        <hr class={styles.divider} />
-        <div class={styles['modal-controls']}>
+        <hr class={searchStyles.divider} />
+        <div class={searchStyles['modal-controls']}>
           <button class={`${appStyles.button} ${appStyles.primary}`} onClick={() => props.onConfirm(newIngredient())}>
             {ingredient() ? 'Edit' : 'Create'}
           </button>
