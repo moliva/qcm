@@ -1,5 +1,3 @@
-import { Kind, State, User } from './types'
-
 import {
   faBlender,
   faCarrot,
@@ -10,9 +8,7 @@ import {
   IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
 
-export function copyToClipboard(value: string): void {
-  navigator.clipboard.writeText(value)
-}
+import { Kind, State, User } from './types'
 
 export function renderKind(kind: Kind): [IconDefinition, string] {
   switch (kind) {
@@ -38,44 +34,6 @@ export function renderState(state: State): [IconDefinition, string] {
 
 export function decodeArgument(arg: string | undefined): string[] {
   return arg ? decodeURI(arg).split(' ') : []
-}
-
-export function removeCookie(cname: string): void {
-  document.cookie = `${cname}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
-}
-
-export function getCookie(cname: string): string | null {
-  let name = cname + '='
-  let decodedCookie = decodeURIComponent(document.cookie)
-  let ca = decodedCookie.split(';')
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i]
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1)
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length)
-    }
-  }
-  return null
-}
-
-export function setCookie(name: string, value: string, expirationDays?: number): void {
-  let expirationString = undefined
-  if (expirationDays) {
-    const date = new Date()
-    date.setTime(date.getTime() + expirationDays * 24 * 60 * 60 * 1000) // millis to days
-    expirationString = `;expires=${date.toUTCString()}`
-  }
-
-  document.cookie = `${name}=${value};SameSite=Strict;Secure;path=/;${expirationString}`
-}
-
-export function parseIdToken(token: string): any {
-  const idToken = token.split('.')[1]
-  const decoded = atob(idToken)
-  const identity = JSON.parse(decoded)
-  return identity
 }
 
 export function useNavigateUtils(navigate: any) {
@@ -139,30 +97,6 @@ export const monthNumberToName = (m: string): string => {
       return 'December'
     default:
       throw `month number out of range ${m}`
-  }
-}
-
-/**
- * "Polyfill" for Object#groupBy for versions that still don't support this API
- */
-function groupBy<T>(array: T[], keySelector: (each: T) => PropertyKey): Partial<Record<PropertyKey, T[]>> {
-  if (Object.groupBy) {
-    return Object.groupBy(array, keySelector)
-  } else {
-    console.debug('Object#groupBy not found, using own version')
-    const grouped: Record<PropertyKey, T[]> = {}
-
-    for (const each of array) {
-      const key = keySelector(each)
-      let values = grouped[key]
-      if (values) {
-        values.push(each)
-      } else {
-        grouped[key] = [each]
-      }
-    }
-
-    return grouped
   }
 }
 

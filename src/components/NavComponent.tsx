@@ -1,6 +1,8 @@
 import { Accessor, createEffect, createMemo, onCleanup, onMount } from 'solid-js'
 import { useLocation, useNavigate, useSearchParams } from '@solidjs/router'
 
+import { Identity } from '@moliva/auth.ts'
+
 import {
   faUnlockKeyhole,
   faAngleLeft,
@@ -11,14 +13,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Fa from 'solid-fa'
 
-import { Identity, SearchOptions } from '../types'
+import { SearchOptions } from '../types'
 
 import { ProfilePicture } from './ProfilePicture'
 
 import appStyles from '../App.module.css'
 import styles from './NavComponent.module.css'
-import { getCookie, removeCookie } from '../utils'
-import { logout } from '../services'
+import { API_HOST } from '../services'
 
 export type NavProps = {
   identity: Identity
@@ -37,7 +38,7 @@ export const Nav = (props: NavProps) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, _setSearchParams] = useSearchParams()
 
   createEffect(async () => {
     if (searchParams.keywords) {
@@ -69,18 +70,6 @@ export const Nav = (props: NavProps) => {
 
   onMount(() => window.addEventListener('keydown', handleKeydown, true))
   onCleanup(() => window.removeEventListener('keydown', handleKeydown))
-
-  const onLogoutClicked = async () => {
-    removeCookie('idToken')
-    removeCookie('name')
-    removeCookie('picture')
-    removeCookie('refreshToken')
-
-    const accessToken = getCookie('accessToken')
-    removeCookie('accessToken')
-
-    await logout(identity, accessToken!)
-  }
 
   const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
@@ -129,8 +118,7 @@ export const Nav = (props: NavProps) => {
               <a
                 title='Log out'
                 class={`${styles['nav-button']} ${appStyles.button} ${appStyles.link} ${styles.logout}`}
-                onClick={onLogoutClicked}
-                href={import.meta.env.BASE_URL}>
+                href={`${API_HOST}/logout`}>
                 <Fa class={styles['nav-icon']} icon={faUnlockKeyhole} />
               </a>
             </div>
@@ -152,7 +140,10 @@ export const Nav = (props: NavProps) => {
             title='Recipes'
             class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === 'recipes' ? appStyles.selected : null}`}
             onClick={() => navigate(`${import.meta.env.BASE_URL}recipes`)}>
-            <Fa class={`${styles['nav2-icon']} ${appStyles.recipes} ${path() === 'recipes' ? appStyles.selected : null}`} icon={faBlender} />
+            <Fa
+              class={`${styles['nav2-icon']} ${appStyles.recipes} ${path() === 'recipes' ? appStyles.selected : null}`}
+              icon={faBlender}
+            />
           </button>
           <button
             title='Ingredients'

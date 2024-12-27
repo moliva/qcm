@@ -1,9 +1,10 @@
-import { For, onMount, Switch, Match, Show, onCleanup, createEffect, lazy, createSignal, createMemo } from 'solid-js'
-import { useNavigate, useSearchParams, Routes, Route, Navigate, useLocation } from '@solidjs/router'
+import { For, onMount, Switch, Match, Show, onCleanup, lazy, createSignal } from 'solid-js'
+import { useNavigate, Routes, Route, Navigate, useSearchParams } from '@solidjs/router'
+
+import { handleAuth } from '@moliva/auth.ts'
 
 import { useAppContext } from './context'
 import { SearchOptions } from './types'
-import { formatError, getCookie, parseIdToken, setCookie } from './utils'
 
 import { Nav } from './components/NavComponent'
 import { Login } from './components/Login'
@@ -33,60 +34,10 @@ export default () => {
   // TODO(miguel): remove - 2024/11/23
   cleanUp()
 
-  // handle auth
   const [searchParams] = useSearchParams()
-  const token = searchParams.login_success
 
-  const [redirect, setRedirect] = createSignal<string | undefined>()
-
-  if (!state().identity && typeof token === 'string') {
-    const oldId = getCookie('idToken')
-    setCookie('idToken', token, 7)
-
-    let identity = parseIdToken(token)
-    if (oldId != null) {
-      const oldIdentity = parseIdToken(oldId)
-
-      identity = {
-        ...oldIdentity,
-        ...identity
-      }
-
-      const name = getCookie('name')
-      if (name) {
-        identity.name = name
-      }
-      const picture = getCookie('picture')
-      if (picture) {
-        identity.picture = picture
-      }
-    }
-    if (identity.name) {
-      setCookie('name', identity.name)
-    }
-    if (identity.picture) {
-      setCookie('picture', identity.picture)
-    }
-
-    const accessToken = searchParams.access_token
-    if (accessToken) {
-      setCookie('accessToken', accessToken, 7)
-    }
-
-    const refreshToken = searchParams.refresh_token
-    if (refreshToken) {
-      setCookie('refreshToken', refreshToken, 7)
-    }
-
-    const newIdentityState = { identity, token }
-
-    const redirect_ = searchParams.redirect
-    if (redirect_ && redirect_.length > 0) {
-      setRedirect(decodeURIComponent(redirect_))
-    }
-
-    setState({ ...state(), identity: newIdentityState })
-  }
+  // handle auth
+  handleAuth(state, setState)
 
   const handleAppKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
@@ -106,6 +57,7 @@ export default () => {
     const states = searchOptions().states.join(' ')
     const kinds = searchOptions().kinds.join(' ')
     const query = `keywords=${searchTerm}&states=${states}&kinds=${kinds}`
+
     navigate(import.meta.env.BASE_URL + `search?${query}`)
   }
 
@@ -115,19 +67,6 @@ export default () => {
     states: ['good', 'bad', 'unknown', 'warning'],
     kinds: ['ingredient', 'recipe']
   })
-
-  // init search options when coming from a permalink with them
-  const redirect__ = redirect()
-  if (redirect__ && redirect__.startsWith('search') && redirect__.includes('?')) {
-    const searchParams = new URLSearchParams(redirect__.substring(redirect__.indexOf('?')))
-
-    let searchOptions = {} as Record<string, string[]>
-    for (const searchParam of searchParams) {
-      searchOptions[searchParam[0]] = searchParam[1].split(' ')
-    }
-
-    setSearchOptions(searchOptions as SearchOptions)
-  }
 
   function onFilterClicked() {
     setShowSearchOptionsModal(true)
@@ -143,12 +82,6 @@ export default () => {
   function onSearchTermChanged(searchTerm: string) {
     setSearchOptions({ ...searchOptions(), keywords: searchTerm.split(' ') })
   }
-
-  onMount(() => {
-    if (redirect()) {
-      navigate(import.meta.env.BASE_URL + redirect())
-    }
-  })
 
   return (
     <div class={styles.App}>
@@ -185,12 +118,13 @@ export default () => {
               </Show>
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
-                  <Route path='/' component={<Navigate href={import.meta.env.BASE_URL + `recipes`} />} />
                   <Route path='/recipes' component={RecipesPage} />
                   <Route path='/ingredients' component={IngredientsPage} />
                   <Route path='/recipes/:id' component={RecipePage} />
                   <Route path='/ingredients/:id' component={IngredientPage} />
                   <Route path='/search' component={SearchPage} />
+
+                  <Route path='/' component={() => <Navigate href={import.meta.env.BASE_URL + `recipes`} />} />
                 </Route>
               </Routes>
             </section>

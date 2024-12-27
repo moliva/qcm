@@ -1,3 +1,5 @@
+import { Identity } from '@moliva/auth.ts'
+
 export type UserId = string
 
 export type IngredientId = number
@@ -62,11 +64,6 @@ export type User = {
   status: UserStatus
   name: string
   picture: string
-}
-
-export type Identity = {
-  identity: { name: string; picture: string; email: string }
-  token: string
 }
 
 export type IdentityState = Identity | undefined
