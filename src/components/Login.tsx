@@ -15,12 +15,13 @@ export function Login(_props: LoginProps) {
   const encoded = encodeURIComponent(location.pathname.replace('/qcm', ''))
 
   return (
-    <div style={{ 'min-height': '100vh', 'align-items': 'center', display: 'flex', 'justify-content': 'center' }}>
+    <div
+      class={styles['login-container']}
+      style={{ 'min-height': '100vh', 'align-items': 'center', display: 'flex', 'justify-content': 'center' }}>
       <a
         href={`${API_HOST}/login?redirect=${encoded}`}
         target='_self'
-        class={`${styles.link} ${navStyles.login}`}
-        style={{ 'font-size': '30px', 'font-weight': 'bold' }}>
+        class={`${styles.link} ${navStyles.login} ${styles.login}`}>
         <Fa class={styles['nav-icon']} icon={faKey} /> Login
       </a>
     </div>
