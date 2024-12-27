@@ -1,6 +1,8 @@
 import { JSXElement, createContext, createSignal, useContext } from 'solid-js'
 
-import { Identity, Ingredient, Recipe } from './types'
+import { Identity } from '@moliva/auth.ts'
+
+import { Ingredient, Recipe } from './types'
 
 import { fetchIngredients as fetchApiIngredients, fetchRecipes as fetchApiRecipes } from './services'
 import { formatError } from './utils'
@@ -62,7 +64,7 @@ const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<numbe
       throw 'not authentified!'
     }
 
-    const result = await fetchApiRecipes(identity!)
+    const result = await fetchApiRecipes()
     setRecipes(result)
 
     return result
@@ -88,7 +90,7 @@ const fetchIngredients = async (opts: { refetching: boolean }): Promise<Record<n
       throw 'not authentified!'
     }
 
-    const result = await fetchApiIngredients(identity!)
+    const result = await fetchApiIngredients()
     setIngredients(result)
 
     return result

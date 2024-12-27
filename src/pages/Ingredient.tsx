@@ -38,7 +38,7 @@ export default () => {
   })
 
   const onDeleteIngredient = (ingredient: Ingredient) => {
-    deleteIngredient(ingredient, state()!.identity!)
+    deleteIngredient(ingredient)
     navigate(import.meta.env.BASE_URL + `ingredients`)
   }
 
@@ -48,9 +48,7 @@ export default () => {
   }
 
   const updateIngredient = (updated: Ingredient) => {
-    const promise = updated.id
-      ? putIngredient(updated, state()!.identity!)
-      : postIngredient(updated, state()!.identity!)
+    const promise = updated.id ? putIngredient(updated) : postIngredient(updated)
 
     promise
       .then(() => {

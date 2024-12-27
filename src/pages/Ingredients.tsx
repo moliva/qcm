@@ -35,9 +35,7 @@ export default () => {
   const { searchTag } = useNavigateUtils(navigate)
 
   const updateIngredient = (updated: Ingredient) => {
-    const promise = updated.id
-      ? putIngredient(updated, state()!.identity!)
-      : postIngredient(updated, state()!.identity!)
+    const promise = updated.id ? putIngredient(updated) : postIngredient(updated)
 
     promise
       .then(() => {
@@ -51,7 +49,7 @@ export default () => {
   }
 
   const onDeleteIngredient = async (ingredient: Ingredient) => {
-    await deleteIngredient(ingredient, state()!.identity!)
+    await deleteIngredient(ingredient)
     await refreshAll()
   }
 

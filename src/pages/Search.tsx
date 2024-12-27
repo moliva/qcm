@@ -45,7 +45,7 @@ export default () => {
       kinds
     }
 
-    const results = await search(state().identity!, searchOptions)
+    const results = await search(searchOptions)
 
     const merged = results.map(r => {
       return r.kind === 'recipe' && state().recipes && state().recipes![r.recipe as any]

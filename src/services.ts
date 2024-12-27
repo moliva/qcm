@@ -1,4 +1,4 @@
-import { Identity, authentifiedFetch, setApiHost } from '@moliva/auth.ts'
+import { authentifiedFetch, setApiHost } from '@moliva/auth.ts'
 
 import { Ingredient, Recipe, Result, SearchOptions } from './types'
 
@@ -20,7 +20,7 @@ function encodeSearchOptions(searchOptions: SearchOptions): string {
   return populated.join('&')
 }
 
-export async function search(identity: Identity, searchOptions: SearchOptions): Promise<Result[]> {
+export async function search(searchOptions: SearchOptions): Promise<Result[]> {
   const query = encodeSearchOptions(searchOptions)
   const res = await authentifiedFetch(`${API_HOST}/search?${query}`)
 
@@ -31,13 +31,13 @@ export async function search(identity: Identity, searchOptions: SearchOptions): 
 // *************** recipes ***************
 // *****************************************************************************************************
 
-export async function fetchRecipes(identity: Identity): Promise<Recipe[]> {
+export async function fetchRecipes(): Promise<Recipe[]> {
   const res = await authentifiedFetch(`${API_HOST}/recipes`)
 
   return (await res.json()) as Recipe[]
 }
 
-export async function postRecipe(recipe: Recipe, identity: Identity): Promise<void> {
+export async function postRecipe(recipe: Recipe): Promise<void> {
   const response = await authentifiedFetch(`${API_HOST}/recipes`, {
     method: 'POST',
     body: JSON.stringify(recipe),
@@ -49,7 +49,7 @@ export async function postRecipe(recipe: Recipe, identity: Identity): Promise<vo
   }
 }
 
-export async function putRecipe(recipe: Recipe, identity: Identity): Promise<void> {
+export async function putRecipe(recipe: Recipe): Promise<void> {
   const response = await authentifiedFetch(`${API_HOST}/recipes/${recipe.id}`, {
     method: 'PUT',
     body: JSON.stringify(recipe),
@@ -61,7 +61,7 @@ export async function putRecipe(recipe: Recipe, identity: Identity): Promise<voi
   }
 }
 
-export async function deleteRecipe(recipe: Recipe, identity: Identity) {
+export async function deleteRecipe(recipe: Recipe) {
   const response = await authentifiedFetch(`${API_HOST}/recipes/${recipe.id}`, { method: 'DELETE' })
   if (!response.ok) {
     throw response
@@ -72,13 +72,13 @@ export async function deleteRecipe(recipe: Recipe, identity: Identity) {
 // *************** ingredients ***************
 // *****************************************************************************************************
 
-export async function fetchIngredients(identity: Identity): Promise<Ingredient[]> {
+export async function fetchIngredients(): Promise<Ingredient[]> {
   const res = await authentifiedFetch(`${API_HOST}/ingredients`)
 
   return (await res.json()) as Ingredient[]
 }
 
-export async function postIngredient(ingredient: Ingredient, identity: Identity): Promise<void> {
+export async function postIngredient(ingredient: Ingredient): Promise<void> {
   const response = await authentifiedFetch(`${API_HOST}/ingredients`, {
     method: 'POST',
     body: JSON.stringify(ingredient),
@@ -90,7 +90,7 @@ export async function postIngredient(ingredient: Ingredient, identity: Identity)
   }
 }
 
-export async function putIngredient(ingredient: Ingredient, identity: Identity): Promise<void> {
+export async function putIngredient(ingredient: Ingredient): Promise<void> {
   const response = await authentifiedFetch(`${API_HOST}/ingredients/${ingredient.id}`, {
     method: 'PUT',
     body: JSON.stringify(ingredient),
@@ -102,7 +102,7 @@ export async function putIngredient(ingredient: Ingredient, identity: Identity):
   }
 }
 
-export async function deleteIngredient(ingredient: Ingredient, identity: Identity) {
+export async function deleteIngredient(ingredient: Ingredient) {
   const response = await authentifiedFetch(`${API_HOST}/ingredients/${ingredient.id}`, { method: 'DELETE' })
   if (!response.ok) {
     throw response

@@ -38,7 +38,7 @@ export default () => {
   })
 
   const updateRecipe = (updated: Recipe) => {
-    const promise = updated.id ? putRecipe(updated, state()!.identity!) : postRecipe(updated, state()!.identity!)
+    const promise = updated.id ? putRecipe(updated) : postRecipe(updated)
 
     promise
       .then(() => {
@@ -57,7 +57,7 @@ export default () => {
   }
 
   const onDeleteRecipe = async (recipe: Recipe) => {
-    await deleteRecipe(recipe, state()!.identity!)
+    await deleteRecipe(recipe)
 
     navigate(import.meta.env.BASE_URL + `recipes`)
   }
