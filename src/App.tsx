@@ -18,21 +18,10 @@ const RecipesPage = lazy(() => import('./pages/Recipes'))
 const IngredientsPage = lazy(() => import('./pages/Ingredients'))
 const SearchPage = lazy(() => import('./pages/Search'))
 
-function cleanUp() {
-  localStorage.removeItem('idToken')
-  localStorage.removeItem('name')
-  localStorage.removeItem('picture')
-  localStorage.removeItem('refreshToken')
-  localStorage.removeItem('accessToken')
-}
-
 export default () => {
   const [state, { setState, setError }] = useAppContext()
 
   const navigate = useNavigate()
-
-  // TODO(miguel): remove - 2024/11/23
-  cleanUp()
 
   const [searchParams] = useSearchParams()
 
