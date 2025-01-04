@@ -69,7 +69,7 @@ const fetchRecipes = async (opts: { refetching: boolean }): Promise<Record<numbe
 
     return result
   } catch (e) {
-    setError(formatError('Error while fetching detailed group', e))
+    setError(formatError('Error while fetching recipes', e))
     const recipes = state().recipes!
     return recipes
   }
@@ -95,7 +95,7 @@ const fetchIngredients = async (opts: { refetching: boolean }): Promise<Record<n
 
     return result
   } catch (e) {
-    setError(formatError('Error while fetching detailed group', e))
+    setError(formatError('Error while fetching ingredients', e))
     const ingredients = state().ingredients
     return ingredients!
   }
