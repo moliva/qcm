@@ -1,10 +1,12 @@
 import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
 
+import { Ref } from '@moliva/solid-multiselect'
+
 import { Ingredient } from '../types'
 import { useAppContext } from '../context'
 
-import MultiSelect, { Ref } from '@moliva/solid-multiselect'
 import KindComponent from './KindComponent'
+import MultiSelectIngredients from './MultiSelectIngredients'
 
 import appStyles from '../App.module.css'
 import styles from './EditSearchOptions.module.css'
@@ -65,7 +67,6 @@ export default (props: EditIngredientProps) => {
   return (
     <div class={styles.modal}>
       <div class={styles['modal-content']}>
-
         <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '10px' }}>
           <KindComponent kind='ingredient' iconClass={styles['big-icon']} />
           <input
@@ -111,33 +112,9 @@ export default (props: EditIngredientProps) => {
         </div>
         <div style={{ display: 'inline-flex', 'align-items': 'start', 'flex-direction': 'column', gap: '10px' }}>
           <label class={ingStyles['ingredient-subtitle']}>Related Ingredients</label>
-          <MultiSelect
+          <MultiSelectIngredients
             ref={setRelatedRef}
-            // onSelect={props.onChange}
-            // onRemove={props.onChange}
-            emptyRecordMsg='No ingredients'
-            options={Object.values(state().ingredients ?? [])}
-            isObject
-            avoidHighlightFirstOption={true}
-            displayValue='id'
-            renderValue={(member: Ingredient) => <label>{member.name}</label>}
             selectedValues={ingredient()?.related.map(e => state()!.ingredients![e])}
-            selectionLimit={20}
-            hidePlaceholder={true}
-            // placeholder={props.placeholder}
-            // closeOnSelect={props.closeOnSelect}
-            // disable={props.disable}
-            style={{
-              multiSelectContainer: { cursor: 'pointer' },
-              searchBox: { cursor: 'pointer', 'border-radius': 0 },
-              optionContainer: { 'background-color': 'var(--background)' },
-              chips: {
-                'background-color': 'var(--background)',
-                border: '1px solid var(--decoration)',
-                'border-radius': 0,
-                color: 'var(--text)'
-              }
-            }}
           />
         </div>
         <div class={styles['modal-controls']}>

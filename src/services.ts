@@ -11,11 +11,19 @@ setAuthConfig({ api: API_HOST, web: import.meta.env.BASE_URL })
 // *****************************************************************************************************
 
 function encodeSearchOptions(searchOptions: SearchOptions): string {
-  const keywords = searchOptions.keywords.length > 0 ? 'keywords=' + searchOptions.keywords.join(',') : undefined
-  const states = searchOptions.states.length > 0 ? 'states=' + searchOptions.states.join(',') : undefined
-  const kinds = searchOptions.kinds.length > 0 ? 'kinds=' + searchOptions.kinds.join(',') : undefined
+  const encoded = Object.entries(searchOptions).map(([label, value]: [string, any]) => {
+    if (Array.isArray(value) && value.length > 0) {
+      const encoded = value.join(',')
 
-  const populated = [keywords, states, kinds].filter(populate => populate !== undefined)
+      return `${label}=${encoded}`
+    } else if (typeof value === 'boolean') {
+      return `${label}=${value}`
+    } else {
+      return undefined
+    }
+  })
+
+  const populated = encoded.filter(populate => populate !== undefined)
 
   return populated.join('&')
 }

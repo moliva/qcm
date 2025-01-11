@@ -32,6 +32,9 @@ export type SearchOptions = {
   keywords: string[]
   states: State[] // subset of possible states: good, bad, warning, unknown
   kinds: Kind[] // subset of possible kinds: recipe, ingredient
+
+  onlyCurrentIngredients: boolean
+  ingredients: IngredientId[]
 }
 
 export type Result =

@@ -1,6 +1,6 @@
-import { Accessor, For, onCleanup, onMount } from 'solid-js'
+import { Accessor, createSignal, For, onCleanup, onMount } from 'solid-js'
 
-import { Kind, SearchOptions, State } from '../types'
+import { Ingredient, Kind, SearchOptions, State } from '../types'
 
 import appStyles from '../App.module.css'
 import styles from './EditSearchOptions.module.css'
@@ -8,6 +8,9 @@ import navStyles from './NavComponent.module.css'
 import ingStyles from './RecipeComponent.module.css'
 import StateComponent from './StateComponent'
 import KindComponent from './KindComponent'
+import MultiSelectIngredients from './MultiSelectIngredients'
+import { Ref } from '@moliva/solid-multiselect'
+import { useAppContext } from '../context'
 
 export type EditSearchOptionsProps = {
   searchOptions: Accessor<SearchOptions>
@@ -19,12 +22,19 @@ export type EditSearchOptionsProps = {
 export default (props: EditSearchOptionsProps) => {
   const { searchOptions } = props
 
+  const [state] = useAppContext()
+
   const stateOptions = ['unknown', 'good', 'warning', 'bad'] as State[]
   const kindOptions = ['recipe', 'ingredient'] as Kind[]
 
   let searchTerm
   let statesChecked
   let kindsChecked
+
+  let onlyCurrentIngredientsRef
+
+  const [ingredientsRef, setIngredientsRef] = createSignal<Ref<Ingredient> | undefined>()
+
   const stateChecked = Object.fromEntries(stateOptions.map(e => [e, undefined]))
   const kindChecked = Object.fromEntries(kindOptions.map(e => [e, undefined]))
 
@@ -52,7 +62,12 @@ export default (props: EditSearchOptionsProps) => {
       .filter(([, ref]) => ref.checked)
       .map(([e]) => e) as Kind[]
 
-    props.onConfirm({ keywords, states, kinds })
+    const onlyCurrentIngredients = onlyCurrentIngredientsRef!.checked
+    const ingredients = ingredientsRef()!
+      .values()
+      .map(e => e.id!)
+
+    props.onConfirm({ keywords, states, kinds, onlyCurrentIngredients, ingredients })
   }
 
   function onKindsClicked() {
@@ -144,6 +159,25 @@ export default (props: EditSearchOptionsProps) => {
               </div>
             )}
           </For>
+        </div>
+        <div style={{ 'margin-top': '10px', display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
+          <label class={ingStyles['ingredient-subtitle']} style={{ 'font-weight': '600' }}>
+            Ingredients
+          </label>
+          <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '2px' }}>
+            <input
+              type='checkbox'
+              ref={onlyCurrentIngredientsRef}
+              class={styles['modal-name']}
+              onClick={() => {}}
+              checked={searchOptions().onlyCurrentIngredients}
+            />
+            <label>Only show recipes with the current ingredients</label>
+          </div>
+          <MultiSelectIngredients
+            ref={setIngredientsRef}
+            selectedValues={searchOptions().ingredients.map(e => state()!.ingredients![e])}
+          />
         </div>
         <div class={styles['modal-controls']}>
           <button class={`${appStyles.button} ${appStyles.primary}`} onClick={onConfirm}>

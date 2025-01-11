@@ -2,7 +2,7 @@ import { For, Match, Switch, createEffect, createSignal, onMount } from 'solid-j
 import { useNavigate, useSearchParams } from '@solidjs/router'
 
 import { search } from '../services'
-import { Kind, Result, State } from '../types'
+import { IngredientId, Kind, Result, State } from '../types'
 import { useAppContext } from '../context'
 import { decodeArgument, useNavigateUtils } from '../utils'
 
@@ -38,11 +38,16 @@ export default () => {
     const keywords = decodeArgument(searchParams.keywords)
     const states = decodeArgument(searchParams.states) as State[]
     const kinds = decodeArgument(searchParams.kinds) as Kind[]
+    const onlyCurrentIngredients = searchParams.onlyCurrentIngredients === 'true'
+    const ingredients = decodeArgument(searchParams.ingredients).map(Number) as IngredientId[]
 
     const searchOptions = {
       keywords,
       states,
-      kinds
+      kinds,
+
+      onlyCurrentIngredients,
+      ingredients
     }
 
     const results = await search(searchOptions)

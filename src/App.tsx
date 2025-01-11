@@ -45,16 +45,21 @@ export default () => {
   async function onSearchClicked(searchTerm: string) {
     const states = searchOptions().states.join(' ')
     const kinds = searchOptions().kinds.join(' ')
-    const query = `keywords=${searchTerm}&states=${states}&kinds=${kinds}`
+    const onlyCurrentIngredients = searchOptions().onlyCurrentIngredients
+    const ingredients = searchOptions().ingredients.join(' ')
+    const query = `keywords=${searchTerm}&states=${states}&kinds=${kinds}&onlyCurrentIngredients=${onlyCurrentIngredients}&ingredients=${ingredients}`
 
     navigate(import.meta.env.BASE_URL + `search?${query}`)
   }
 
-  const [showSearchOptionsModal, setShowSearchOptionsModal] = createSignal(false)
+  const [showSearchOptionsModal, setShowSearchOptionsModal] = createSignal(true)
   const [searchOptions, setSearchOptions] = createSignal<SearchOptions>({
     keywords: (searchParams.keywords ?? '').split(' '),
     states: ['good', 'bad', 'unknown', 'warning'],
-    kinds: ['ingredient', 'recipe']
+    kinds: ['ingredient', 'recipe'],
+
+    onlyCurrentIngredients: false,
+    ingredients: []
   })
 
   function onFilterClicked() {
@@ -108,8 +113,8 @@ export default () => {
               <Routes>
                 <Route path={import.meta.env.BASE_URL}>
                   <Route path='/recipes' component={RecipesPage} />
-                  <Route path='/ingredients' component={IngredientsPage} />
                   <Route path='/recipes/:id' component={RecipePage} />
+                  <Route path='/ingredients' component={IngredientsPage} />
                   <Route path='/ingredients/:id' component={IngredientPage} />
                   <Route path='/search' component={SearchPage} />
 
