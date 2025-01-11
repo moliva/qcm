@@ -172,7 +172,7 @@ export default (props: EditSearchOptionsProps) => {
               onClick={() => {}}
               checked={searchOptions().onlyCurrentIngredients}
             />
-            <label>Only show recipes with the current ingredients</label>
+            <label>Only show recipes including all the listed ingredients</label>
           </div>
           <MultiSelectIngredients
             ref={setIngredientsRef}
