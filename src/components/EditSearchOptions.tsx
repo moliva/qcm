@@ -162,7 +162,7 @@ export default (props: EditSearchOptionsProps) => {
         </div>
         <div style={{ 'margin-top': '10px', display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
           <label class={ingStyles['ingredient-subtitle']} style={{ 'font-weight': '600' }}>
-            Ingredients
+            Recipes
           </label>
           <div style={{ display: 'inline-flex', 'align-items': 'center', gap: '2px' }}>
             <input
