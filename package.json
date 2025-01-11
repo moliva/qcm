@@ -24,7 +24,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@moliva/auth.ts": "github:moliva/auth.ts",
-    "@moliva/solid-multiselect": "github:moliva/solid-multiselect#1585366f2084be23b7bef785a3075885ab05b32a",
+    "@moliva/solid-multiselect": "github:moliva/solid-multiselect#67fb41ecc4ae45d3fc641d97650fcda1293c433f",
     "@solidjs/router": "^0.8.4",
     "deep-copy-ts": "^0.5.4",
     "solid-fa": "^0.2.0",

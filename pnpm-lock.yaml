@@ -30,8 +30,8 @@ importers:
         specifier: github:moliva/auth.ts
         version: https://codeload.github.com/moliva/auth.ts/tar.gz/59e54499b4f6ce168c4c60db9fd07edcb501f83f
       '@moliva/solid-multiselect':
-        specifier: github:moliva/solid-multiselect#1585366f2084be23b7bef785a3075885ab05b32a
-        version: https://codeload.github.com/moliva/solid-multiselect/tar.gz/1585366f2084be23b7bef785a3075885ab05b32a(solid-js@1.9.3)
+        specifier: github:moliva/solid-multiselect#67fb41ecc4ae45d3fc641d97650fcda1293c433f
+        version: https://codeload.github.com/moliva/solid-multiselect/tar.gz/67fb41ecc4ae45d3fc641d97650fcda1293c433f(solid-js@1.9.3)
       '@solidjs/router':
         specifier: ^0.8.4
         version: 0.8.4(solid-js@1.9.3)
@@ -331,8 +331,8 @@ packages:
     resolution: {tarball: https://codeload.github.com/moliva/auth.ts/tar.gz/59e54499b4f6ce168c4c60db9fd07edcb501f83f}
     version: 1.0.0
 
-  '@moliva/solid-multiselect@https://codeload.github.com/moliva/solid-multiselect/tar.gz/1585366f2084be23b7bef785a3075885ab05b32a':
-    resolution: {tarball: https://codeload.github.com/moliva/solid-multiselect/tar.gz/1585366f2084be23b7bef785a3075885ab05b32a}
+  '@moliva/solid-multiselect@https://codeload.github.com/moliva/solid-multiselect/tar.gz/67fb41ecc4ae45d3fc641d97650fcda1293c433f':
+    resolution: {tarball: https://codeload.github.com/moliva/solid-multiselect/tar.gz/67fb41ecc4ae45d3fc641d97650fcda1293c433f}
     version: 0.1.0
     engines: {node: '>=20.0', yarn: '>=1.22.5'}
     peerDependencies:
@@ -919,7 +919,7 @@ snapshots:
     dependencies:
       solid-js: 1.9.3
 
-  '@moliva/solid-multiselect@https://codeload.github.com/moliva/solid-multiselect/tar.gz/1585366f2084be23b7bef785a3075885ab05b32a(solid-js@1.9.3)':
+  '@moliva/solid-multiselect@https://codeload.github.com/moliva/solid-multiselect/tar.gz/67fb41ecc4ae45d3fc641d97650fcda1293c433f(solid-js@1.9.3)':
     dependencies:
       solid-js: 1.9.3
 

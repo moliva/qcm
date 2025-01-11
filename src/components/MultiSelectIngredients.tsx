@@ -21,7 +21,7 @@ export default (props: MultiSelectIngredientProps) => {
       options={Object.values(state().ingredients ?? [])}
       isObject
       avoidHighlightFirstOption={true}
-      displayValue='id'
+      displayValue='name'
       renderValue={(member: Ingredient) => <label>{member.name}</label>}
       selectedValues={props.selectedValues}
       selectionLimit={20}
