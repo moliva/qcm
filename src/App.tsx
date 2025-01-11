@@ -52,7 +52,7 @@ export default () => {
     navigate(import.meta.env.BASE_URL + `search?${query}`)
   }
 
-  const [showSearchOptionsModal, setShowSearchOptionsModal] = createSignal(true)
+  const [showSearchOptionsModal, setShowSearchOptionsModal] = createSignal(false)
   const [searchOptions, setSearchOptions] = createSignal<SearchOptions>({
     keywords: (searchParams.keywords ?? '').split(' '),
     states: ['good', 'bad', 'unknown', 'warning'],
