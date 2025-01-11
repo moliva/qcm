@@ -1,8 +1,7 @@
-import { Accessor, createEffect, createMemo, onCleanup, onMount } from 'solid-js'
+import { Accessor, createEffect, onCleanup, onMount } from 'solid-js'
 import { useLocation, useNavigate, useSearchParams } from '@solidjs/router'
 
-import { Identity } from '@moliva/auth.ts'
-
+import Fa from 'solid-fa'
 import {
   faUnlockKeyhole,
   faAngleLeft,
@@ -11,17 +10,19 @@ import {
   faCarrot,
   faFilter
 } from '@fortawesome/free-solid-svg-icons'
-import Fa from 'solid-fa'
+
+import { Identity } from '@moliva/auth.ts'
 
 import { SearchOptions } from '../types'
 
 import { ProfilePicture } from './ProfilePicture'
+import NavTab from './NavTab'
 
 import appStyles from '../App.module.css'
 import styles from './NavComponent.module.css'
 import { API_HOST } from '../services'
 
-export type NavProps = {
+export type NavBarProps = {
   identity: Identity
   searchOptions: Accessor<SearchOptions>
 
@@ -30,7 +31,10 @@ export type NavProps = {
   onFilterClicked(): void
 }
 
-export const Nav = (props: NavProps) => {
+/**
+ * Navigation bar.
+ */
+export const NavBar = (props: NavBarProps) => {
   const { identity } = props
 
   let searchTermRef: any
@@ -70,8 +74,6 @@ export const Nav = (props: NavProps) => {
 
   onMount(() => window.addEventListener('keydown', handleKeydown, true))
   onCleanup(() => window.removeEventListener('keydown', handleKeydown))
-
-  const path = createMemo(() => location.pathname.split('/').slice(2).join('/'))
 
   return (
     <>
@@ -126,34 +128,8 @@ export const Nav = (props: NavProps) => {
           </div>
         </div>
         <div class={styles['nav-main']} style={{ 'align-items': 'center', 'justify-content': 'center' }}>
-          {/**
-        <button
-          title='Home'
-          class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === '' ? appStyles.selected : null}`}
-          onClick={() => navigate(import.meta.env.BASE_URL)}>
-          <Fa 
-            class={`${styles['nav2-icon']} ${path() === '' ? appStyles.home : null}`}
-          icon={faHouse} />
-        </button>
-      */}
-          <button
-            title='Recipes'
-            class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${path() === 'recipes' ? appStyles.selected : null}`}
-            onClick={() => navigate(`${import.meta.env.BASE_URL}recipes`)}>
-            <Fa
-              class={`${styles['nav2-icon']} ${appStyles.recipes} ${path() === 'recipes' ? appStyles.selected : null}`}
-              icon={faBlender}
-            />
-          </button>
-          <button
-            title='Ingredients'
-            class={`${appStyles.button} ${appStyles.link} ${styles.notifications} ${styles['nav-button']} ${styles['nav-button']} ${path() === 'ingredients' ? appStyles.selected : null}`}
-            onClick={() => navigate(`${import.meta.env.BASE_URL}ingredients`)}>
-            <Fa
-              class={`${styles['nav2-icon']} ${appStyles.ingredients} ${path() === 'ingredients' ? appStyles.selected : null}`}
-              icon={faCarrot}
-            />
-          </button>
+          <NavTab title='Recipes' path='recipes' style={appStyles.recipes} icon={faBlender} />
+          <NavTab title='Ingredients' path='ingredients' style={appStyles.ingredients} icon={faCarrot} />
         </div>
       </nav>
     </>

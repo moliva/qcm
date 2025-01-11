@@ -84,13 +84,7 @@ export default (props: EditSearchOptionsProps) => {
 
   return (
     <div class={styles.modal}>
-      <div
-        class={styles['modal-content']}
-        onKeyDown={event => {
-          if (event.key === 'Enter') {
-            onConfirm()
-          }
-        }}>
+      <div class={styles['modal-content']}>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
           <label class={styles['modal-title']}>Search</label>
           <label class={ingStyles['ingredient-subtitle']}>Keywords</label>
@@ -102,6 +96,11 @@ export default (props: EditSearchOptionsProps) => {
             }}
             ref={searchTerm}
             value={searchOptions().keywords.join(' ')}
+            onKeyDown={event => {
+              if (event.key === 'Enter') {
+                onConfirm()
+              }
+            }}
           />
         </div>
         <div style={{ display: 'flex', 'flex-direction': 'column', gap: '10px' }}>
