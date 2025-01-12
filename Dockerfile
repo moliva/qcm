@@ -14,7 +14,6 @@ COPY package.json pnpm-lock.yaml ./
 # Cache build tools separately
 RUN pnpm install --frozen-lockfile --prefer-offline
 
-
 # Add .dockerignore to exclude unnecessary files
 COPY . .
 
