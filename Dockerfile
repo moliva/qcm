@@ -24,18 +24,23 @@ RUN pnpm build
 
 FROM nginx:1.25-alpine AS server
 
-# Add non-root user for security
-RUN adduser -D -u 1000 nginx-user && \
-    chown -R nginx-user:nginx-user /usr/share/nginx/html
-
-# Copy nginx configuration
+# Copy nginx configuration first
 COPY ./etc/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy only the built assets
+# Copy the built assets
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Use non-root user
-USER nginx-user
+# Set proper permissions
+RUN chown -R nginx:nginx /var/cache/nginx && \
+    chown -R nginx:nginx /var/log/nginx && \
+    chown -R nginx:nginx /etc/nginx/conf.d && \
+    chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html && \
+    touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/run/nginx.pid
+
+# Use nginx's default user instead of custom one
+USER nginx
 
 # Expose port (documentation purpose)
 EXPOSE 80
