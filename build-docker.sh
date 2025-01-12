@@ -6,7 +6,7 @@ last_hash=$(git rev-parse HEAD)
 image_name="qcm:$last_hash"
 
 echo "Building $image_name"
-docker build -f "$dockerfile" -t "$image_name" .
+DOCKER_BUILDKIT=1 docker build -f "$dockerfile" -t "$image_name" .
 
 if [[ $1 =~ ^(-p|--push) ]]; then
   registry="$DOCKER_HOME_REGISTRY"
