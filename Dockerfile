@@ -10,10 +10,10 @@ RUN corepack enable pnpm
 
 # Cache dependencies
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
 
 # Cache build tools separately
-RUN pnpm install --frozen-lockfile --dev
+RUN pnpm install --frozen-lockfile --prefer-offline
+
 
 # Add .dockerignore to exclude unnecessary files
 COPY . .
